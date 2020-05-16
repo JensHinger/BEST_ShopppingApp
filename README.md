@@ -1,5 +1,4 @@
-#Hello ^-^
-
+# Hello 
 
 ## Packages
 - mysql-connector

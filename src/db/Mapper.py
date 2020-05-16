@@ -30,7 +30,7 @@ class Mapper (AbstractContextManager, ABC):
         pass
 
     @abstractmethod
-    def find_by_key(self, key):
+    def find_by_id(self, id):
         """Lies den einen Tupel mit der gegebenen ID (vgl. Primärschlüssel) aus."""
         pass
 
@@ -48,3 +48,4 @@ class Mapper (AbstractContextManager, ABC):
     def delete(self, object):
         """Den Datensatz, der das gegebene Objekt in der DB repräsentiert löschen."""
         pass
+
