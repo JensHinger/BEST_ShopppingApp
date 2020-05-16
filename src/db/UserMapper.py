@@ -48,8 +48,18 @@ class UserMapper(Mapper):
     def find_all(self):
         pass
 
-    def insert(self, object):
-        pass
+    def insert(self, user):
+
+        cursor = self._cnx.cursor()
+        cursor.execute("SELECT MAX(id) as maxid from user")
+        tuples = cursor.fetchall()
+
+        id = tuples[0][0] + 1
+
+        self._cnx.commit()
+        cursor.close()
+
+        return tuples[0][0]
 
     def update(self, object):
         pass
@@ -59,8 +69,9 @@ class UserMapper(Mapper):
 
 # Für Testzwecke
 
+
 if (__name__ == "__main__"):
     with UserMapper() as mapper:
         # Nach mapper jegliche Methode dieser Klasse
-        result = mapper.find_user_by_email("hpiddockf@twitter.com")
+        result = mapper.insert(None)
         print(result)
