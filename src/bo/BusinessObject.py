@@ -18,6 +18,10 @@ class BusinessObject(ABC):
         """Auslesen des Erzeugungsdatum."""
         return self._creation_date
 
+    def set_creation_date(self, date):
+        """Setzen des Erzeugungsdatum"""
+        self._creation_date = date
+
     def get_id(self):
         """Auslesen der id."""
         return self._id
