@@ -1,5 +1,11 @@
-Hallo
+#Hello ^-^
 
-Dies ist ein Test 1234
 
-zhklj
+## Packages
+- mysql-connector
+
+## Notes
+- Python 3.8
+
+- db für mapper
+- bo für Objekte
