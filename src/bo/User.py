@@ -6,7 +6,7 @@ class User(BusinessObject):
     def __init__(self):
         super().__init__()
         self._email = ""
-        self.google_id = ""
+        self._google_id = ""
 
     def get_email(self):
         """Auslesen der Email des gewählten Users"""
@@ -18,5 +18,9 @@ class User(BusinessObject):
 
     def get_google_id(self):
         """Auslesen der google_id des gewählten Users"""
-        return self.google_id
+        return self._google_id
+
+    def set_google_id(self, google_id):
+        """Setzen der google_id des gewählten Users"""
+        self._google_id = google_id
 
