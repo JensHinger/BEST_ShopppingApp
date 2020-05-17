@@ -16,12 +16,16 @@ class PartyMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name, creation_date) in tuples:
-            party = Party()
-            party.set_id(id)
-            party.set_name(name)
-            party.set_creation_date(creation_date)
-            result = party
+        try:
+            for (id, name, creation_date) in tuples:
+                party = Party()
+                party.set_id(id)
+                party.set_name(name)
+                party.set_creation_date(creation_date)
+                result = party
+
+        except IndexError:
+            result = None
 
         self._cnx.commit()
         cursor.close()
@@ -29,7 +33,25 @@ class PartyMapper(Mapper):
         return result
 
     def find_all(self):
-        pass
+
+        result = []
+
+        cursor = self._cnx.cursor()
+        command = "SELECT * FROM party"
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, name, creation_date) in tuples:
+            party = Party()
+            party.set_id(id)
+            party.set_name(name)
+            party.set_creation_date(creation_date)
+            result.append(party)
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
 
     def insert(self, object):
         pass
@@ -44,5 +66,5 @@ class PartyMapper(Mapper):
 if (__name__ == "__main__"):
     with PartyMapper() as mapper:
         # Nach mapper jegliche Methode dieser Klasse
-        result = mapper.find_by_id(4)
+        result = mapper.find_all()
         print(result)
