@@ -74,15 +74,26 @@ class UserMapper(Mapper):
 
     def find_by_id(self, id):
 
+        result = None
+
         cursor = self._cnx.cursor()
         command = "SELECT id, name, creation_date, google_id, email FROM user WHERE id LIKE '{}' ".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
+        for (id, name, creation_date, google_id, email) in tuples:
+            user = User()
+            user.set_id(id)
+            user.set_name(name)
+            user.set_creation_date(creation_date)
+            user.set_google_id(google_id)
+            user.set_email(email)
+            result = user
+
         self._cnx.commit()
         cursor.close()
 
-        return tuples
+        return result
 
     def find_all(self):
 
