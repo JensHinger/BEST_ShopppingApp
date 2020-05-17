@@ -1,4 +1,5 @@
-# Hello 
+# Hello
+Dont add .idea folder ty 
 
 ## Packages
 - mysql-connector
