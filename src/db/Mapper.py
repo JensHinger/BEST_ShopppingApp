@@ -25,6 +25,11 @@ class Mapper (AbstractContextManager, ABC):
     """Formuliere nachfolgend sämtliche Auflagen, die instanzierbare Mapper-Subklassen mid. nerfüllen müssen."""
 
     @abstractmethod
+    def build_bo(self, tuples):
+        """Vereinfacht den Bau der bo's in den jeweiligen Mapper"""
+        pass
+
+    @abstractmethod
     def find_all(self):
         """Lies alle Tupel aus und gib sie als Objekte zurück."""
         pass

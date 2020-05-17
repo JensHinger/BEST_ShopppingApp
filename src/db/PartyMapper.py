@@ -7,6 +7,9 @@ class PartyMapper(Mapper):
     def __init__(self):
         super().__init__()
 
+    def build_bo(self, tuples):
+        pass
+
     def find_by_id(self, id):
 
         result = None

@@ -12,6 +12,31 @@ class UserMapper(Mapper):
     def __init__(self):
         super().__init__()
 
+    def build_bo(self, tuples):
+
+        result = []
+
+        if len(tuples) == 1:
+            for (id, name, creation_date, google_id, email) in tuples:
+                user = User()
+                user.set_id(id)
+                user.set_name(name)
+                user.set_creation_date(creation_date)
+                user.set_google_id(google_id)
+                user.set_email(email)
+                result = user
+        else:
+            for (id, name, creation_date, google_id, email) in tuples:
+                user = User()
+                user.set_id(id)
+                user.set_name(name)
+                user.set_creation_date(creation_date)
+                user.set_google_id(google_id)
+                user.set_email(email)
+                result.append(user)
+
+        return result
+
     def find_user_by_email(self, email):
 
         result = None
@@ -22,16 +47,7 @@ class UserMapper(Mapper):
         tuples = cursor.fetchall()
 
         try:
-
-            for (id, name, creation_date, google_id, email) in tuples:
-                user = User()
-                user.set_id(id)
-                user.set_name(name)
-                user.set_creation_date(creation_date)
-                user.set_google_id(google_id)
-                user.set_email(email)
-                result = user
-
+            result = self.build_bo(tuples)
         except IndexError:
             """Falls kein User mit der angegebenen email gefunden werden konnte,
             wird hier None als Rückgabewert deklariert"""
@@ -104,14 +120,8 @@ class UserMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name, creation_date, google_id, email) in tuples:
-            user = User()
-            user.set_id(id)
-            user.set_name(name)
-            user.set_creation_date(creation_date)
-            user.set_google_id(google_id)
-            user.set_email(email)
-            result.append(user)
+
+        result = (self.build_bo(tuples))
 
         self._cnx.commit()
         cursor.close()
@@ -162,7 +172,5 @@ if __name__ == "__main__":
     with UserMapper() as mapper:
         # Nach mapper jegliche Methode dieser Klasse
 
-        u = User()
-        u.set_id(19)
-        result = mapper.delete(u)
-        print(result)
+        result = mapper.find_all()
+        print(len(result))
