@@ -127,17 +127,24 @@ class UserMapper(Mapper):
         for (maxid) in tuples:
             user.set_id(maxid[0]+1)
 
-        cursor.execute("INSERT INTO persons (id, name, creation_date, google_id, email) VALUES ('{}','{}','{}')"
-                       .format(user.get_id(), user.get_name(), user.get_creation_date(), user.get_google_id(),
-                               user.get_email()))
+        command = "INSERT INTO persons (id, name, creation_date, google_id, email) VALUES ('{}','{}','{}')"\
+                .format(user.get_id(), user.get_name(), user.get_creation_date(), user.get_google_id(),
+                        user.get_email())
+        cursor.execute(command)
 
         self._cnx.commit()
         cursor.close()
 
-        print("Done")
-
     def update(self, user):
-        pass
+
+        cursor = self._cnx.cursor()
+        command = "UPDATE user SET name = ('{}'), creation_date = ('{}'), google_id = ('{}'), email = ('{}') " \
+                  "WHERE id = ('{}')"\
+            .format(user.get_name(), user.get_creation_date(), user.get_google_id(),user.get_email(), user.get_id())
+        cursor.execute(command)
+
+        self._cnx.commit()
+        cursor.close()
 
     def delete(self, user):
 
@@ -156,6 +163,6 @@ if __name__ == "__main__":
         # Nach mapper jegliche Methode dieser Klasse
 
         u = User()
-        u.set_id(20)
+        u.set_id(19)
         result = mapper.delete(u)
         print(result)
