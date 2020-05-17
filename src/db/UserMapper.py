@@ -124,24 +124,38 @@ class UserMapper(Mapper):
         cursor.execute("SELECT MAX(id) as maxid from user")
         tuples = cursor.fetchall()
 
-        id = tuples[0][0] + 1
+        for (maxid) in tuples:
+            user.set_id(maxid[0]+1)
+
+        cursor.execute("INSERT INTO persons (id, name, creation_date, google_id, email) VALUES ('{}','{}','{}')"
+                       .format(user.get_id(), user.get_name(), user.get_creation_date(), user.get_google_id(),
+                               user.get_email()))
 
         self._cnx.commit()
         cursor.close()
 
-        return tuples[0][0]
+        print("Done")
 
-    def update(self, object):
+    def update(self, user):
         pass
 
-    def delete(self, object):
-        pass
+    def delete(self, user):
 
-# Für Testzwecke
+        cursor = self._cnx.cursor()
+        try:
+            cursor.execute("DELETE FROM user WHERE id LIKE ('{}');".format(user.get_id()))
+        except:
+            print("User konnte nicht gefunden werden!")
+
+        self._cnx.commit()
+        cursor.close()
 
 
-if (__name__ == "__main__"):
+if __name__ == "__main__":
     with UserMapper() as mapper:
         # Nach mapper jegliche Methode dieser Klasse
-        result = mapper.find_all()
+
+        u = User()
+        u.set_id(20)
+        result = mapper.delete(u)
         print(result)
