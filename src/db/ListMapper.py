@@ -89,14 +89,41 @@ class ListMapper(Mapper):
 
         return result
 
-    def insert(self, object):
-        pass
+    def insert(self, list):
 
-    def update(self, object):
-        pass
+        cursor = self._cnx.cursor()
+        cursor.execute("SELECT MAX(id) as maxid from list")
+        tuples = cursor.fetchall()
 
-    def delete(self, object):
-        pass
+        for (maxid) in tuples:
+            list.set_id(maxid[0] + 1)
+
+        command = "INSERT INTO list (id, name, creation_date, partyl_id) VALUES ('{}','{}','{}','{}')" \
+            .format(list.get_id(), list.get_name(), list.get_creation_date(), list.get_partyl_id())
+        cursor.execute(command)
+
+        self._cnx.commit()
+        cursor.close()
+
+    def update(self, list):
+
+        cursor = self._cnx.cursor()
+        command = "UPDATE list SET name = ('{}'), creation_date = ('{}'), partyl_id = ('{}') " \
+                  "WHERE id = ('{}')" \
+            .format(list.get_name(), list.get_creation_date(), list.get_partyl_id(), list.get_id())
+        cursor.execute(command)
+
+        self._cnx.commit()
+        cursor.close()
+
+    def delete(self, list):
+
+        cursor = self._cnx.cursor()
+        command = "DELETE FROM list WHERE id LIKE ('{}')".format(list.get_id())
+        cursor.execute(command)
+
+        self._cnx.commit()
+        cursor.close()
 
 
 if __name__ == "__main__":
