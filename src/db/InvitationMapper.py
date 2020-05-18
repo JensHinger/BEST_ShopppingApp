@@ -39,7 +39,6 @@ class InvitationMapper(Mapper):
         command = "SELECT * FROM invitation"
         cursor.execute(command)
         tuples = cursor.fetchall()
-
         result = self.build_bo(tuples)
 
         self._cnx.commit()
