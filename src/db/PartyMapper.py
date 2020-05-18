@@ -39,7 +39,7 @@ class PartyMapper(Mapper):
         tuples = cursor.fetchall()
 
         try:
-            result = self.build_bo()
+            result = self.build_bo(tuples)
 
         except IndexError:
             """Falls keine Party mit der angegebenen id gefunden werden konnte,
@@ -84,16 +84,29 @@ class PartyMapper(Mapper):
         cursor.close()
 
     def update(self, party):
-        pass
+
+        cursor = self._cnx.cursor()
+        command = "UPDATE party SET name = ('{}'), creation_date = ('{}') " \
+                  "WHERE id = ('{}')" \
+            .format(party.get_name(), party.get_creation_date(), party.get_id())
+        cursor.execute(command)
+
+        self._cnx.commit()
+        cursor.close()
 
     def delete(self, party):
-        pass
+
+        cursor = self._cnx.cursor()
+        command = "DELETE FROM party WHERE id = ('{}')".format(party.get_id())
+        cursor.execute(command)
+
+        self._cnx.commit()
+        cursor.close()
 
 
 if (__name__ == "__main__"):
     with PartyMapper() as mapper:
         # Nach mapper jegliche Methode dieser Klasse
-        party = Party()
-        party.set_name("HerroMyNameIsGud")
-        result = mapper.insert(party)
+        party = mapper.find_by_id(6)
+        result = mapper.delete(party)
         print(result)
