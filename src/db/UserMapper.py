@@ -38,6 +38,22 @@ class UserMapper(Mapper):
 
         return result
 
+    def find_all(self):
+
+        result = []
+
+        cursor = self._cnx.cursor()
+        command = "SELECT * FROM user"
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        result = (self.build_bo(tuples))
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
     def find_user_by_email(self, email):
 
         result = None
@@ -69,16 +85,7 @@ class UserMapper(Mapper):
         tuples = cursor.fetchall()
 
         try:
-
-            for (id, name, creation_date, google_id, email) in tuples:
-                user = User()
-                user.set_id(id)
-                user.set_name(name)
-                user.set_creation_date(creation_date)
-                user.set_google_id(google_id)
-                user.set_email(email)
-                result = user
-
+            result = self.build_bo(tuples)
         except IndexError:
             """Falls kein User mit der angegebenen email gefunden werden konnte,
             wird hier None als Rückgabewert deklariert"""
@@ -98,31 +105,12 @@ class UserMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name, creation_date, google_id, email) in tuples:
-            user = User()
-            user.set_id(id)
-            user.set_name(name)
-            user.set_creation_date(creation_date)
-            user.set_google_id(google_id)
-            user.set_email(email)
-            result = user
-
-        self._cnx.commit()
-        cursor.close()
-
-        return result
-
-    def find_all(self):
-
-        result = []
-
-        cursor = self._cnx.cursor()
-        command = "SELECT * FROM user"
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-
-        result = (self.build_bo(tuples))
+        try:
+            result = self.build_bo(tuples)
+        except IndexError:
+            """Falls kein User mit der angegebenen email gefunden werden konnte,
+            wird hier None als Rückgabewert deklariert"""
+            result = None
 
         self._cnx.commit()
         cursor.close()
@@ -138,7 +126,7 @@ class UserMapper(Mapper):
         for (maxid) in tuples:
             user.set_id(maxid[0]+1)
 
-        command = "INSERT INTO persons (id, name, creation_date, google_id, email) VALUES ('{}','{}','{}')"\
+        command = "INSERT INTO user (id, name, creation_date, google_id, email) VALUES ('{}','{}','{}','{}','{}')"\
                 .format(user.get_id(), user.get_name(), user.get_creation_date(), user.get_google_id(),
                         user.get_email())
         cursor.execute(command)
