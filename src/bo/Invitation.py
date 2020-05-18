@@ -6,35 +6,35 @@ class Invitation(BusinessObject):
 
     def __init__(self):
         super().__init__()
-        self._party = None
-        self._target_user = None
-        self._source_user = None
+        self._partyi_id = None
+        self._target_user_id = None
+        self._source_user_id = None
         self._is_accepted = None
 
 
-    def get_party(self):
+    def get_partyi_id(self):
         """Auslesen der Party"""
-        return self._party
+        return self._partyi_id
 
-    def set_party(self, party):
+    def set_partyi_id(self, partyi_id):
         """Zugehörige Party wird festgelegt"""
-        self._party = party
+        self._partyi_id = partyi_id
 
-    def get_target_user(self):
+    def get_target_user_id(self):
         """Auslesen des Users welcher eingeladen wird (target-user)."""
-        return self._target_user
+        return self._target_user_id
 
-    def set_target_user(self, target_user):
+    def set_target_user_id(self, target_user_id):
         """Setzen des Users welcher eingeladen wird (target-user)."""
-        self._target_user = target_user
+        self._target_user_id = target_user_id
 
-    def get_source_user(self):
+    def get_source_user_id(self):
         """Auslesen des Users welcher den target-user einlädt"""
-        return self._source_user
+        return self._source_user_id
 
-    def set_source_user(self, source_user):
+    def set_source_user_id(self, source_user_id):
         """Setzen des Users welcher den target-user einlädt"""
-        self._source_user = source_user
+        self._source_user_id = source_user_id
 
     def get_is_accepted(self):
         return self._is_accepted

@@ -12,25 +12,25 @@ class InvitationMapper(Mapper):
 
         if len(tuples) == 1:
             "Baue nur einen"
-            for (id, creation_date, is_accepted, partyi_id, target_user, source_user) in tuples:
+            for (id, creation_date, is_accepted, partyi_id, target_user_id, source_user_id) in tuples:
                 invitation = Invitation()
                 invitation.set_id(id)
                 invitation.set_creation_date(creation_date)
                 invitation.set_is_accepted(is_accepted)
-                invitation.set_party(partyi_id)
-                invitation.set_target_user(target_user)
-                invitation.set_source_user(source_user)
+                invitation.set_partyi_id(partyi_id)
+                invitation.set_target_user_id(target_user_id)
+                invitation.set_source_user_id(source_user_id)
                 result = invitation
         else:
             "Baue mehrere"
-            for (id, creation_date, is_accepted, partyi_id, target_user, source_user) in tuples:
+            for (id, creation_date, is_accepted, partyi_id, target_user_id, source_user_id) in tuples:
                 invitation = Invitation()
                 invitation.set_id(id)
                 invitation.set_creation_date(creation_date)
                 invitation.set_is_accepted(is_accepted)
-                invitation.set_party(partyi_id)
-                invitation.set_target_user(target_user)
-                invitation.set_source_user(source_user)
+                invitation.set_partyi_id(partyi_id)
+                invitation.set_target_user_id(target_user_id)
+                invitation.set_source_user_id(source_user_id)
                 result.append(invitation)
 
         return result
@@ -69,20 +69,20 @@ class InvitationMapper(Mapper):
 
         return result
 
-    def find_all_user_in_party(self, party):
+    def find_all_user_in_party(self, partyi):
         """Alle User einer party auslesen, gibt nur die ID zurück """
         cursor = self._cnx.cursor()
         command = "SELECT target_user FROM invitation WHERE " \
-                  "partyi_id LIKE '{}' ".format(party)
+                  "partyi_id LIKE '{}' ".format(partyi)
         cursor.execute(command)
         result = cursor.fetchall()
         return result
 
-    def find_pend_invites_by_target_user(self, target_user):
+    def find_pend_invites_by_target_user(self, target_user_id):
         """Nicht angenommene invites mit entsprechendem target user finden"""
         cursor = self._cnx.cursor()
         command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
-                  "target_user LIKE '{}' AND is_accepted = 0".format(target_user)
+                  "target_user LIKE '{}' AND is_accepted = 0".format(target_user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -92,11 +92,11 @@ class InvitationMapper(Mapper):
             result = None
         return result
 
-    def find_pend_invites_by_source_user(self, source_user):
+    def find_pend_invites_by_source_user(self, source_user_id):
         """Invite mit dem entsprechenden source user finden"""
         cursor = self._cnx.cursor()
         command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
-                  "source_user LIKE '{}' AND is_accepted = 0".format(source_user)
+                  "source_user LIKE '{}' AND is_accepted = 0".format(source_user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -106,11 +106,11 @@ class InvitationMapper(Mapper):
             result = None
         return result
 
-    def find_source_user(self, source_user):
+    def find_source_user(self, source_user_id):
         """Invite mit entsprechendem source user finden"""
         cursor = self._cnx.cursor()
         command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
-                  "source_user LIKE '{}' ".format(source_user)
+                  "source_user LIKE '{}' ".format(source_user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -120,11 +120,11 @@ class InvitationMapper(Mapper):
             result = None
         return result
 
-    def find_target_user(self, target_user):
+    def find_target_user(self, target_user_id):
         """Invite mit entsprechendem target user finden"""
         cursor = self._cnx.cursor()
         command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
-                  "target_user LIKE '{}' ".format(target_user)
+                  "target_user LIKE '{}' ".format(target_user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -134,11 +134,11 @@ class InvitationMapper(Mapper):
             result = None
         return result
 
-    def find_all_parties_corr_user(self, target_user):
+    def find_all_parties_corr_user(self, target_user_id):
         "Alle parties zu denen ein bestimmter User gehört auslesen"
         cursor = self._cnx.cursor()
         command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
-                  "target_user LIKE '{}' AND is_accepted = 1 ".format(target_user)
+                  "target_user LIKE '{}' AND is_accepted = 1 ".format(target_user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
         try:
@@ -168,10 +168,10 @@ class InvitationMapper(Mapper):
         for (maxid) in tuples:
             invitation.set_id(maxid[0] + 1)
 
-        command = "INSERT INTO invation (id, creation_date, is_accepted, partyi_id, target_user, source_user) " \
-                  "VALUES ('{}','{}','{}','{}', '{}, '{} )" \
+        command = "INSERT INTO invitation (id, creation_date, is_accepted, partyi_id, target_user, source_user) " \
+                  "VALUES ('{}','{}','{}','{}', '{}', '{}' )" \
                   .format(invitation.get_id(), invitation.get_creation_date(), invitation.get_is_accepted(),
-                          invitation.get_party(), invitation.get_target_user(), invitation.get_source_user())
+                          invitation.get_partyi_id(), invitation.get_target_user_id(), invitation.get_source_user_id())
         cursor.execute(command)
         self._cnx.commit()
         cursor.close()
@@ -179,9 +179,9 @@ class InvitationMapper(Mapper):
     def update(self, invitation):
         cursor = self._cnx.cursor()
         command = "UPDATE invitation SET creation_date = ('{}'), is_accepted = ('{}'), partyi_id = ('{}'), " \
-                  "target_user = ('{}'), source_user = ('{}'), WHERE id = ('{}')" \
-            .format(invitation.get_creation_date(), invitation.get_is_accepted(), invitation.get_party(),
-                    invitation.get_target_user(), invitation.get_source_user(),invitation.get_id())
+                  "target_user = ('{}'), source_user = ('{}') WHERE id = ('{}')" \
+            .format(invitation.get_creation_date(), invitation.get_is_accepted(), invitation.get_partyi_id(),
+                    invitation.get_target_user_id(), invitation.get_source_user_id(), invitation.get_id())
         cursor.execute(command)
 
         self._cnx.commit()
@@ -189,21 +189,17 @@ class InvitationMapper(Mapper):
 
     def delete(self, invitation):
         cursor = self._cnx.cursor()
-        command = "DELETE FROM invitaion WHERE id = ('{}')".format(invitation.get_id())
+        command = "DELETE FROM invitation WHERE id = ('{}')".format(invitation.get_id())
         cursor.execute(command)
         self._cnx.commit()
 
 if (__name__ == "__main__"):
     with InvitationMapper() as mapper:
         #Nach mapper jegliche Methode dieser Klasse
-        myinv = Invitation
-        myinv.set_id()
-        myinv.set_is_accepted()
-        myinv.set_party()
-        myinv.set_source_user()
-        myinv.set_target_user()
-        result = mapper.find_all_parties_corr_user(12)
-        print(result.get_id())
+        testinv = mapper.find_by_id(6)
+        mapper.delete(testinv)
+        thisinv = mapper.find_by_id(7)
+        mapper.delete(thisinv)
 
 
 
