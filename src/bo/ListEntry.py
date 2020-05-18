@@ -8,6 +8,7 @@ class ListEntry(BusinessObject):
         self._item_id = None
         self._retailer_id = None
         self._user_id = None
+        self._list_id = None
 
     def get_item_id(self):
         """Auslesen des Produkts in dem Listeneintrag"""
@@ -32,3 +33,11 @@ class ListEntry(BusinessObject):
     def set_user_id(self, user_id):
         """Setzen des Zugehörigen Käufer in dem Listeneintrag"""
         self._user_id = user_id
+
+    def get_list_id(self):
+        """Auslesen der übergeordneten Liste des Listenelement"""
+        return self._list_id
+
+    def set_list_id(self, list_id):
+        """Setzen der Übergeordneten Liste des Listenelements"""
+        self._list_id = list_id
