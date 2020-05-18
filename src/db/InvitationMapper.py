@@ -11,6 +11,7 @@ class InvitationMapper(Mapper):
         result = []
 
         if len(tuples) == 1:
+            "Baue nur einen"
             for (id, creation_date, is_accepted, partyi_id, target_user, source_user) in tuples:
                 invitation = Invitation()
                 invitation.set_id(id)
@@ -21,6 +22,7 @@ class InvitationMapper(Mapper):
                 invitation.set_source_user(source_user)
                 result = invitation
         else:
+            "Baue mehrere"
             for (id, creation_date, is_accepted, partyi_id, target_user, source_user) in tuples:
                 invitation = Invitation()
                 invitation.set_id(id)
@@ -48,9 +50,11 @@ class InvitationMapper(Mapper):
 
     def find_by_id(self, id):
         cursor = self._cnx.cursor()
-        command = "SELECT id, creation_date FROM party WHERE id LIKE '{}' ".format(id)
+        command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user " \
+                  "FROM invitation WHERE id LIKE '{}' ".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
+        print(tuples)
 
         try:
             result = self.build_bo(tuples)
@@ -66,23 +70,16 @@ class InvitationMapper(Mapper):
         return result
 
     def find_all_user_in_party(self, party):
-        """Alle User einer party auslesen """
+        """Alle User einer party auslesen, gibt nur die ID zurück """
         cursor = self._cnx.cursor()
-        command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
+        command = "SELECT target_user FROM invitation WHERE " \
                   "partyi_id LIKE '{}' ".format(party)
         cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        try:
-            result = self.build_bo(tuples)
-
-        except IndexError:
-            result = None
-
+        result = cursor.fetchall()
         return result
 
     def find_pend_invites_by_target_user(self, target_user):
-        """Invite mit entsprechendem target user finden"""
+        """Nicht angenommene invites mit entsprechendem target user finden"""
         cursor = self._cnx.cursor()
         command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
                   "target_user LIKE '{}' AND is_accepted = 0".format(target_user)
@@ -137,7 +134,7 @@ class InvitationMapper(Mapper):
             result = None
         return result
 
-    def find_all_parties(self, target_user):
+    def find_all_parties_corr_user(self, target_user):
         "Alle parties zu denen ein bestimmter User gehört auslesen"
         cursor = self._cnx.cursor()
         command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
@@ -196,6 +193,17 @@ class InvitationMapper(Mapper):
         cursor.execute(command)
         self._cnx.commit()
 
+if (__name__ == "__main__"):
+    with InvitationMapper() as mapper:
+        #Nach mapper jegliche Methode dieser Klasse
+        myinv = Invitation
+        myinv.set_id()
+        myinv.set_is_accepted()
+        myinv.set_party()
+        myinv.set_source_user()
+        myinv.set_target_user()
+        result = mapper.find_all_parties_corr_user(12)
+        print(result.get_id())
 
 
 
