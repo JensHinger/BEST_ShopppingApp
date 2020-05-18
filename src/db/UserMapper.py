@@ -125,7 +125,7 @@ class UserMapper(Mapper):
         for (maxid) in tuples:
             user.set_id(maxid[0]+1)
 
-        command = "INSERT INTO persons (id, name, creation_date, google_id, email) VALUES ('{}','{}','{}','{}','{}')"\
+        command = "INSERT INTO user (id, name, creation_date, google_id, email) VALUES ('{}','{}','{}','{}','{}')"\
                 .format(user.get_id(), user.get_name(), user.get_creation_date(), user.get_google_id(),
                         user.get_email())
         cursor.execute(command)
