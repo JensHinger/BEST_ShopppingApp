@@ -65,7 +65,12 @@ class ListEntryMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        result = self.build_bo(tuples)
+        try:
+            result = self.build_bo(tuples)
+        except IndexError:
+            """Falls kein ListEntry mit der angegebenen id gefunden werden konnte,
+                            wird hier None als Rückgabewert deklariert"""
+            result = None
 
         self._cnx.commit()
         cursor.close()
