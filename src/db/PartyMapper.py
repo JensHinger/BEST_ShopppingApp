@@ -8,7 +8,26 @@ class PartyMapper(Mapper):
         super().__init__()
 
     def build_bo(self, tuples):
-        pass
+
+        result = []
+
+        if len(tuples) == 1:
+            for (id, name, creation_date) in tuples:
+                party = Party()
+                party.set_id(id)
+                party.set_name(name)
+                party.set_creation_date(creation_date)
+                result = party
+
+        else:
+            for (id, name, creation_date) in tuples:
+                party = Party()
+                party.set_id(id)
+                party.set_name(name)
+                party.set_creation_date(creation_date)
+                result.append(party)
+
+        return result
 
     def find_by_id(self, id):
 
@@ -20,14 +39,11 @@ class PartyMapper(Mapper):
         tuples = cursor.fetchall()
 
         try:
-            for (id, name, creation_date) in tuples:
-                party = Party()
-                party.set_id(id)
-                party.set_name(name)
-                party.set_creation_date(creation_date)
-                result = party
+            result = self.build_bo()
 
         except IndexError:
+            """Falls keine Party mit der angegebenen id gefunden werden konnte,
+                wird hier None als Rückgabewert deklariert"""
             result = None
 
         self._cnx.commit()
@@ -44,30 +60,40 @@ class PartyMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name, creation_date) in tuples:
-            party = Party()
-            party.set_id(id)
-            party.set_name(name)
-            party.set_creation_date(creation_date)
-            result.append(party)
+        result = self.build_bo(tuples)
 
         self._cnx.commit()
         cursor.close()
 
         return result
 
-    def insert(self, object):
+    def insert(self, party):
+
+        cursor = self._cnx.cursor()
+        cursor.execute("SELECT MAX(id) as maxid from party")
+        tuples = cursor.fetchall()
+
+        for (maxid) in tuples:
+            party.set_id(maxid[0] + 1)
+
+        command = "INSERT INTO party (id, name, creation_date) VALUES ('{}','{}','{}')"\
+                .format(party.get_id(), party.get_name(), party.get_creation_date())
+        cursor.execute(command)
+
+        self._cnx.commit()
+        cursor.close()
+
+    def update(self, party):
         pass
 
-    def update(self, object):
-        pass
-
-    def delete(self, object):
+    def delete(self, party):
         pass
 
 
 if (__name__ == "__main__"):
     with PartyMapper() as mapper:
         # Nach mapper jegliche Methode dieser Klasse
-        result = mapper.find_all()
+        party = Party()
+        party.set_name("HerroMyNameIsGud")
+        result = mapper.insert(party)
         print(result)
