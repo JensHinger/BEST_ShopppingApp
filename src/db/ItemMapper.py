@@ -70,13 +70,13 @@ class ItemMapper(Mapper):
     def insert(self, item):
 
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) as maxid from listentry")
+        cursor.execute("SELECT MAX(id) as maxid from item")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
             item.set_id(maxid[0] + 1)
 
-        command = "INSERT INTO listentry (id, name, creation_date, amount, unit) VALUES ('{}','{}','{}','{}','{}')" \
+        command = "INSERT INTO item (id, name, creation_date, amount, unit) VALUES ('{}','{}','{}','{}','{}')" \
             .format(item.get_id(), item.get_name(), item.get_creation_date(), item.get_amount(), item.get_unit())
         cursor.execute(command)
 
@@ -86,7 +86,8 @@ class ItemMapper(Mapper):
     def update(self, item):
 
         cursor = self._cnx.cursor()
-        command = "UPDATE listentry SET name = ('{}'), creation_date = ('{}'), amount = ('{}'), unit = ('{}'),"\
+        command = "UPDATE item SET name = ('{}'), creation_date = ('{}'), amount = ('{}'), unit = ('{}') " \
+                  "WHERE id LIKE ('{}')"\
             .format(item.get_name(), item.get_creation_date(), item.get_amount(), item.get_unit(), item.get_id())
         cursor.execute(command)
 
@@ -104,5 +105,5 @@ class ItemMapper(Mapper):
 
 if __name__ == "__main__":
     with ItemMapper() as mapper:
-        result = mapper.find_all()
-        print(result)
+        i = mapper.find_by_id(101)
+        mapper.delete(i)
