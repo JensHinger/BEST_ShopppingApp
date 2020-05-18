@@ -29,6 +29,22 @@ class PartyMapper(Mapper):
 
         return result
 
+    def find_all(self):
+
+        result = []
+
+        cursor = self._cnx.cursor()
+        command = "SELECT * FROM party"
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        result = self.build_bo(tuples)
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
     def find_by_id(self, id):
 
         result = None
@@ -45,22 +61,6 @@ class PartyMapper(Mapper):
             """Falls keine Party mit der angegebenen id gefunden werden konnte,
                 wird hier None als Rückgabewert deklariert"""
             result = None
-
-        self._cnx.commit()
-        cursor.close()
-
-        return result
-
-    def find_all(self):
-
-        result = []
-
-        cursor = self._cnx.cursor()
-        command = "SELECT * FROM party"
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        result = self.build_bo(tuples)
 
         self._cnx.commit()
         cursor.close()
