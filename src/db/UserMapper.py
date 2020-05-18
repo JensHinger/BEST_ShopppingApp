@@ -13,7 +13,6 @@ class UserMapper(Mapper):
         super().__init__()
 
     def build_bo(self, tuples):
-        #1234567899
 
         result = []
 
