@@ -1,4 +1,5 @@
 # Hello
+Danke für die Hilfe Jens :)
 Dont add .idea folder ty 
 
 ## Packages
