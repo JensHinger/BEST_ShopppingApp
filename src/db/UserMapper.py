@@ -68,16 +68,7 @@ class UserMapper(Mapper):
         tuples = cursor.fetchall()
 
         try:
-
-            for (id, name, creation_date, google_id, email) in tuples:
-                user = User()
-                user.set_id(id)
-                user.set_name(name)
-                user.set_creation_date(creation_date)
-                user.set_google_id(google_id)
-                user.set_email(email)
-                result = user
-
+            result = self.build_bo(tuples)
         except IndexError:
             """Falls kein User mit der angegebenen email gefunden werden konnte,
             wird hier None als Rückgabewert deklariert"""
@@ -97,14 +88,12 @@ class UserMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name, creation_date, google_id, email) in tuples:
-            user = User()
-            user.set_id(id)
-            user.set_name(name)
-            user.set_creation_date(creation_date)
-            user.set_google_id(google_id)
-            user.set_email(email)
-            result = user
+        try:
+            result = self.build_bo(tuples)
+        except IndexError:
+            """Falls kein User mit der angegebenen email gefunden werden konnte,
+            wird hier None als Rückgabewert deklariert"""
+            result = None
 
         self._cnx.commit()
         cursor.close()
@@ -119,7 +108,6 @@ class UserMapper(Mapper):
         command = "SELECT * FROM user"
         cursor.execute(command)
         tuples = cursor.fetchall()
-
 
         result = (self.build_bo(tuples))
 
