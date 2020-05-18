@@ -37,6 +37,22 @@ class UserMapper(Mapper):
 
         return result
 
+    def find_all(self):
+
+        result = []
+
+        cursor = self._cnx.cursor()
+        command = "SELECT * FROM user"
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        result = (self.build_bo(tuples))
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
     def find_user_by_email(self, email):
 
         result = None
@@ -94,22 +110,6 @@ class UserMapper(Mapper):
             """Falls kein User mit der angegebenen email gefunden werden konnte,
             wird hier None als Rückgabewert deklariert"""
             result = None
-
-        self._cnx.commit()
-        cursor.close()
-
-        return result
-
-    def find_all(self):
-
-        result = []
-
-        cursor = self._cnx.cursor()
-        command = "SELECT * FROM user"
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        result = (self.build_bo(tuples))
 
         self._cnx.commit()
         cursor.close()
