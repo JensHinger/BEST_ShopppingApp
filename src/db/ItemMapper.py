@@ -52,16 +52,54 @@ class ItemMapper(Mapper):
         return result
 
     def find_by_id(self, id):
-        pass
+
+        result = None
+
+        cursor = self._cnx.cursor()
+        command = "SELECT id, name, creation_date, amount, unit FROM item WHERE id LIKE ('{}')".format(id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        result = self.build_bo(tuples)
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
 
     def insert(self, item):
-        pass
+
+        cursor = self._cnx.cursor()
+        cursor.execute("SELECT MAX(id) as maxid from listentry")
+        tuples = cursor.fetchall()
+
+        for (maxid) in tuples:
+            item.set_id(maxid[0] + 1)
+
+        command = "INSERT INTO listentry (id, name, creation_date, amount, unit) VALUES ('{}','{}','{}','{}','{}')" \
+            .format(item.get_id(), item.get_name(), item.get_creation_date(), item.get_amount(), item.get_unit())
+        cursor.execute(command)
+
+        self._cnx.commit()
+        cursor.close()
 
     def update(self, item):
-        pass
+
+        cursor = self._cnx.cursor()
+        command = "UPDATE listentry SET name = ('{}'), creation_date = ('{}'), amount = ('{}'), unit = ('{}'),"\
+            .format(item.get_name(), item.get_creation_date(), item.get_amount(), item.get_unit(), item.get_id())
+        cursor.execute(command)
+
+        self._cnx.commit()
+        cursor.close()
 
     def delete(self, item):
-        pass
+        cursor = self._cnx.cursor()
+        command = "DELETE FROM item WHERE id LIKE ('{}')".format(item.get_id())
+        cursor.execute(command)
+
+        self._cnx.commit()
+        cursor.close()
 
 
 if __name__ == "__main__":
