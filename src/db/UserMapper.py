@@ -13,6 +13,7 @@ class UserMapper(Mapper):
         super().__init__()
 
     def build_bo(self, tuples):
+        #123
 
         result = []
 
