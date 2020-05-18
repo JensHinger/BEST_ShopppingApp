@@ -5,10 +5,10 @@ class ListEntry(BusinessObject):
 
     def __init__(self):
         super().__init__()
-        self._item_id = None
-        self._retailer_id = None
-        self._user_id = None
-        self._list_id = None
+        self._item_id = 0
+        self._retailer_id = 0
+        self._user_id = 0
+        self._list_id = 0
 
     def get_item_id(self):
         """Auslesen des Produkts in dem Listeneintrag"""
