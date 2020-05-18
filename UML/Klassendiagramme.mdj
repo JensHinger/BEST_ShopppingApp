@@ -523,7 +523,7 @@
 											"font": "Arial;13;1",
 											"left": 853,
 											"top": 919,
-											"width": 147.7607421875,
+											"width": 174.50341796875,
 											"height": 13,
 											"text": "Invitation"
 										},
@@ -558,7 +558,7 @@
 									"font": "Arial;13;0",
 									"left": 848,
 									"top": 912,
-									"width": 157.7607421875,
+									"width": 184.50341796875,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAFyCWGmfBEsQ4w="
@@ -595,9 +595,9 @@
 											"font": "Arial;13;0",
 											"left": 853,
 											"top": 942,
-											"width": 147.7607421875,
+											"width": 174.50341796875,
 											"height": 13,
-											"text": "-group: Group",
+											"text": "-party: Party",
 											"horizontalAlignment": 0
 										},
 										{
@@ -612,7 +612,7 @@
 											"font": "Arial;13;0",
 											"left": 853,
 											"top": 957,
-											"width": 147.7607421875,
+											"width": 174.50341796875,
 											"height": 13,
 											"text": "-target_user: User",
 											"horizontalAlignment": 0
@@ -629,7 +629,7 @@
 											"font": "Arial;13;0",
 											"left": 853,
 											"top": 972,
-											"width": 147.7607421875,
+											"width": 174.50341796875,
 											"height": 13,
 											"text": "-source_user: User",
 											"horizontalAlignment": 0
@@ -638,7 +638,7 @@
 									"font": "Arial;13;0",
 									"left": 848,
 									"top": 937,
-									"width": 157.7607421875,
+									"width": 184.50341796875,
 									"height": 53
 								},
 								{
@@ -663,9 +663,9 @@
 											"font": "Arial;13;0",
 											"left": 853,
 											"top": 995,
-											"width": 147.7607421875,
+											"width": 174.50341796875,
 											"height": 13,
-											"text": "+get_group(): Group",
+											"text": "+get_party(): party",
 											"horizontalAlignment": 0
 										},
 										{
@@ -680,9 +680,9 @@
 											"font": "Arial;13;0",
 											"left": 853,
 											"top": 1010,
-											"width": 147.7607421875,
+											"width": 174.50341796875,
 											"height": 13,
-											"text": "+set_group(Group)",
+											"text": "+set_party(party)",
 											"horizontalAlignment": 0
 										},
 										{
@@ -697,7 +697,7 @@
 											"font": "Arial;13;0",
 											"left": 853,
 											"top": 1025,
-											"width": 147.7607421875,
+											"width": 174.50341796875,
 											"height": 13,
 											"text": "+get_target_user(): User",
 											"horizontalAlignment": 0
@@ -714,7 +714,7 @@
 											"font": "Arial;13;0",
 											"left": 853,
 											"top": 1040,
-											"width": 147.7607421875,
+											"width": 174.50341796875,
 											"height": 13,
 											"text": "+set_target_user(User)",
 											"horizontalAlignment": 0
@@ -731,7 +731,7 @@
 											"font": "Arial;13;0",
 											"left": 853,
 											"top": 1055,
-											"width": 147.7607421875,
+											"width": 174.50341796875,
 											"height": 13,
 											"text": "+get_source_user(): User",
 											"horizontalAlignment": 0
@@ -748,7 +748,7 @@
 											"font": "Arial;13;0",
 											"left": 853,
 											"top": 1070,
-											"width": 147.7607421875,
+											"width": 174.50341796875,
 											"height": 13,
 											"text": "+set_source_user(User)",
 											"horizontalAlignment": 0
@@ -757,7 +757,7 @@
 									"font": "Arial;13;0",
 									"left": 848,
 									"top": 990,
-									"width": 157.7607421875,
+									"width": 184.50341796875,
 									"height": 98
 								},
 								{
@@ -800,7 +800,7 @@
 							"containerChangeable": true,
 							"left": 848,
 							"top": 912,
-							"width": 157.7607421875,
+							"width": 184.50341796875,
 							"height": 176,
 							"nameCompartment": {
 								"$ref": "AAAAAAFyCWGmfBEr19Q="
@@ -4310,7 +4310,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 1030,
+									"left": 1057,
 									"top": 971,
 									"height": 13,
 									"alpha": 0.5235987755982988,
@@ -4331,7 +4331,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 1033,
+									"left": 1060,
 									"top": 957,
 									"height": 13,
 									"alpha": 0.7853981633974483,
@@ -4352,7 +4352,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 1026,
+									"left": 1053,
 									"top": 998,
 									"height": 13,
 									"alpha": -0.5235987755982988,
@@ -4462,7 +4462,7 @@
 							"tail": {
 								"$ref": "AAAAAAFyCWGmfBEqN0E="
 							},
-							"points": "1005:992;1304:992;1304:1064",
+							"points": "1032:992;1304:992;1304:1064",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAFyDZHaBTHzYrU="
@@ -19111,11 +19111,9 @@
 									"_parent": {
 										"$ref": "AAAAAAFx85TyhpK/5S0="
 									},
-									"name": "group",
+									"name": "party",
 									"visibility": "private",
-									"type": {
-										"$ref": "AAAAAAFx85HG6ZH6xr8="
-									}
+									"type": "Party"
 								},
 								{
 									"_type": "UMLAttribute",
@@ -19149,7 +19147,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFx85TyhpK/5S0="
 									},
-									"name": "get_group",
+									"name": "get_party",
 									"parameters": [
 										{
 											"_type": "UMLParameter",
@@ -19157,9 +19155,7 @@
 											"_parent": {
 												"$ref": "AAAAAAFx8+vvSZ/u2cg="
 											},
-											"type": {
-												"$ref": "AAAAAAFx85HG6ZH6xr8="
-											},
+											"type": "party",
 											"direction": "return"
 										}
 									]
@@ -19170,7 +19166,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFx85TyhpK/5S0="
 									},
-									"name": "set_group",
+									"name": "set_party",
 									"parameters": [
 										{
 											"_type": "UMLParameter",
@@ -19178,8 +19174,7 @@
 											"_parent": {
 												"$ref": "AAAAAAFx8+wwPJ/3B9o="
 											},
-											"name": "Group",
-											"type": ""
+											"name": "party"
 										}
 									]
 								},
@@ -19218,8 +19213,7 @@
 											"_parent": {
 												"$ref": "AAAAAAFx8+4xRNMm4tM="
 											},
-											"name": "User",
-											"type": ""
+											"name": "User"
 										}
 									]
 								},
