@@ -9,4 +9,4 @@ Dont add .idea folder ty
 - Python 3.8
 
 - db für mapper
-- bo für Objekte
+- bo für Objekte !!
