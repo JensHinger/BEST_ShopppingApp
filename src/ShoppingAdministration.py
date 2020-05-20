@@ -31,16 +31,23 @@ sind:
 - die Mapper-Klassen für den DB-Zugriff.
 """
 
+
 class ShoppingAdministration(object):
     def __init__(self):
         pass
 
-    def get_Lists(self):
+
+    """
+    Hier geht es um die Listen
+    """
+
+
+    def get_all_Lists(self):
         """Alle Listen auslesen."""
         with ListMapper() as mapper:
             return mapper.find_all()
 
-    def get_Lists_by_party(self, party):
+    def get_all_Lists_by_party(self, party):
         """Alle Listen einer Party auslesen."""
         with ListMapper() as mapper:
             return mapper.find_by_party(party)
@@ -50,10 +57,14 @@ class ShoppingAdministration(object):
         with ListMapper() as mapper:
             return mapper.find_by_id(id)
 
-    def create_List(self, partyl_id):
+    def create_List(self, name, partyl_id):
         """Eine Liste anlegen."""
         list = List()
+        list.set_name(name)
         list.set_partyl_id(partyl_id)
+
+        with ListMapper() as mapper:
+            return mapper.insert(list)
 
     def update_List(self, list):
         """Eine Liste updaten."""
@@ -65,12 +76,18 @@ class ShoppingAdministration(object):
         with ListMapper as mapper:
             mapper.delete(list)
 
-    def get_Listentrys(self):
+
+    """
+    Hier geht es um die Listentrys
+    """
+
+
+    def get_all_Listentrys(self):
         """Alle Listeneinträge auslesen."""
         with ListEntryMapper() as mapper:
             return mapper.find_all()
 
-    def get_Listentrys_by_party(self, party):
+    def get_all_Listentrys_by_party(self, party):
         """Alle Listeneinträge einer Party auslesen."""
         with ListEntryMapper() as mapper:
             return mapper.find_by_party(party)
@@ -80,13 +97,17 @@ class ShoppingAdministration(object):
         with ListEntryMapper() as mapper:
             return mapper.find_by_id(id)
 
-    def create_Listentry(self, item_id, retailer_id, user_id, list_id):
+    def create_Listentry(self, name, item_id, retailer_id, user_id, list_id):
         """Einen Listeneintrag erstellen."""
         listentry = ListEntry()
+        listentry.set_name(name)
         listentry.set_item_id(item_id)
         listentry.set_retailer_id(retailer_id)
         listentry.set_user_id(user_id)
         listentry.set_list_id(list_id)
+
+        with ListEntryMapper() as mapper:
+            mapper.insert(listentry)
 
     def update_Listentry(self, listentry):
         """Einen Listeneintrag updaten."""
@@ -98,12 +119,18 @@ class ShoppingAdministration(object):
         with ListEntryMapper() as mapper:
             mapper.delete(listentry)
 
-    def get_Items(self):
+
+    """
+    Ab hier geht es um Items.
+    """
+
+
+    def get_all_Items(self):
         """Alle Items auslesen."""
         with ItemMapper() as mapper:
             return mapper.find_all()
 
-    def get_Items_by_party(self, party):
+    def get_all_Items_by_party(self, party):
         """Alle Items einer Party auslesen."""
         with ItemMapper() as mapper:
             return mapper.find_by_party(party)
@@ -113,12 +140,15 @@ class ShoppingAdministration(object):
         with ItemMapper() as mapper:
             return mapper.find_by_id(id)
 
-    def create_Item(self, amount, unit):
+    def create_Item(self, name, amount, unit):
         """Ein Item anlegen."""
         item = Item()
+        item.set_name(name)
         item.set_amount(amount)
         item.set_unit(unit)
-        item.set_id(1)
+
+        with ListMapper() as mapper:
+            mapper.insert(item)
 
     def update_Item(self, item):
         """Ein Item updaten."""
@@ -129,5 +159,4 @@ class ShoppingAdministration(object):
         """Ein Item löschen."""
         with ItemMapper() as mapper:
             mapper.delete(item)
-
 
