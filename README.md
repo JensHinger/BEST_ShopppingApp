@@ -1,5 +1,5 @@
 <picture> 
-    <img src="https://cdn.discordapp.com/attachments/698171365827674117/711565717312634900/unknown.png">
+    <img src="https://cdn.discordapp.com/attachments/698171365827674117/711565717312634900/unknown.png" width=600 >
 </picture>
 
 ## Packages
