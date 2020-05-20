@@ -159,3 +159,4 @@ class ShoppingAdministration(object):
         """Ein Item löschen."""
         with ItemMapper() as mapper:
             mapper.delete(item)
+
