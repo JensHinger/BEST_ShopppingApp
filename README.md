@@ -1,5 +1,6 @@
-# BE!ST
-### Don't be stressed, shop with BE!ST.
+<picture> 
+    <img src="https://cdn.discordapp.com/attachments/698171365827674117/711565717312634900/unknown.png">
+</picture>
 
 ## Packages
 - mysql-connector
