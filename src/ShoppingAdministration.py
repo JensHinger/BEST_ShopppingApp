@@ -8,8 +8,7 @@ from src.db.ItemMapper import ItemMapper
 
 """
 Autoren: 
-Michael Hofmann
-René Hofmann
+Michael Hofmann & René Hofmann
 
 Diese Klasse aggregiert nahezu sämtliche Applikationslogik (engl. Business Logic).
 
