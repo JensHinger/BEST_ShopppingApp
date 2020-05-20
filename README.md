@@ -1,6 +1,5 @@
-# Hello
-Danke für die Hilfe Jens :)
-Dont add .idea folder ty 
+# BE!ST
+### Don't be stressed, shop with BE!ST.
 
 ## Packages
 - mysql-connector
@@ -8,5 +7,5 @@ Dont add .idea folder ty
 ## Notes
 - Python 3.8
 
-- db für mapper
-- bo für Objekte !!
+- db für Mapper
+- bo für Business-Objekte 
