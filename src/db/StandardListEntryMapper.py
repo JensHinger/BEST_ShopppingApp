@@ -77,6 +77,27 @@ class StandardListEntryMapper(Mapper):
 
         return result
 
+    def find_by_party_id(self, party_id):
+        result = None
+
+        cursor = self._cnx.cursor()
+        command = "SELECT id, name, creation_date, item_id, retailer_id, user_id, list_id FROM listentry" \
+                  " WHERE partysle_id LIKE ('{}')".format(id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            result = self.build_bo(tuples)
+        except IndexError:
+            """Falls kein ListEntry mit der angegebenen id gefunden werden konnte,
+                            wird hier None als Rückgabewert deklariert"""
+            result = None
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
     def insert(self, listentry):
 
         cursor = self._cnx.cursor()
@@ -118,7 +139,7 @@ class StandardListEntryMapper(Mapper):
 
 
 if __name__ == "__main__":
-    with ListEntryMapper() as mapper:
+    with StandardListEntryMapper() as mapper:
         l = mapper.find_by_id(5)
         l.set_retailer_id(4)
         mapper.update(l)
