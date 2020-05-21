@@ -1,5 +1,5 @@
 from db.Mapper import Mapper
-from bo.ListEntry import ListEntry
+from bo.StandardListEntry import StandardListEntry
 
 
 class StandardListEntryMapper(Mapper):
@@ -13,29 +13,29 @@ class StandardListEntryMapper(Mapper):
 
         if len(tuples) == 1:
 
-            for (id, name, creation_date, item_id, retailer_id, user_id, list_id) in tuples:
-                listentry = ListEntry()
-                listentry.set_id(id)
-                listentry.set_name(name)
-                listentry.set_creation_date(creation_date)
-                listentry.set_item_id(item_id)
-                listentry.set_retailer_id(retailer_id)
-                listentry.set_user_id(user_id)
-                listentry.set_list_id(list_id)
-                result = listentry
+            for (id, name, creation_date, item_id, retailer_id, user_id, party_id) in tuples:
+                standardlistentry = StandardListEntry()
+                standardlistentry.set_id(id)
+                standardlistentry.set_name(name)
+                standardlistentry.set_creation_date(creation_date)
+                standardlistentry.set_item_id(item_id)
+                standardlistentry.set_retailer_id(retailer_id)
+                standardlistentry.set_user_id(user_id)
+                standardlistentry.set_party_id(party_id)
+                result = standardlistentry
 
         else:
 
-            for (id, name, creation_date, item_id, retailer_id, user_id, list_id) in tuples:
-                listentry = ListEntry()
-                listentry.set_id(id)
-                listentry.set_name(name)
-                listentry.set_creation_date(creation_date)
-                listentry.set_item_id(item_id)
-                listentry.set_retailer_id(retailer_id)
-                listentry.set_user_id(user_id)
-                listentry.set_list_id(list_id)
-                result.append(listentry)
+            for (id, name, creation_date, item_id, retailer_id, user_id, party_id) in tuples:
+                standardlistentry = StandardListEntry()
+                standardlistentry.set_id(id)
+                standardlistentry.set_name(name)
+                standardlistentry.set_creation_date(creation_date)
+                standardlistentry.set_item_id(item_id)
+                standardlistentry.set_retailer_id(retailer_id)
+                standardlistentry.set_user_id(user_id)
+                standardlistentry.set_party_id(party_id)
+                result.append(standardlistentry)
 
         return result
 
@@ -44,7 +44,7 @@ class StandardListEntryMapper(Mapper):
         result = []
 
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM listentry"
+        command = "SELECT * FROM standardlistentry"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -60,7 +60,7 @@ class StandardListEntryMapper(Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, creation_date, item_id, retailer_id, user_id, list_id FROM listentry" \
+        command = "SELECT id, name, creation_date, item_id, retailer_id, user_id, party_sle_id FROM standardlistentry" \
                   " WHERE id LIKE ('{}')".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
@@ -77,31 +77,54 @@ class StandardListEntryMapper(Mapper):
 
         return result
 
-    def insert(self, listentry):
+    def find_by_party_id(self, party_id):
+        result = None
 
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) as maxid from listentry")
+        command = "SELECT id, name, creation_date, item_id, retailer_id, user_id, party_sle_id FROM standardlistentry" \
+                  " WHERE party_sle_id LIKE ('{}')".format(party_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            result = self.build_bo(tuples)
+        except IndexError:
+            """Falls kein ListEntry mit der angegebenen id gefunden werden konnte,
+                            wird hier None als Rückgabewert deklariert"""
+            result = None
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
+    def insert(self, standardlistentry):
+
+        cursor = self._cnx.cursor()
+        cursor.execute("SELECT MAX(id) as maxid from standardlistentry")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            listentry.set_id(maxid[0] + 1)
+            standardlistentry.set_id(maxid[0] + 1)
 
-        command = "INSERT INTO listentry (id, name, creation_date, item_id, retailer_id, user_id, list_id) VALUES " \
-                  "('{}','{}','{}','{}','{}','{}','{}')"\
-                .format(listentry.get_id(), listentry.get_name(), listentry.get_creation_date(), listentry.get_item_id()
-                        , listentry.get_retailer_id(), listentry.get_user_id(), listentry.get_list_id())
+        command = "INSERT INTO standardlistentry " \
+                  "(id, name, creation_date, item_id, retailer_id, user_id, party_sle_id) " \
+                  "VALUES ('{}','{}','{}','{}','{}','{}','{}')".format(standardlistentry.get_id(),
+                  standardlistentry.get_name(), standardlistentry.get_creation_date(), standardlistentry.get_item_id(),
+                  standardlistentry.get_retailer_id(), standardlistentry.get_user_id(), standardlistentry.get_party_id())
         cursor.execute(command)
 
         self._cnx.commit()
         cursor.close()
 
-    def update(self, listentry):
+    def update(self, standardlistentry):
 
         cursor = self._cnx.cursor()
-        command = "UPDATE listentry SET name = ('{}'), creation_date = ('{}'), item_id = ('{}'), retailer_id = ('{}'),"\
-                  " user_id = ('{}'), list_id = ('{}') WHERE id LIKE ('{}')" \
-            .format(listentry.get_name(), listentry.get_creation_date(), listentry.get_item_id()
-                    , listentry.get_retailer_id(), listentry.get_user_id(), listentry.get_list_id(), listentry.get_id())
+        command = "UPDATE standardlistentry SET name = ('{}'), creation_date = ('{}'), item_id = ('{}'), " \
+                  "retailer_id = ('{}'), user_id = ('{}'), party_sle_id = ('{}') WHERE id LIKE ('{}')" \
+            .format(standardlistentry.get_name(), standardlistentry.get_creation_date(), standardlistentry.get_item_id()
+                ,standardlistentry.get_retailer_id(), standardlistentry.get_user_id(),
+                    standardlistentry.get_party_id(), standardlistentry.get_id())
         cursor.execute(command)
 
         self._cnx.commit()
@@ -110,7 +133,7 @@ class StandardListEntryMapper(Mapper):
     def delete(self, listentry):
 
         cursor = self._cnx.cursor()
-        command = "DELETE FROM listentry WHERE id LIKE ('{}')".format(listentry.get_id())
+        command = "DELETE FROM standardlistentry WHERE id LIKE ('{}')".format(listentry.get_id())
         cursor.execute(command)
 
         self._cnx.commit()
@@ -118,7 +141,7 @@ class StandardListEntryMapper(Mapper):
 
 
 if __name__ == "__main__":
-    with ListEntryMapper() as mapper:
-        l = mapper.find_by_id(5)
-        l.set_retailer_id(4)
-        mapper.update(l)
+    with StandardListEntryMapper() as mapper:
+        result = mapper.find_by_id(3)
+        result.set_retailer_id(2)
+        mapper.update(result)

@@ -8,7 +8,7 @@ class StandardListEntry(BusinessObject):
         self._item_id = 0
         self._retailer_id = 0
         self._user_id = 0
-        self._list_id = 0
+        self._party_id = 0
 
     def get_item_id(self):
         """Auslesen des Produkts in dem Listeneintrag"""
@@ -34,10 +34,8 @@ class StandardListEntry(BusinessObject):
         """Setzen des Zugehörigen Käufer in dem Listeneintrag"""
         self._user_id = user_id
 
-    def get_list_id(self):
-        """Auslesen der übergeordneten Liste des Listenelement"""
-        return self._list_id
+    def get_party_id(self):
+        return self._party_id
 
-    def set_list_id(self, list_id):
-        """Setzen der Übergeordneten Liste des Listenelements"""
-        self._list_id = list_id
+    def set_party_id(self, party_id):
+        self._party_id = party_id
