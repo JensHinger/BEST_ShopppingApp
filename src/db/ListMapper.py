@@ -68,12 +68,12 @@ class ListMapper(Mapper):
 
         return result
 
-    def find_by_party(self, party):
+    def find_by_partyl_id(self, partyl_id):
 
         result = []
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, creation_date, partyl_id FROM list WHERE partyl_id LIKE ('{}')".format(party.get_id())
+        command = "SELECT id, name, creation_date, partyl_id FROM list WHERE partyl_id LIKE ('{}')".format(partyl_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
