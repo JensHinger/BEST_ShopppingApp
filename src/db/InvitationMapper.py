@@ -69,11 +69,11 @@ class InvitationMapper(Mapper):
 
         return result
 
-    def find_all_user_in_party(self, partyi):
+    def find_all_user_in_party(self, partyi_id):
         """Alle User einer party auslesen, gibt nur die ID zurück """
         cursor = self._cnx.cursor()
         command = "SELECT target_user FROM invitation WHERE " \
-                  "partyi_id LIKE '{}' ".format(partyi)
+                  "partyi_id LIKE '{}' ".format(partyi_id)
         cursor.execute(command)
         result = cursor.fetchall()
         return result
