@@ -6,7 +6,7 @@ class Item(BusinessObject):
     def __init__(self):
         super().__init__()
         self._amount = 0
-        self._unit = ""
+        self._unit = 0
 
     def get_amount(self):
         """Auslesen der gewünschten Kaufmenge"""
