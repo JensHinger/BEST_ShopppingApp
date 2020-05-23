@@ -46,10 +46,10 @@ class ShoppingAdministration(object):
         with ListMapper() as mapper:
             return mapper.find_all()
 
-    def get_all_lists_by_party_id(self, party_id):
+    def get_all_lists_by_partyl_id(self, partyl_id):
         """Alle Listen einer Party auslesen."""
         with ListMapper() as mapper:
-            return mapper.find_by_party(party_id)
+            return mapper.find_by_partyl_id(partyl_id)
 
     def get_list_by_id(self, id):
         """Eine Liste anhand ihrer ID auslesen."""
@@ -83,11 +83,6 @@ class ShoppingAdministration(object):
         """Alle Listeneinträge auslesen."""
         with ListEntryMapper() as mapper:
             return mapper.find_all()
-
-    def get_all_listentries_by_party(self, party):
-        """Alle Listeneinträge einer Party auslesen."""
-        with ListEntryMapper() as mapper:
-            return mapper.find_by_party(party)
 
     def get_listentry_by_id(self, id):
         """Einen Listeneintrag auslesen."""
@@ -124,11 +119,6 @@ class ShoppingAdministration(object):
         """Alle Items auslesen."""
         with ItemMapper() as mapper:
             return mapper.find_all()
-
-    def get_all_items_by_party(self, party):
-        """Alle Items einer Party auslesen."""
-        with ItemMapper() as mapper:
-            return mapper.find_by_party(party)
 
     def get_item_by_id(self, id):
         """Ein Item anhand seiner ID auslesen."""
