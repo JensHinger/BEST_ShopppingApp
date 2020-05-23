@@ -46,10 +46,10 @@ class ShoppingAdministration(object):
         with ListMapper() as mapper:
             return mapper.find_all()
 
-    def get_all_lists_by_party(self, party):
+    def get_all_lists_by_party_id(self, party_id):
         """Alle Listen einer Party auslesen."""
         with ListMapper() as mapper:
-            return mapper.find_by_party(party)
+            return mapper.find_by_party(party_id)
 
     def get_list_by_id(self, id):
         """Eine Liste anhand ihrer ID auslesen."""
