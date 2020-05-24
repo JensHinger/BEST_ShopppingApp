@@ -10,4 +10,4 @@
 
 - db für Mapper
 - bo für Business-Objekte 
-- Test Visual Studio
+- Test Visual Studio, der zweite
