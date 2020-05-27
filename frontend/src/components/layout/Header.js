@@ -28,13 +28,13 @@ class Header extends Component {
     return (
       <Paper variant='outlined' >
         <Typography variant='h3' component='h1' align='center'>
-          BE!ST /n
+          BE!ST 
           Don't be stressed, shop with BE!ST.
         </Typography>
         <Typography variant='h4' component='h2' align='center'>
           Client Advisor Home
         </Typography>
-        }
+        
       </Paper>
     )
   }
