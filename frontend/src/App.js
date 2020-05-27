@@ -1,7 +1,17 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
+import Header from './components/layout/Header';
 
-function App() {
-  return <Button color="primary">Hello World</Button>;
+
+
+class App extends Component {
+
+
+  render(){
+    return (
+      <div>
+        <Header  />
+      </div>
+    );
+  }
 }
 export default App;
