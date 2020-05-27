@@ -1,5 +1,6 @@
-import React from 'react';
+import React,{Component} from 'react';
 import Header from './components/layout/Header';
+
 
 
 
@@ -14,4 +15,5 @@ class App extends Component {
     );
   }
 }
+
 export default App;
