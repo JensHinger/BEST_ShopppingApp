@@ -4,6 +4,7 @@
 
 ## Packages
 - mysql-connector
+- Flask
 
 ## Notes
 - Python 3.8
