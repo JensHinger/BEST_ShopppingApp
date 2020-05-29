@@ -5,6 +5,7 @@
 ## Packages
 - mysql-connector
 - Flask
+- Flask restx
 
 ## Notes
 - Python 3.8
