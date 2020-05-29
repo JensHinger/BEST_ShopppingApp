@@ -13,7 +13,7 @@ class ItemMapper(Mapper):
 
         if len(tuples) == 1:
 
-            for (id, name, creation_date, amount, unit) in tuples:
+            for (id, name, creation_date, unit, amount) in tuples:
                 item = Item()
                 item.set_id(id)
                 item.set_name(name)
@@ -24,7 +24,7 @@ class ItemMapper(Mapper):
 
         else:
 
-            for (id, name, creation_date, amount, unit) in tuples:
+            for (id, name, creation_date, unit, amount) in tuples:
                 item = Item()
                 item.set_id(id)
                 item.set_name(name)

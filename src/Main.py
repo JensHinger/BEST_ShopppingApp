@@ -1,23 +1,35 @@
 from flask import Flask
+from flask_restx import Resource, Api, fields
 
 from ShoppingAdministration import ShoppingAdministration
 
 
 app = Flask(__name__)
 
-"""Die app.route gibt hier die Route des URLs an"""
-@app.route('/hello')
-def hello_world():
-    return 'Hello, World!'
+api = Api(app, version='0.1 pre-alpha', title='SSLS API',
+    description='Demo-API für das Shared-Shopping-List-System')
 
+bo = api.model('BusinessObject', {
+    'name': fields.String(attribute='_name', description='Der Name eines Business Object'),
+    'id': fields.Integer(attribute='_id', description='Der Unique Identifier eines Business Object'),
+    'creation_date': fields.DateTime(attribute='_creation_date', description='Das Erstellungsdatum '
+                                                                            'eines Business Object'),
 
-"""Hier wird eine id übergeben. Dies funktioniert indem in der URL nach der lokalen
- IP-Adresse eine id übergeben wird : http://127.0.0.1:5000/<id>"""
-@app.route('/<id>')
-def show_item_by_id(id):
-    adm = ShoppingAdministration()
-    item = adm.get_item_by_id(id).get_name()
-    return item
+})
+
+item = api.inherit('Item', bo, {
+    'unit': fields.Integer(attribute='_unit', description='Die Einheit eines gewählten Produktes'),
+    'amount': fields.Integer(attribute='_amount', description='Die Menge eines gewählten Produktes'),
+})
+
+@api.route('/Item')
+class Item(Resource):
+
+    @api.marshal_with(item)
+    def get(self):
+        adm = ShoppingAdministration()
+        item = adm.get_all_items()
+        return item
 
 
 """Um Flask in einer lokalen Entwicklungsumgebung zu starten"""
