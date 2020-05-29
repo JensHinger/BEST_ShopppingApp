@@ -6,6 +6,7 @@
 - mysql-connector
 - Flask
 - Flask restx
+- Flask Cors
 
 ## Notes
 - Python 3.8
