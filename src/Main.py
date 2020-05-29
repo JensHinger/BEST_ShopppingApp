@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restx import Resource, Api, fields
+from flask_cors import CORS
 
 from ShoppingAdministration import ShoppingAdministration
 
@@ -8,6 +9,8 @@ app = Flask(__name__)
 
 api = Api(app, version='0.1 pre-alpha', title='SSLS API',
     description='Demo-API für das Shared-Shopping-List-System')
+
+CORS(app, resources=r'/shopping/*')
 
 bo = api.model('BusinessObject', {
     'name': fields.String(attribute='_name', description='Der Name eines Business Object'),
