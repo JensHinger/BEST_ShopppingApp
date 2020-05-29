@@ -1,4 +1,4 @@
-export default class Item {
+export default class Item extends BusinessObject{
 
     constructor() {
         this.amount = 0
