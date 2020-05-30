@@ -15,14 +15,14 @@ class ItemList extends Component {
             .then(ItemBOs =>
                 this.setState({
                     items: ItemBOs
-                })
+                }), 
             )
     }
 
     render() {
         return (
             <div>
-                {console.log(this.state)}
+                
             </div>
         );
     }

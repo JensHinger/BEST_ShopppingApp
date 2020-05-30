@@ -8,7 +8,7 @@ export default class ShoppingAPI {
     #shoppingServerBaseURL = '/shopping';
 
     //Item related
-    #getAllItemsURL = () => `${this.#shoppingServerBaseURL}/items`;
+    #getAllItemsURL = () => `${this.#shoppingServerBaseURL}/item`;
 
     static getAPI() {
         if (this.#api == null) {
@@ -35,12 +35,10 @@ export default class ShoppingAPI {
     getAllItems() {
         return this.#fetchAdvanced(this.#getAllItemsURL()).then((responseJSON) => {
             let ItemBOs = ItemBO.fromJSON(responseJSON);
-            console.log("ItemBOs" + ItemBOs)
             return new Promise(function (resolve) {
                 resolve(ItemBOs)
             })
         })
-
     }
 
 }

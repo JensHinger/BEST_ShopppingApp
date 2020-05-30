@@ -27,10 +27,10 @@ item = api.inherit('Item', bo, {
     'amount': fields.Integer(attribute='_amount', description='Die Menge eines gewählten Produktes'),
 })
 
-@shopping.route('/Item')
+@shopping.route('/item')
 class Item(Resource):
 
-    @shopping.marshal_with(item)
+    @shopping.marshal_list_with(item)
     def get(self):
         adm = ShoppingAdministration()
         item = adm.get_all_items()
