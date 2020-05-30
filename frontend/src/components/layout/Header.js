@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Paper, Typography, Tabs, Tab } from '@material-ui/core';
 
-
 class Header extends Component {
 
   constructor(props) {
@@ -27,13 +26,12 @@ class Header extends Component {
 
     return (
       <Paper variant='outlined' >
+        
         <Typography variant='h3' component='h1' align='center'>
-          BE!ST 
-          Don't be stressed, shop with BE!ST.
+          <img src = 'https://cdn.discordapp.com/attachments/698171365827674117/716249049426296842/Best.png' width ='600' ></img>
         </Typography>
-        <Typography variant='h4' component='h2' align='center'>
-          Client Advisor Home
-        </Typography>
+        
+      
         
       </Paper>
     )
