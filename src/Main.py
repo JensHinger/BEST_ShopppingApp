@@ -7,10 +7,12 @@ from ShoppingAdministration import ShoppingAdministration
 
 app = Flask(__name__)
 
+CORS(app, resources=r'/shopping/*')
+
 api = Api(app, version='0.1 pre-alpha', title='SSLS API',
     description='Demo-API für das Shared-Shopping-List-System')
 
-CORS(app, resources=r'/shopping/*')
+shopping = api.namespace('shopping', description='Funktionen des SSLS')
 
 bo = api.model('BusinessObject', {
     'name': fields.String(attribute='_name', description='Der Name eines Business Object'),
@@ -25,10 +27,10 @@ item = api.inherit('Item', bo, {
     'amount': fields.Integer(attribute='_amount', description='Die Menge eines gewählten Produktes'),
 })
 
-@api.route('/Item')
+@shopping.route('/Item')
 class Item(Resource):
 
-    @api.marshal_with(item)
+    @shopping.marshal_with(item)
     def get(self):
         adm = ShoppingAdministration()
         item = adm.get_all_items()
