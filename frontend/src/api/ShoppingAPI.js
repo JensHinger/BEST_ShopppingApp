@@ -31,7 +31,7 @@ export default class ShoppingAPI {
             return res.json();
         }
     )
-    
+
     getAllItems() {
         return this.#fetchAdvanced(this.#getAllItemsURL()).then((responseJSON) => {
             let ItemBOs = ItemBO.fromJSON(responseJSON);
