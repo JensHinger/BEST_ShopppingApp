@@ -4,6 +4,7 @@ import MyArticle from './components/pages/MyArticle';
 import Overview from './components/pages/Overview';
 import About from './components/pages/About';
 import CreateGroupDialog from './components/dialogs/CreateGroupDialog';
+import Navbar from './components/pages/Navbar'
 
 
 class App extends Component {
@@ -16,6 +17,7 @@ class App extends Component {
         <MyArticle  />
         <CreateGroupDialog />
         <About />
+        <Navbar />
 
       </div>
     );
