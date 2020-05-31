@@ -14,7 +14,6 @@ class App extends Component {
         <Header  /> 
         <Overview />
         <MyArticle  />
-        <CreateGroupDialog />
         <About />
 
       </div>
