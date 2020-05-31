@@ -4,17 +4,17 @@ import { makeStyles, Paper, Typography, Link } from '@material-ui/core';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
     padding: theme.spacing(1)
   },
   content: {
-    margin: theme.spacing(1),
+    margin: theme.spacing(3),
   }
 }));
 
 /**
- * Shows the about page with the impressum
+ * Zeigt die About Page mit den Verantwortlichen
  */
 function About() {
 
@@ -28,19 +28,25 @@ function About() {
         </Typography>
         <br />
         <Typography>
-          Database written by <Link href='https://github.com/JensHinger'>Jens Hinger</Link>
-          Database written by <Link href='https://github.com/JonathanKessel'>Jonathan Kessel</Link>
+          <h4>Database</h4>
+          Database written by <Link href='https://github.com/JensHinger'>Jens Hinger</Link> <br/>
+          Database written by <Link href='https://github.com/JonathanKessel'>Jonathan Kessel</Link> <br/>
         </Typography>
+        <br/>
         <Typography>
-          React Frontend written by <Link href='https://github.com/DominicHaffner'>Dominic Haffner</Link>
-          React Frontend written by <Link href='https://github.com/JensHinger'>Jens Hinger</Link>
-          React Frontend written by <Link href='https://github.com/JonathanKessel'>Jonathan Kessel</Link>
-          React Frontend written by <Link href='https://github.com/AnnyThai'>Anny Thai</Link>
+          <h4> React Frontend</h4>
+          React Frontend written by <Link href='https://github.com/DominicHaffner'>Dominic Haffner</Link> <br/>
+          React Frontend written by <Link href='https://github.com/JensHinger'>Jens Hinger</Link> <br/>
+          React Frontend written by <Link href='https://github.com/JonathanKessel'>Jonathan Kessel</Link> <br/>
+          React Frontend written by <Link href='https://github.com/AnnyThai'>Anny Thai</Link> <br/>
         </Typography>
+        <br/>
         <Typography>
-          Python Backend written by <Link href='https://github.com/MichaHofmann'>Michael Hofmann</Link>
+          <h4>Python Backend </h4>
+          Python Backend written by <Link href='https://github.com/MichaHofmann'>Michael Hofmann</Link> <br/>
           Python Backend written by <Link href='https://github.com/ReneHofmann'>Renè Hofmann</Link>
         </Typography>
+        
         <br />
         <Typography variant='body2'>
           © Hochschule der Medien 2020, all rights reserved.
