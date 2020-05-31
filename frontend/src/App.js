@@ -3,7 +3,7 @@ import Header from './components/layout/Header';
 import MyArticle from './components/pages/MyArticle';
 import Overview from './components/pages/Overview';
 import About from './components/pages/About';
-import CreateGroupDialog from './components/pages/CreateGroupDialog';
+import CreateGroupDialog from './components/dialogs/CreateGroupDialog';
 
 
 class App extends Component {
