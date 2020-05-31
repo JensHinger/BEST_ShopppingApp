@@ -10,6 +10,10 @@ class ItemList extends Component {
         };
     }
 
+    componentDidMount() {
+        this.getItems();
+    }
+
     getItems = () => {
         ShoppingAPI.getAPI().getAllItems()
             .then(ItemBOs =>
