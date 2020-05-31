@@ -24,32 +24,21 @@ export default class ItemBO extends BusinessObject{
         return this.unit
     }
 
-    static fromJSON(items){
-        let outputHTML = '';
-        items = ItemBO.fromJSON(this.responseText);
-        items.forEach((i) => {
-            outputHTML += '<div>' + i.getid() + ' ' + i.getName() + '</div>';
-        });
-        return outputHTML
-    }
-
-    /* 
     static fromJSON(items) {
         let result = [];
 
         if (Array.isArray(items)) {
-            items.forEach((a) => {
-                Object.setPrototypeOf(a, ItemBO.prototype)
-                result.push(a)
+            items.forEach((c) => {
+                Object.setPrototypeOf(c, ItemBO.prototype)
+                result.push(c)
             })
         } else {
             // Es handelt sich offenbar um ein singuläres Objekt
-            let a = items
-            Object.setPrototypeOf(a, ItemBO.prototype)
-            result.push(a)
+            let c = items;
+            Object.setPrototypeOf(c, ItemBO.prototype)
+            result.push(c)
         }
-
         return result;
     }
-    */
+
 }
