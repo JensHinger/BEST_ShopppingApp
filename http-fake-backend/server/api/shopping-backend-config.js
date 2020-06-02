@@ -1,3 +1,10 @@
+/**
+* Config file for a https://github.com/micromata/http-fake-backend to
+* mock the PythonBankBeispiel backend.
+*
+* Just place in ./server/api folder.
+*/
+
 const SetupEndpoint = require('./setup/');
 
 const prefix = "shopping"
