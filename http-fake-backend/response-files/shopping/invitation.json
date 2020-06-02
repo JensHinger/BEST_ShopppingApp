@@ -1,0 +1,5 @@
+[{"id":1, "creation_date":"2019-08-12 17:27:17", "is_accepted":1, "partyi_id":2, "target_user":10, "source_user":1},
+ {"id":2, "creation_date":"2019-09-05 17:11:38", "is_accepted":1, "partyi_id":1, "target_user":10, "source_user":4},
+ {"id":3, "creation_date":"2019-09-06 12:57:30", "is_accepted":1, "partyi_id":2, "target_user":12, "source_user":10},
+ {"id":4, "creation_date":"2019-09-02 00:10:46", "is_accepted":1, "partyi_id":2, "target_user":9, "source_user":10},
+ {"id":5, "creation_date":"2019-12-16 16:21:48", "is_accepted":1, "partyi_id":3, "target_user":10, "source_user":6}]
