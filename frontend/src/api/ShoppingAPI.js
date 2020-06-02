@@ -5,7 +5,11 @@ export default class ShoppingAPI {
     // Singelton instance
     static #api = null;
 
-    #shoppingServerBaseURL = '/shopping';
+    //Standard URL für MySQL Backend
+    //#shoppingServerBaseURL = '/shopping';
+
+    //URL für Fakebackend
+    #shoppingServerBaseURL = '/api/shopping';
 
     //Item related
     #getAllItemsURL = () => `${this.#shoppingServerBaseURL}/item`;
