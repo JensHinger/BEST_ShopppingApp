@@ -1,0 +1,5 @@
+[{"id":1, "name":"Shooping", "creation_date":"2019-12-16 10:00:54", "partyl_id":2},
+ {"id":2, "name":"Aldi Samstag", "creation_date":"2019-08-11 20:04:14", "partyl_id":1},
+ {"id":3, "name":"Kaufland Montag", "creation_date":"2019-12-25 10:32:10", "partyl_id":3},
+ {"id":4, "name":"Rewe Donnerstag", "creation_date":"2020-03-07 12:04:48", "partyl_id":1},
+ {"id":5, "name":"Hamstern101", "creation_date":"2019-06-07 19:14:23", "partyl_id":2}]
