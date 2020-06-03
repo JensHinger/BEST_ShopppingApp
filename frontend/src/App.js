@@ -4,7 +4,7 @@ import Overview from './components/pages/Overview';
 import About from './components/pages/About';
 import ManageGroup from "./components/pages/ManageGroup";
 import ManageUser from "./components/pages/ManageUser"
-import MyGroup from "./components/pages/MyGroup";
+import MyParty from "./components/pages/MyParty";
 import MyArticle from './components/pages/MyArticle';
 import GroupShoppingList from "./components/pages/GroupShoppingLists";
 import ShoppingListEntry from "./components/pages/ShoppingListEntry";
@@ -40,8 +40,8 @@ class App extends Component {
                 <Route path='/groupshoppinglist'>
                     <GroupShoppingList />
                 </Route>
-                <Route path='/mygroup'>
-                    <MyGroup />
+                <Route path='/myparty'>
+                    <MyParty />
                 </Route>
                 <Route path='/shoppinglistentry'>
                     <ShoppingListEntry />
