@@ -6,6 +6,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import {ThemeProvider} from "@material-ui/core"
+import Theme from "../../Theme"
 
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
@@ -20,6 +22,7 @@ export default function FormDialog() {
 
   return (
     <div>
+      <ThemeProvider theme = {Theme}>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         Gruppe erstellen
       </Button>
@@ -45,6 +48,7 @@ export default function FormDialog() {
           </Button>
         </DialogActions>
       </Dialog>
+      </ThemeProvider>
     </div>
   );
 }
