@@ -1,4 +1,5 @@
 import ItemBO from './ItemBO'
+import PartyBO from './PartyBO'
 
 export default class ShoppingAPI {
 
@@ -13,6 +14,9 @@ export default class ShoppingAPI {
 
     //Item related
     #getAllItemsURL = () => `${this.#shoppingServerBaseURL}/item`;
+
+    //Party related
+    #getAllPartiesByUserURL = () => `${this.#shoppingServerBaseURL}/party`;
 
     static getAPI() {
         if (this.#api == null) {
@@ -35,11 +39,24 @@ export default class ShoppingAPI {
         }
     )
 
+    //Items
+
     getAllItems() {
         return this.#fetchAdvanced(this.#getAllItemsURL()).then((responseJSON) => {
             let ItemBOs = ItemBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(ItemBOs)
+            })
+        })
+    }
+
+    //Parties
+
+    getPartiesByUser(id) {
+        return this.#fetchAdvanced(this.#getAllPartiesByUserURL()).then((responseJSON) => {
+            let PartyBOs = PartyBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(PartyBOs)
             })
         })
     }
