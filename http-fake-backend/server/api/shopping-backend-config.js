@@ -60,5 +60,12 @@ module.exports = SetupEndpoint({
             method: 'GET',
             response: '/response-files/shopping/user.json'
         }]
+    }, {
+        params: '/user8',
+        requests: [{
+            method: 'GET',
+            response: '/response-files/shopping/user8.json'
+        }]
     }]
+    
 });
