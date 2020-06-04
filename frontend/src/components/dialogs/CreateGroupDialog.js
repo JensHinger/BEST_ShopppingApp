@@ -42,10 +42,12 @@ export default function FormDialog() {
           />
         </DialogContent>
         <DialogActions>
+          <Button>Gruppenmitglied hinzufügen</Button>
           
           <Button onClick={handleClose} color="primary">
             Erstellen
           </Button>
+        
         </DialogActions>
       </Dialog>
       </ThemeProvider>
