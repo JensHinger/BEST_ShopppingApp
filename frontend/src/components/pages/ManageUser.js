@@ -4,6 +4,7 @@ import ShoppingAPI from '../../api/ShoppingAPI'
 import {Link as RouterLink} from 'react-router-dom'
 import {Divider} from '@material-ui/core'
 import {TextField} from '@material-ui/core'
+import UserParties from './UserParties'
 
 class ManageUser extends Component {
     constructor(props){
@@ -56,7 +57,11 @@ class ManageUser extends Component {
                 
                 Gruppen
                 <Divider/>
-                
+
+                <br margin-top ='20px'/> 
+                <Grid>
+                <UserParties/>
+                </Grid>
             </Grid>
         </Typography>
             
