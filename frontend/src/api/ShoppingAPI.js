@@ -1,6 +1,8 @@
 import ItemBO from './ItemBO'
 import PartyBO from './PartyBO'
 import UserBO from './UserBO'
+import ListBO from './ListBO'
+
 
 export default class ShoppingAPI {
 
@@ -19,8 +21,13 @@ export default class ShoppingAPI {
     //Party related
     #getAllPartiesByUserURL = () => `${this.#shoppingServerBaseURL}/party`;
 
+
     //User related
     #getUserURL = () => `${this.#shoppingServerBaseURL}/user8`;
+
+    //Shoppinglist related
+    #getAllListsByPartyURL = () => `${this.#shoppingServerBaseURL}/list`
+
 
     static getAPI() {
         if (this.#api == null) {
@@ -65,6 +72,7 @@ export default class ShoppingAPI {
         })
     }
 
+
     //User
 
     getUser() {
@@ -76,4 +84,15 @@ export default class ShoppingAPI {
         })
     }
 
+
+    //ShoppingList
+
+    getListsByParty(id) {
+        return this.#fetchAdvanced(this.#getAllListsByPartyURL()).then((responseJSON) => {
+            let ListBOs = ListBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(ListBOs)
+            })
+        })
+    }
 }
