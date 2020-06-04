@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Typography, Button, Grid, Card, CardMedia } from '@material-ui/core';
-import ShoppingAPI from '../../api/ShoppingAPI'
+import { Typography, Button, Grid, Card, CardMedia, Dialog } from '@material-ui/core';
 import {Link as RouterLink} from 'react-router-dom'
-
+import ShoppingAPI from '../../api/ShoppingAPI'
+import CreateGroupDialog from '../dialogs/CreateGroupDialog'
 
 class Overview extends Component {
 
@@ -10,7 +10,7 @@ class Overview extends Component {
         super(props)
 
         this.state = {
-            parties : []
+            parties : [],
         }
     }
 
@@ -26,7 +26,6 @@ class Overview extends Component {
                 }))
     }
 
-
     render() {
         const userParties = this.state.parties
         return ( 
@@ -35,14 +34,15 @@ class Overview extends Component {
                 <Card variant='h3' style={{width : "50%", margin : "auto"}}>
                     <CardMedia src = 'https://cdn.discordapp.com/attachments/698171365827674117/716249049426296842/Best.png' component='img' title='BE!ST'/>
                 </Card>
-            
+                <CreateGroupDialog />
+
                 {userParties.map((party) =>
                     <Grid key={party.getID()}>
                         <Button 
                         font-size="40px"
                          variant='outlined'
                           color='primary'
-                          component={RouterLink} to={`/mygroup/${party.getID()}`}
+                          component={RouterLink} to={`/myparty/${party.getID()}`}
                           >
                             {party.getName()}
                         </Button>

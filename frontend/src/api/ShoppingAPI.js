@@ -20,7 +20,7 @@ export default class ShoppingAPI {
     #getAllPartiesByUserURL = () => `${this.#shoppingServerBaseURL}/party`;
 
     //Shoppinglist related
-    #getAllListsByGroupURL = () => `${this.#shoppingServerBaseURL}/list`
+    #getAllListsByPartyURL = () => `${this.#shoppingServerBaseURL}/list`
 
     static getAPI() {
         if (this.#api == null) {
@@ -67,8 +67,8 @@ export default class ShoppingAPI {
 
     //ShoppingList
 
-    getListsByGroup(id) {
-        return this.#fetchAdvanced(this.#getAllListsByGroupURL()).then((responseJSON) => {
+    getListsByParty(id) {
+        return this.#fetchAdvanced(this.#getAllListsByPartyURL()).then((responseJSON) => {
             let ListBOs = ListBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(ListBOs)
