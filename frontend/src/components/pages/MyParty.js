@@ -2,26 +2,32 @@ import React, { Component } from 'react';
 import { Typography, Button, Grid} from '@material-ui/core';
 import ShoppingAPI from '../../api/ShoppingAPI'
 import {Link as RouterLink} from 'react-router-dom'
+import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 
 class MyParty extends Component{
     constructor(props){
         super(props);
 
         this.state = {
-            shoppinglists: []
+            shoppinglists: [],
+            newListField: false
         }
     }
 
     componentDidMount(){
-        this.getListsByGroup()
+        this.getListsByParty()
     }
 
-    getListsByGroup(){
-         // Hier muss bei getListsByGroup noch die partyID bei dem Übergabewert ergänzt werden kann Gruppenname übergeben werden als prop??
-         ShoppingAPI.getAPI().getListsByGroup().then(ListBOs =>
+    getListsByParty(){
+         // Hier muss bei getListsByParty noch die partyID bei dem Übergabewert ergänzt werden kann Gruppenname übergeben werden als prop??
+         ShoppingAPI.getAPI().getListsByParty().then(ListBOs =>
             this.setState({
                 shoppinglists: ListBOs
             }))
+    }
+
+    addListHandler = () => {
+        console.log("React ist toll")
     }
     
     render() {
@@ -30,13 +36,17 @@ class MyParty extends Component{
         return ( 
         <Typography variant='h3' component='h1' align='center'> 
             <Grid>
+                <Button onClick={this.addListHandler()}>
+                    <PlaylistAddIcon fontSize='large' color='primary'/>
+                </Button>
+
                 {userLists.map((list) =>
                     <Grid key={list.getID()}>
                         <Button 
-                        font-size="40px"
+                        font-size='40px'
                          variant='outlined'
                           color='primary'
-                          component={RouterLink} to={`/mygroup/${list.getID()}`}
+                          component={RouterLink} to={`/mylist/${list.getID()}`}
                           >
                             {list.getName()}
                         </Button>
