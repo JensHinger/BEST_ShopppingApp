@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ExitGroupDialog from '../dialogs/ExitGroupDialog';
-
+import RemoveGroupMemberDialog from '../dialogs/RemoveGroupMemberDialog';
 
 class ManageGroup extends Component {
 
@@ -12,6 +12,10 @@ class ManageGroup extends Component {
          <ExitGroupDialog>
 
          </ExitGroupDialog>
+
+         <RemoveGroupMemberDialog>
+             
+         </RemoveGroupMemberDialog>
         </div>
     )
 
