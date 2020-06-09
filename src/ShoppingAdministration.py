@@ -3,12 +3,14 @@ from src.bo.ListEntry import ListEntry
 from src.bo.Item import Item
 from src.bo.Invitation import Invitation
 from src.bo.Party import Party
+from src.bo.User import User
 
 from src.db.ListMapper import ListMapper
 from src.db.ListEntryMapper import ListEntryMapper
 from src.db.ItemMapper import ItemMapper
 from src.db.InvitationMapper import InvitationMapper
 from src.db.PartyMapper import PartyMapper
+from src.db.UserMapper import UserMapper
 
 """
 Autoren: 
@@ -253,3 +255,44 @@ class ShoppingAdministration(object):
     """
     Hier geht es um den User
     """
+
+    def get_all_users(self):
+        """Alle User auslesen."""
+        with UserMapper() as mapper:
+            mapper.find_all()
+
+    def get_user_by_email(self, email):
+        """Einen User nach der email auslesen."""
+        with UserMapper() as mapper:
+            mapper.find_user_by_email(email)
+
+    def get_user_by_google_id(self, google_id):
+        """Einen User nach der Google-ID auslesen."""
+        with UserMapper() as mapper:
+            mapper.find_user_by_google_id(google_id)
+
+    def get_user_by_id(self, id):
+        """Einen User nach seiner ID auslesen"""
+        with UserMapper() as mapper:
+            mapper.find_by_id(id)
+
+    def create_user(self, name, email, google_id):
+        """Einen User erstellen."""
+        user = User()
+        user.set_name(name)
+        user.set_email(email)
+        user.set_google_id(google_id)
+
+        with UserMapper() as mapper:
+            mapper.insert(user)
+
+    def update_user(self, user):
+        """Einen User updaten."""
+        with UserMapper() as mapper:
+            mapper.update(user)
+
+    def delete_user(self, user):
+        """Einen User löschen."""
+        with UserMapper() as mapper:
+            mapper.delete(user)
+
