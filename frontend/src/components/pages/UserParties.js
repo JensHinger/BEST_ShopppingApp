@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import {Button, Grid} from '@material-ui/core'
-import {Link as RouterLink} from 'react-router-dom'
+import {ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Button, Typography} from '@material-ui/core'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ShoppingAPI from '../../api/ShoppingAPI'
 
 class UserParties extends Component{
@@ -10,36 +10,52 @@ class UserParties extends Component{
 
         this.state = {
             parties : [],
+            lists : []
         }
     }
 
     componentDidMount() {
         this.getPartiesByUser()
+        this.getListsByParty()
     }
+
+    getListsByParty(){
+        // Hier muss bei getListsByParty noch die partyID bei dem Übergabewert ergänzt werden kann Gruppenname übergeben werden als prop??
+        ShoppingAPI.getAPI().getListsByParty().then(ListBOs =>
+           this.setState({
+               lists: ListBOs
+           }))
+   }
 
     getPartiesByUser = () => {
         // Hier muss bei getPartiesByUser noch this.props.user.getID() bei dem Übergabewert ergänzt werden
         ShoppingAPI.getAPI().getPartiesByUser().then(PartyBOs =>
-                this.setState({
-                    parties: PartyBOs
-                }))
+            this.setState({
+                parties: PartyBOs
+            }))
     }
     
     render(){
         const userParties = this.state.parties
+        const lists = this.state.lists
+        console.log(lists)
         return(
             <div>
                 {userParties.map((party) =>
-                    <Grid key={party.getID()}>
-                        <Button 
-                        font-size="40px"
-                        variant='outlined'
-                        color='primary'
-                        component={RouterLink} to={`/myparty/${party.getID()}`}
+                    <ExpansionPanel key={party.getID()}>
+                        <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon />}
                         >
                             {party.getName()}
-                        </Button>
-                 </Grid> 
+                        </ExpansionPanelSummary>
+                            {lists.map((list) => 
+                                <ExpansionPanelDetails>
+                                    <Typography>
+                                        <Button>{list.getName()}</Button>
+                                    </Typography>
+                                </ExpansionPanelDetails>
+                            )}                  
+                    </ExpansionPanel> 
                 )} 
             </div>  
         )

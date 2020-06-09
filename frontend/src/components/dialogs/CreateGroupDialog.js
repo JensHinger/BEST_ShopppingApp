@@ -86,7 +86,9 @@ class CreateGroupDialog extends Component{
                   label="E-Mail"
                   type="string"
                   fullWidth/>
-                <Button onClick={() => this.handleEmailChange()}>HIER</Button>
+                <Button onClick={() => this.handleEmailChange()}>
+                  <GroupAddIcon/>
+                </Button>
                 
                 <ul>
                   {emailList.map((mail, index) => 
@@ -105,7 +107,7 @@ class CreateGroupDialog extends Component{
                 <Button>
                   Gruppe erstellen
                 </Button>
-                <Button>
+                <Button onClick={() => this.handleClose()}>
                   Abbrechen
                 </Button>
               </DialogActions>
