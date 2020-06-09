@@ -2,11 +2,13 @@ from src.bo.List import List
 from src.bo.ListEntry import ListEntry
 from src.bo.Item import Item
 from src.bo.Invitation import Invitation
+from src.bo.Party import Party
 
 from src.db.ListMapper import ListMapper
 from src.db.ListEntryMapper import ListEntryMapper
 from src.db.ItemMapper import ItemMapper
 from src.db.InvitationMapper import InvitationMapper
+from src.db.PartyMapper import PartyMapper
 
 """
 Autoren: 
@@ -215,3 +217,39 @@ class ShoppingAdministration(object):
         """Eine Invitation löschen."""
         with InvitationMapper() as mapper:
             mapper.delete(invitation)
+
+    """
+    Hier geht es um die Party
+    """
+
+    def get_all_parties(self):
+        """Alle Gruppen auslesen."""
+        with PartyMapper() as mapper:
+            mapper.find_all()
+
+    def get_party_by_id(self, id):
+        """Eine Gruppe anhand der ID auslesen."""
+        with PartyMapper() as mapper:
+            mapper.find_by_id(id)
+
+    def create_party(self, name):
+        """Eine Gruppe erstellen."""
+        party = Party()
+        party.set_name(name)
+
+        with PartyMapper() as mapper:
+            mapper.insert(party)
+
+    def update_party(self, party):
+        """Eine Gruppe updaten."""
+        with PartyMapper() as mapper:
+            mapper.update(party)
+
+    def delete_party(self, party):
+        """Eine Gruppe löschen."""
+        with PartyMapper() as mapper:
+            mapper.delete(party)
+
+    """
+    Hier geht es um den User
+    """
