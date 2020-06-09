@@ -1,10 +1,12 @@
 from src.bo.List import List
 from src.bo.ListEntry import ListEntry
 from src.bo.Item import Item
+from src.bo.Invitation import Invitation
 
 from src.db.ListMapper import ListMapper
 from src.db.ListEntryMapper import ListEntryMapper
 from src.db.ItemMapper import ItemMapper
+from src.db.InvitationMapper import InvitationMapper
 
 """
 Autoren: 
@@ -145,3 +147,71 @@ class ShoppingAdministration(object):
         with ItemMapper() as mapper:
             mapper.delete(item)
 
+    """ 
+    Hier geht es um die Invitation
+    """
+
+    def get_all_invitation(self):
+        """Alle Invitations auslesen."""
+        with InvitationMapper() as mapper:
+            return mapper.find_all()
+
+    def get_invitation_by_id(self, id):
+        """Invitations nach id auslesen."""
+        with InvitationMapper() as mapper:
+            return mapper.find_by_id(id)
+
+    def get_all_user_in_party(self, partyi_id):
+        """Alle User einer Party auslesen."""
+        with InvitationMapper() as mapper:
+            return mapper.find_all_user_in_party(partyi_id)
+
+    def get_pen_invites_by_target_user(self, target_user_id):
+        """Alle pending-Invitations von dem Target-User auslesen."""
+        with InvitationMapper() as mapper:
+            return mapper.find_pend_invites_by_target_user(target_user_id)
+
+    def get_pen_invites_by_source_user(self, source_user_id):
+        """Alle Invitations von Source-User auslesen."""
+        with InvitationMapper() as mapper:
+            return mapper.find_pend_invites_by_source_user(source_user_id)
+
+    def get_source_user_by_id(self, source_user_id):
+        """Den source-user auslesen."""
+        with InvitationMapper() as mapper:
+            return mapper.find_source_user(source_user_id)
+
+    def get_target_user_by_id(self, target_user_id):
+        """Den target-user auslesen."""
+        with InvitationMapper() as mapper:
+            return mapper.find_target_user(target_user_id)
+
+    def get_all_parties_corr_user(self, target_user_id):
+        """Alle Parties zu denen ein User gehört auslesen."""
+        with InvitationMapper() as mapper:
+            return mapper.find_all_parties_corr_user(target_user_id)
+
+    def get_all_pend_invites(self):
+        """Alle pending-invitations auslesen."""
+        with InvitationMapper() as mapper:
+            return mapper.find_all_pend_invites()
+
+    def create_invitation(self, partyi_id, target_user_id, source_user_id):
+        """Eine Invitation erstellen."""
+        invitation = Invitation()
+        invitation.set_partyi_id(partyi_id)
+        invitation.set_target_user_id(target_user_id)
+        invitation.set_source_user_id(source_user_id)
+
+        with InvitationMapper() as mapper:
+            mapper.insert(invitation)
+
+    def update_invitation(self, invitation):
+        """Invitation updaten/speichern."""
+        with InvitationMapper() as mapper:
+            mapper.update(invitation)
+
+    def delete_invitation(self, invitation):
+        """Eine Invitation löschen."""
+        with InvitationMapper() as mapper:
+            mapper.delete(invitation)
