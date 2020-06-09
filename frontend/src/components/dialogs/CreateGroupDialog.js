@@ -6,8 +6,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {ThemeProvider, Input} from "@material-ui/core"
+import {ThemeProvider} from "@material-ui/core"
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Theme from "../../Theme"
 
 class CreateGroupDialog extends Component{
@@ -18,11 +19,13 @@ class CreateGroupDialog extends Component{
       this.state = {
         open: false,
         partyName: "",
-        emailList: ["EKEKE"]
+        emailList: [],
+        mail : ""
       }
   }
 
   
+
   handleClickOpen = () => {
     this.setState({open: true});
   };
@@ -31,17 +34,23 @@ class CreateGroupDialog extends Component{
     this.setState({open: false});
   };
 
-
   handleNameChange(name){
     this.setState({partyName: name})
   };
 
-  handleEmailChange(mail, index){
-    this.setState({emailList: mail})
+  handleEmailChange(){
+    this.setState({emailList : [...this.state.emailList, this.state.mail]})
   };
 
+  handleEmailDelete(index){
+    let array = this.state.emailList
+
+    array.splice(index, 1)
+    this.setState({emailList : array})
+  }
+
   render(){
-    const emailList = this.state.emailList;
+    let emailList = this.state.emailList;
     return (
       <div>
         <ThemeProvider theme = {Theme}>
@@ -69,16 +78,27 @@ class CreateGroupDialog extends Component{
                 <br margin-top='20px'/>
                   Fügen Sie Gruppenmitglieder hinzu!
                 </DialogContentText>
-                  {emailList.map((mail, index) =>
-                      <TextField
-                        onChange = {(event) => this.handleEmailChange(event.target.value, index)}
-                        value = {mail}
-                        margin="dense"
-                        id="userEmail"
-                        label="E-Mail"
-                        type="string"
-                        fullWidth/>
+                  
+                <TextField
+                  onChange = {(event) => this.setState({mail : event.target.value})}
+                  margin="dense"
+                  id="userEmail"
+                  label="E-Mail"
+                  type="string"
+                  fullWidth/>
+                <Button onClick={() => this.handleEmailChange()}>HIER</Button>
+                
+                <ul>
+                  {emailList.map((mail, index) => 
+                    <p>
+                      {mail}
+                      <Button onClick = {() => this.handleEmailDelete(index)}>
+                        <DeleteIcon/>
+                      </Button>
+                    </p>
                   )}
+                </ul>
+
               </DialogContent>
 
               <DialogActions>
