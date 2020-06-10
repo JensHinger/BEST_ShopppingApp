@@ -4,6 +4,7 @@ from src.bo.Item import Item
 from src.bo.Invitation import Invitation
 from src.bo.Party import Party
 from src.bo.User import User
+from src.bo.StandardListEntry import StandardListEntry
 
 from src.db.ListMapper import ListMapper
 from src.db.ListEntryMapper import ListEntryMapper
@@ -11,6 +12,7 @@ from src.db.ItemMapper import ItemMapper
 from src.db.InvitationMapper import InvitationMapper
 from src.db.PartyMapper import PartyMapper
 from src.db.UserMapper import UserMapper
+from src.db.StandardListEntryMapper import StandardListEntryMapper
 
 """
 Autoren: 
@@ -295,4 +297,40 @@ class ShoppingAdministration(object):
         """Einen User löschen."""
         with UserMapper() as mapper:
             mapper.delete(user)
+
+    """
+    Hier geht es um den Standartlisteneinträge
+    """
+
+    def get_all_standard_list_entrys(self):
+        """Alle Standartlisteneinträge auslesen."""
+        with StandardListEntryMapper() as mapper:
+            mapper.find_all()
+
+    def get_standard_list_entry_by_id(self, id):
+        """Standartlisteneintrag nach ID auslesen."""
+        with StandardListEntryMapper() as mapper:
+            mapper.find_by_id(id)
+
+    def get_standard_list_entry_by_party_id(self, party_id):
+        """Standartlisteneinträge nach Gruppen-ID auslesen."""
+        with StandardListEntryMapper() as mapper:
+            mapper.find_by_party_id(party_id)
+
+    def create_standard_list_entry(self):
+        """Ein Standartlisteneintrag erstellen."""
+        standardlistentry = StandardListEntry()
+
+        with StandardListEntryMapper() as mapper:
+            mapper.insert(standardlistentry)
+
+    def update_standard_list_entry(self, standardlistentry):
+        """Einen Standartlisteneintrag updaten."""
+        with StandardListEntryMapper() as mapper:
+            mapper.update(standardlistentry)
+
+    def delete_standard_list_entry(self, standardlistentry):
+        """Einen Standartlisteneintrag löschen."""
+        with StandardListEntryMapper() as mapper:
+            mapper.delete(standardlistentry)
 
