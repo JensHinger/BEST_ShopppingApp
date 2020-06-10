@@ -317,13 +317,14 @@ class ShoppingAdministration(object):
         with StandardListEntryMapper() as mapper:
             mapper.find_by_party_id(party_id)
 
-    def create_standard_list_entry(self, name, item_id, retailer_id, user_id, list_id):
+    def create_standard_list_entry(self, name, item_id, retailer_id, user_id, party_id):
         """Ein Standartlisteneintrag erstellen."""
         standardlistentry = StandardListEntry()
         standardlistentry.set_name(name)
         standardlistentry.set_item_id(item_id)
         standardlistentry.set_retailer_id(retailer_id)
         standardlistentry.set_user_id(user_id)
+        standardlistentry.set_party_id(party_id)
 
         with StandardListEntryMapper() as mapper:
             mapper.insert(standardlistentry)
