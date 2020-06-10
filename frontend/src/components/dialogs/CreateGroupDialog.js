@@ -32,6 +32,7 @@ class CreateGroupDialog extends Component{
 
   handleClose = () => {
     this.setState({open: false});
+    this.setState({emailList: []})
   };
 
   handleNameChange(name){
