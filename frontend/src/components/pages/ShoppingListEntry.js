@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ArticleAmountUnit from '../subcomponents/ArticleAmountUnit'
 
  class ShoppingListEntry extends Component {
 
@@ -6,7 +7,7 @@ import React, { Component } from 'react'
         super(props);
 
         this.state = {
-            
+
 
          }
 
@@ -15,6 +16,9 @@ import React, { Component } from 'react'
     render() {
         return (
             <div>
+            <ArticleAmountUnit/>
+
+            
                 
             </div>
         )
