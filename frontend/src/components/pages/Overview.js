@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Typography, Grid, Card, CardMedia} from '@material-ui/core';
 import CreateGroupDialog from '../dialogs/CreateGroupDialog'
-import UserParties from './UserParties'
+import UserParties from '../subcomponents/UserParties'
 
 class Overview extends Component {
 
