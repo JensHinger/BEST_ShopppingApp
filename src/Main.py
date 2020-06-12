@@ -22,9 +22,42 @@ bo = api.model('BusinessObject', {
 
 })
 
+invitation = api.inherit('Invitation', bo, {
+    'partyi_id': fields.Integer(attribute='_partyi_id', description='Die Einheit eines gewählten Produktes'),
+    'target_user_id': fields.Integer(attribute='_target_user_id', description='Die Menge eines gewählten Produktes'),
+    'source_user_id': fields.Integer(attribute='_source_user_id', description='Die Menge eines gewählten Produktes'),
+    'is_accepted': fields.Boolean(attribute='_is_accepted', description='Die Menge eines gewählten Produktes'),
+})
+
 item = api.inherit('Item', bo, {
     'unit': fields.Integer(attribute='_unit', description='Die Einheit eines gewählten Produktes'),
     'amount': fields.Integer(attribute='_amount', description='Die Menge eines gewählten Produktes'),
+})
+
+list = api.inherit('List', bo, {
+    'partyl_id': fields.Integer(attribute='_partyl_id', description='Die Einheit eines gewählten Produktes'),
+})
+
+list_entry = api.inherit('ListEntry', bo, {
+    'item_id': fields.Integer(attribute='_item_id', description='Die Einheit eines gewählten Produktes'),
+    'retailer_id': fields.Integer(attribute='_retailer_id', description='Die Einheit eines gewählten Produktes'),
+    'user_id': fields.Integer(attribute='_user_id', description='Die Einheit eines gewählten Produktes'),
+    'list_id': fields.Integer(attribute='_list_id', description='Die Einheit eines gewählten Produktes'),
+})
+
+party = api.inherit('Party', bo, {
+})
+
+standard_list_entry = api.inherit('StandardListEntry', bo, {
+    'item_id': fields.Integer(attribute='_item_id', description='Die Einheit eines gewählten Produktes'),
+    'retailer_id': fields.Integer(attribute='_retailer_id', description='Die Einheit eines gewählten Produktes'),
+    'user_id': fields.Integer(attribute='_user_id', description='Die Einheit eines gewählten Produktes'),
+    'list_id': fields.Integer(attribute='_list_id', description='Die Einheit eines gewählten Produktes'),
+})
+
+user = api.inherit('User', bo, {
+    'email': fields.String(attribute='_email', description='Die Einheit eines gewählten Produktes'),
+    'google_id': fields.Integer(attribute='_google_id', description='Die Einheit eines gewählten Produktes'),
 })
 
 @shopping.route('/item')
@@ -35,6 +68,15 @@ class Item(Resource):
         adm = ShoppingAdministration()
         item = adm.get_all_items()
         return item
+
+@shopping.route('/user')
+class User(Resource):
+
+    @shopping.marshal_list_with(user)
+    def get(self):
+        adm = ShoppingAdministration()
+        users = adm.get_all_users()
+        return users
 
 
 """Um Flask in einer lokalen Entwicklungsumgebung zu starten"""
