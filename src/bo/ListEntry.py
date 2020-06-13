@@ -35,7 +35,7 @@ class ListEntry(BusinessObject):
         self._user_id = user_id
 
     def get_list_id(self):
-        """Auslesen der übergeordneten Liste des Listenelement"""
+        """Au slesen der übergeordneten Liste des Listenelement"""
         return self._list_id
 
     def set_list_id(self, list_id):
