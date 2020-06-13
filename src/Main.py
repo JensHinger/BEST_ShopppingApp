@@ -60,6 +60,8 @@ user = api.inherit('User', bo, {
     'google_id': fields.Integer(attribute='_google_id', description='Die Einheit eines gewählten Produktes'),
 })
 
+
+
 @shopping.route('/item')
 class Item(Resource):
 
@@ -68,6 +70,8 @@ class Item(Resource):
         adm = ShoppingAdministration()
         item = adm.get_all_items()
         return item
+
+"""Ab hier Jonathan immer vor den Blöcken bitte "****** related" hinschreiben"""
 
 @shopping.route('/user')
 class User(Resource):
