@@ -73,18 +73,19 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
                 <br margin-top = '20px'/>
                 Eintrag hinzufügen
                 <Divider/>
-                <Grid>
-                <br margin-top = '20px'/>
+                <Grid container>
+                <Grid item sm >
+
                 <Autocomplete
                 id="combo-box-demo"
                 options={artikel}
                 getOptionLabel={(option) => option.title}
-                style={{ width: 300 }}
+                style={{ width: 200 }}
                 renderInput={(params) =><TextField {...params} label="Artikel"  />}
                 />
                 </Grid>
 
-                <Grid>
+                <Grid item sm >
                 <TextField
                 label="Menge"
                 helperText="Geben Sie eine Menge an"
@@ -93,7 +94,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 
                 
-                <Grid>
+                <Grid item sm >
                 <TextField
                 id="standard-select-currency"
                 select
@@ -109,6 +110,8 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
                     ))}
                 </TextField>
                 </Grid>
+                </Grid>
+                
                 </Typography>
                 
             </div>
