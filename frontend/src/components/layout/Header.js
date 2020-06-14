@@ -10,6 +10,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Navbar from "./Navbar"
+import LogOutDialog from "../dialogs/LogOutDialog"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -82,6 +83,7 @@ export default function PrimarySearchAppBar() {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}><LogOutDialog></LogOutDialog></MenuItem>
     </Menu>
   );
 
