@@ -38,6 +38,7 @@ class ManageGroup extends Component{
                 <br margin-top = '20px'/>
                 Gruppenmitglieder
                 <Divider/>
+                <br margin-top = '20px'/>
                 <ExitGroupDialog/>
             </Typography>
             )
