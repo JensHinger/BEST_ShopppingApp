@@ -24,7 +24,7 @@ class ExitGroupDialog extends Component{
 
         return (
     <div>
-      <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+      <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
         Gruppe verlassen
       </Button>
       <Dialog
