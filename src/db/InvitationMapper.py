@@ -106,6 +106,20 @@ class InvitationMapper(Mapper):
             result = None
         return result
 
+    def find_pend_invites_by_party(self, party_id):
+        """Invite mit der entsprechenden party finden"""
+        cursor = self._cnx.cursor()
+        command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
+                  "partyi_id LIKE '{}' AND is_accepted = 0".format(party_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            result = self.build_bo(tuples)
+        except IndexError:
+            result = None
+        return result
+
     def find_source_user(self, source_user_id):
         """Invite mit entsprechendem source user finden"""
         cursor = self._cnx.cursor()
@@ -200,7 +214,4 @@ if (__name__ == "__main__"):
         mapper.delete(testinv)
         thisinv = mapper.find_by_id(7)
         mapper.delete(thisinv)
-
-
-
 

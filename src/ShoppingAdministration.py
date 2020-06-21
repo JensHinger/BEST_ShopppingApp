@@ -212,9 +212,14 @@ class ShoppingAdministration(object):
             return mapper.find_pend_invites_by_target_user(target_user_id)
 
     def get_pen_invites_by_source_user(self, source_user_id):
-        """Alle Invitations von Source-User auslesen."""
+        """Alle pending-Invitations von Source-User auslesen."""
         with InvitationMapper() as mapper:
             return mapper.find_pend_invites_by_source_user(source_user_id)
+
+    def get_pen_invites_by_party(self, party_id):
+        """Alle pending-Invitations von der Party auslesen."""
+        with InvitationMapper() as mapper:
+            return mapper.find_pend_invites_by_party(party_id)
 
     def get_source_user_by_id(self, source_user_id):
         """Den source-user auslesen."""
