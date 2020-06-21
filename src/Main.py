@@ -2,6 +2,15 @@ from flask import Flask
 from flask_restx import Resource, Api, fields
 from flask_cors import CORS
 
+from bo.ListEntry import ListEntry
+from bo.Party import Party
+from bo.Retailer import Retailer
+from bo.StandardListEntry import StandardListEntry
+from bo.User import User
+from bo.Invitation import Invitation
+from bo.Item import Item
+from bo.List import List
+
 from ShoppingAdministration import ShoppingAdministration
 
 
@@ -63,26 +72,14 @@ user = api.inherit('User', bo, {
 retailer = api.inherit('retailer', bo, {
 })
 
-
-@shopping.route('/item')
-class Item(Resource):
-
-    @shopping.marshal_list_with(item)
-    def get(self):
-        adm = ShoppingAdministration()
-        item = adm.get_all_items()
-        return item
+"""Invitation related"""
 
 
+"""Item related"""
 
 
-"""Ab hier Jonathan immer vor den Blöcken bitte "****** related" hinschreiben"""
-"""Jonathan macht die letzten 4 und Jens macht die ersten 4 """
-from bo.ListEntry import ListEntry
-from bo.Party import Party
-from bo.Retailer import Retailer
-from bo.StandardListEntry import StandardListEntry
-from bo.User import User
+"""List related"""
+
 
 """ListEntry related"""
 @shopping.route("/listentry-by-list/<int:id>")
@@ -192,21 +189,21 @@ class PartyOperations(Resource):
         else:
             return "", 500
 
-    @shopping.route("/party")
-    class PartyListOperations(Resource):
-        @shopping.marshal_with(party)
-        @shopping.expect(party)
-        def post(self):
-            """Anlegen einer neuen Party: Die vom Client vorgegebenen Daten werden dabei als Vorschlag aufgenommen."""
-            adm = ShoppingAdministration()
-            proposal = Party.from_dict(api.payload)
+@shopping.route("/party")
+class PartyListOperations(Resource):
+    @shopping.marshal_with(party)
+    @shopping.expect(party)
+    def post(self):
+        """Anlegen einer neuen Party: Die vom Client vorgegebenen Daten werden dabei als Vorschlag aufgenommen."""
+        adm = ShoppingAdministration()
+        proposal = Party.from_dict(api.payload)
 
-            if proposal is not None:
-                print(proposal.get_name())
-                result = adm.create_party(proposal.get_name())
-                return result, 200
-            else:
-                return "", 500
+        if proposal is not None:
+            print(proposal.get_name())
+            result = adm.create_party(proposal.get_name())
+            return result, 200
+        else:
+            return "", 500
 
 
 
