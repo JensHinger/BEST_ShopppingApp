@@ -302,6 +302,7 @@ class StandardListEntryListOperations(Resource):
             return "", 500
 
 
+
 @shopping.route("/standardlistentry/<int:id>")
 class StandardListEntryOperations(Resource):
     @shopping.marshal_with(standard_list_entry)
