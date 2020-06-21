@@ -23,3 +23,11 @@ class Item(BusinessObject):
     def set_unit(self, unit):
         """Setzen der Einheit des gewünschten Artikels"""
         self._unit = unit
+
+    @staticmethod
+    def from_dict(dictionary=dict()):
+        """Umwandeln eines Python dict() in einen listentry()."""
+        obj = Item()
+        obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
+        obj.set_name(dictionary["name"])
+        return obj
