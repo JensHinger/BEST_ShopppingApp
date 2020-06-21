@@ -41,3 +41,19 @@ class ListEntry(BusinessObject):
     def set_list_id(self, list_id):
         """Setzen der Übergeordneten Liste des Listenelements"""
         self._list_id = list_id
+
+    @staticmethod
+    def from_dict(dictionary=dict()):
+        """Umwandeln eines Python dict() in einen listentry()."""
+        obj = ListEntry()
+        obj.set_name(dictionary["name"])
+        obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
+        obj.set_item_id(dictionary["item_id"])
+        obj.set_list_id(dictionary["list_id"])
+        obj.set_retailer_id(dictionary["retailer_id"])
+        obj.set_user_id(dictionary["user_id"])
+        return obj
+    def __str__(self):
+        """Erzeugen eines Strings welcher das Objekt beschreibt"""
+        return "Listentry id: {}, name: {}, item_id: {}, retailer_id:{}, user_id: {}, list_id: {} ".format(self.get_id(),
+               self.get_name(), self.get_item_id(), self.get_retailer_id(), self.get_user_id(), self.get_list_id(),)

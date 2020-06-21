@@ -107,6 +107,5 @@ class PartyMapper(Mapper):
 if (__name__ == "__main__"):
     with PartyMapper() as mapper:
         # Nach mapper jegliche Methode dieser Klasse
-        party = mapper.find_by_id(6)
-        result = mapper.delete(party)
-        print(result)
+        party = mapper.find_by_id(2)
+        print(party.get_id())

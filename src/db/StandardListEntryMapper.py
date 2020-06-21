@@ -98,6 +98,27 @@ class StandardListEntryMapper(Mapper):
 
         return result
 
+    def find_user_by_id(self, user_id):
+        result = None
+
+        cursor = self._cnx.cursor()
+        command = "SELECT id, name, creation_date, item_id, retailer_id, user_id, party_sle_id FROM standardlistentry" \
+                  " WHERE user_id LIKE ('{}')".format(user_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            result = self.build_bo(tuples)
+        except IndexError:
+            """Falls kein ListEntry mit der angegebenen id gefunden werden konnte,
+                            wird hier None als Rückgabewert deklariert"""
+            result = None
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
     def insert(self, standardlistentry):
 
         cursor = self._cnx.cursor()
