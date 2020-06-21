@@ -52,6 +52,7 @@ standard_list_entry = api.inherit('StandardListEntry', bo, {
     'item_id': fields.Integer(attribute='_item_id', description='Die Einheit eines gewählten Produktes'),
     'retailer_id': fields.Integer(attribute='_retailer_id', description='Die Einheit eines gewählten Produktes'),
     'user_id': fields.Integer(attribute='_user_id', description='Die Einheit eines gewählten Produktes'),
+    'party_id': fields.Integer(attribute='_party_id', description='Die Einheit eines gewählten Produktes'),
 })
 
 user = api.inherit('User', bo, {
@@ -292,11 +293,12 @@ class StandardListEntryListOperations(Resource):
         """
         print("anlegen eines Standardlistentries")
         adm = ShoppingAdministration()
+        print(api.payload)
         proposal = StandardListEntry.from_dict(api.payload)
         if proposal is not None:
             slentry = adm.create_standard_list_entry(proposal.get_name(), proposal.get_item_id(),
-                                                     proposal.get_retailer_id(), proposal.set_user_id(),
-                                                     proposal.get_list_id())
+                                                     proposal.get_retailer_id(), proposal.get_user_id(),
+                                                     proposal.get_party_id())
             return slentry, 200
         else:
             return "", 500
