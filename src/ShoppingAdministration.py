@@ -201,10 +201,15 @@ class ShoppingAdministration(object):
         with InvitationMapper() as mapper:
             return mapper.find_by_id(id)
 
-    def get_all_user_in_party(self, partyi_id):
-        """Alle User einer Party auslesen."""
+    def get_all_pend_user_in_party(self, partyi_id):
+        """Alle User mit pend invites für eine Party auslesen."""
         with InvitationMapper() as mapper:
-            return mapper.find_all_user_in_party(partyi_id)
+            return mapper.find_all_pend_user_in_party(partyi_id)
+
+    def get_all_accepted_user_in_party(self, partyi_id):
+        """Alle User welche in einer Party sind auslesen."""
+        with InvitationMapper() as mapper:
+            return mapper.find_all_accepted_user_in_party(partyi_id)
 
     def get_pen_invites_by_target_user(self, target_user_id):
         """Alle pending-Invitations von dem Target-User auslesen."""
@@ -216,25 +221,15 @@ class ShoppingAdministration(object):
         with InvitationMapper() as mapper:
             return mapper.find_pend_invites_by_source_user(source_user_id)
 
-    def get_pen_invites_by_party(self, party_id):
-        """Alle pending-Invitations von der Party auslesen."""
+    def get_accepted_invites_by_source_user_by_id(self, source_user_id):
+        """Invitation nach Source-User auslesen, welche akzeptiert wurde."""
         with InvitationMapper() as mapper:
-            return mapper.find_pend_invites_by_party(party_id)
+            return mapper.find_accepted_invites_by_source_user(source_user_id)
 
-    def get_source_user_by_id(self, source_user_id):
-        """Den source-user auslesen."""
+    def get_accepted_invites_by_target_user_by_id(self, target_user_id):
+        """Invitation nach Target-User auslesen, welche akzeptiert wurde."""
         with InvitationMapper() as mapper:
-            return mapper.find_source_user(source_user_id)
-
-    def get_target_user_by_id(self, target_user_id):
-        """Den target-user auslesen."""
-        with InvitationMapper() as mapper:
-            return mapper.find_target_user(target_user_id)
-
-    def get_all_parties_corr_user(self, target_user_id):
-        """Alle Parties zu denen ein User gehört auslesen."""
-        with InvitationMapper() as mapper:
-            return mapper.find_all_parties_corr_user(target_user_id)
+            return mapper.find_accepted_invites_by_target_user(target_user_id)
 
     def get_all_pend_invites(self):
         """Alle pending-invitations auslesen."""

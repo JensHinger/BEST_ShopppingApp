@@ -125,9 +125,9 @@ class InvitationOperations(Resource):
         else:
             return "", 500
 
-@shopping.route("/invitation-by-source-user/<int:id>")
+@shopping.route("/pending-invitation-by-source-user/<int:id>")
 @shopping.param("id", "Die ID des Source Users")
-class InvitationBySourceUser(Resource):
+class PendingInvitationBySourceUser(Resource):
 
     @shopping.marshal_with(invitation)
     def get(self, id):
@@ -136,9 +136,9 @@ class InvitationBySourceUser(Resource):
         entry = adm.get_pen_invites_by_source_user(id)
         return entry
 
-@shopping.route("/invitation-by-target-user/<int:id>")
+@shopping.route("/pending-invitation-by-target-user/<int:id>")
 @shopping.param("id", "Die ID des Target Users")
-class InvitationByTargetUser(Resource):
+class PendingInvitationByTargetUser(Resource):
 
     @shopping.marshal_with(invitation)
     def get(self, id):
@@ -147,15 +147,49 @@ class InvitationByTargetUser(Resource):
         entry = adm.get_pen_invites_by_target_user(id)
         return entry
 
-@shopping.route("/invitation-by-party/<int:id>")
+@shopping.route("/accepted-invitation-by-source-user/<int:id>")
+@shopping.param("id", "Die ID des Source Users")
+class AcceptedInvitationBySourceUser(Resource):
+
+    @shopping.marshal_with(invitation)
+    def get(self, id):
+        """Auslesen von pending Invitation Objekten welche die mit dieser Source User ID verbunden sind."""
+        adm = ShoppingAdministration()
+        entry = adm.get_accepted_invites_by_source_user_by_id(id)
+        return entry
+
+@shopping.route("/accepted-invitation-by-target-user/<int:id>")
+@shopping.param("id", "Die ID des Target Users")
+class AcceptedInvitationByTargetUser(Resource):
+
+    @shopping.marshal_with(invitation)
+    def get(self, id):
+        """Auslesen von pending Invitation Objekten welche die mit dieser Target User ID verbunden sind."""
+        adm = ShoppingAdministration()
+        entry = adm.get_accepted_invites_by_target_user_by_id(id)
+        return entry
+
+@shopping.route("/pending-invitations-by-user-in-party/<int:id>")
 @shopping.param("id", "Die ID der Party")
-class InvitationByParty(Resource):
+class PendingInvitationsByParty(Resource):
 
     @shopping.marshal_with(invitation)
     def get(self, id):
         """Auslesen von pending Invitation Objekten welche die mit dieser Party ID verbunden sind."""
         adm = ShoppingAdministration()
-        entry = adm.get_pen_invites_by_party(id)
+        entry = adm.get_all_pend_user_in_party(id)
+        return entry
+
+
+@shopping.route("/accepted-invitations-by-user-in-party/<int:id>")
+@shopping.param("id", "Die ID der Party")
+class AcceptedInvitationsByParty(Resource):
+
+    @shopping.marshal_with(invitation)
+    def get(self, id):
+        """Auslesen von pending Invitation Objekten welche die mit dieser Party ID verbunden sind."""
+        adm = ShoppingAdministration()
+        entry = adm.get_all_accepted_user_in_party(id)
         return entry
 
 """Item related"""
