@@ -160,5 +160,5 @@ if __name__ == "__main__":
     with UserMapper() as mapper:
         # Nach mapper jegliche Methode dieser Klasse
 
-        result = mapper.find_all()
-        print(len(result))
+        result = mapper.find_by_id(2)
+        print(result.get_id())

@@ -1,11 +1,5 @@
 import React, { Component } from 'react';
-import { Typography, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-import {ThemeProvider} from "@material-ui/core"
-import Theme from "../../Theme"
-import ShoppingAPI from '../../api/ShoppingAPI'
-import {Link as RouterLink} from 'react-router-dom'
-
-
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 
 class ExitGroupDialog extends Component{
 
@@ -30,7 +24,7 @@ class ExitGroupDialog extends Component{
 
         return (
     <div>
-      <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+      <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
         Gruppe verlassen
       </Button>
       <Dialog

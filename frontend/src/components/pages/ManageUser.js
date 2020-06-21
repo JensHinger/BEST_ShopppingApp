@@ -4,7 +4,7 @@ import ShoppingAPI from '../../api/ShoppingAPI'
 import {Link as RouterLink} from 'react-router-dom'
 import {Divider} from '@material-ui/core'
 import {TextField} from '@material-ui/core'
-import UserParties from './UserParties'
+import UserParties from '../subcomponents/UserParties'
 
 class ManageUser extends Component {
     constructor(props){

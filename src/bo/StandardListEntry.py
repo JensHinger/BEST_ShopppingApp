@@ -39,3 +39,21 @@ class StandardListEntry(BusinessObject):
 
     def set_party_id(self, party_id):
         self._party_id = party_id
+
+    @staticmethod
+    def from_dict(dictionary=dict()):
+        """Umwandeln eines Python dict() in einen Standardlistentry()."""
+        obj = StandardListEntry()
+        obj.set_name(dictionary["name"])
+        obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
+        obj.set_item_id(dictionary["item_id"])
+        obj.set_party_id(dictionary["party_id"])
+        obj.set_retailer_id(dictionary["retailer_id"])
+        obj.set_user_id(dictionary["user_id"])
+        return obj
+
+    def __str__(self):
+        """Erzeugen eines Strings welcher das Objekt beschreibt"""
+        return "StandardListentry id: {}, name: {}, item_id: {}, retailer_id:{}, user_id: {}, party_id: {} ".format(
+            self.get_id(),
+            self.get_name(), self.get_item_id(), self.get_retailer_id(), self.get_user_id(), self.get_party_id(), )
