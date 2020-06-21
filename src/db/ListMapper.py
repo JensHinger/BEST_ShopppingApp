@@ -128,5 +128,7 @@ class ListMapper(Mapper):
 
 if __name__ == "__main__":
     with ListMapper() as mapper:
-        result = mapper.find_all()
-        print(result)
+        l = List()
+        l.set_name("Donnerstag")
+        l.set_partyl_id(2)
+        mapper.insert(l)

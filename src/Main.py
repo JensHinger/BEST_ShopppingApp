@@ -197,8 +197,70 @@ class AcceptedInvitationsByParty(Resource):
 
 """List related"""
 
+@shopping.route("/list")
+class ListListOperations(Resource):
+
+    @shopping.marshal_with(list)
+    @shopping.expect(list)
+    def post(self):
+        adm = ShoppingAdministration()
+        proposal = List.from_dict(api.payload)
+        print("proposal", proposal)
+        if proposal is not None:
+            list = adm.create_list(proposal.get_name(), proposal.get_partyl_id())
+            return list, 200
+        else:
+            return "", 500
+
+@shopping.route("/list/<int:id>")
+@shopping.param("id", "Die ID der Party")
+class ListOperations(Resource):
+
+    @shopping.marshal_with(list)
+    def get(self, id):
+        """Auslesen von pending Invitation Objekten welche die mit dieser Party ID verbunden sind."""
+        adm = ShoppingAdministration()
+        entry = adm.get_list_by_id(id)
+        return entry
+
+    @shopping.marshal_with(list)
+    @shopping.expect(list)
+    def put(self, id):
+        """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
+        adm = ShoppingAdministration()
+        list = List.from_dict(api.payload)
+
+        if list is not None:
+            list.set_id(id)
+            adm.update_list(list)
+            return "", 200
+        else:
+            return "", 500
+
+    def delete(self, id):
+        """Löschen der spezifizierten party"""
+        adm = ShoppingAdministration()
+        p = adm.get_list_by_id(id)
+
+        if p is not None:
+            adm.delete_list(p)
+            return "", 200
+        else:
+            return "", 500
+
+@shopping.route("/list-by-party/<int:id>")
+@shopping.param("id", "Die ID der Party")
+class ListByPartyOperations(Resource):
+
+    @shopping.marshal_with(list)
+    def get(self, id):
+        """Auslesen von pending Invitation Objekten welche die mit dieser Party ID verbunden sind."""
+        adm = ShoppingAdministration()
+        entry = adm.get_all_lists_by_partyl_id(id)
+        return entry
 
 """ListEntry related"""
+
 @shopping.route("/listentry-by-list/<int:id>")
 @shopping.param("id", "Die ID der Shopping List ")
 class ListEntryByListOperations(Resource):
