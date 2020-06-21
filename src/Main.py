@@ -291,7 +291,7 @@ class PartyListOperations(Resource):
 
 
 """Retailer related."""
-@shopping.route("retailer/<int:id>")
+@shopping.route("/retailer/<int:id>")
 class RetailerOperations (Resource):
     @shopping.marshal_with(retailer)
     def get(self, id):
