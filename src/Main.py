@@ -52,14 +52,15 @@ standard_list_entry = api.inherit('StandardListEntry', bo, {
     'item_id': fields.Integer(attribute='_item_id', description='Die Einheit eines gewählten Produktes'),
     'retailer_id': fields.Integer(attribute='_retailer_id', description='Die Einheit eines gewählten Produktes'),
     'user_id': fields.Integer(attribute='_user_id', description='Die Einheit eines gewählten Produktes'),
-    'list_id': fields.Integer(attribute='_list_id', description='Die Einheit eines gewählten Produktes'),
 })
 
 user = api.inherit('User', bo, {
     'email': fields.String(attribute='_email', description='Die Einheit eines gewählten Produktes'),
-    'google_id': fields.Integer(attribute='_google_id', description='Die Einheit eines gewählten Produktes'),
+    'google_id': fields.String(attribute='_google_id', description='Die Einheit eines gewählten Produktes'),
 })
 
+retailer = api.inherit('retailer', bo, {
+})
 
 
 @shopping.route('/item')
@@ -71,17 +72,310 @@ class Item(Resource):
         item = adm.get_all_items()
         return item
 
+
+
+
 """Ab hier Jonathan immer vor den Blöcken bitte "****** related" hinschreiben"""
+"""Jonathan macht die letzten 4 und Jens macht die ersten 4 """
+from bo.ListEntry import ListEntry
+from bo.Party import Party
+from bo.Retailer import Retailer
+from bo.StandardListEntry import StandardListEntry
+from bo.User import User
 
-@shopping.route('/user')
-class User(Resource):
-
-    @shopping.marshal_list_with(user)
-    def get(self):
+"""ListEntry related"""
+@shopping.route("/listentry-by-list/<int:id>")
+@shopping.param("id", "Die ID der Shopping List ")
+class ListEntryByListOperations(Resource):
+    @shopping.marshal_with(list_entry)
+    def get(self, id):
+        """Auslesen von Listentry Objekten welche die mit dieser  List ID verbunden sind."""
         adm = ShoppingAdministration()
-        users = adm.get_all_users()
-        return users
+        entry = adm.get_listentry_by_list_id(id)
+        return entry
 
+
+@shopping.route("/listentry-by-user/<int:id>")
+@shopping.param("id", "Die id des Users")
+class ListEntryByUserOperations(Resource):
+    @shopping.marshal_with(list_entry)
+    def get(self, id):
+        adm = ShoppingAdministration()
+        entry = adm.get_listentry_by_user_id(id)
+        return entry
+
+
+@shopping.route("/listentry")
+@shopping.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class ListEntryListOperations(Resource):
+    @shopping.marshal_with(list_entry)
+    @shopping.expect(list_entry)
+    def post(self):
+        """Die vom Client gesendeten Daten werden als Vorschlag aufgefasst (siehe Thies),
+        PROBLEM! Hier bekomme ich doch nicht die IDs zurück sondern die eingegebenen Strings?!
+        Ich müsste ja erst die neu entstandenen item (+ amount, unit) in die DB füttern.
+        Dann muss ich herausfinden ob der User existiert (und in der Gruppe ist).
+        gleiches gilt für den Retailer. Erst dann kann ich meinen Listentry erstellen und in der DB speicher.
+        """
+
+        adm = ShoppingAdministration()
+        proposal = ListEntry.from_dict(api.payload)
+        print("proposal", proposal)
+        if proposal is not None:
+            lentry = adm.create_listentry(proposal.get_name(), proposal.get_item_id(), proposal.get_retailer_id(), proposal.get_user_id(),
+                                          proposal.get_list_id())
+            return lentry, 200
+        else:
+            return "", 500
+
+
+
+@shopping.route("/listentry/<int:id>")
+class ListEntryOperations(Resource):
+    @shopping.marshal_with(list_entry)
+    @shopping.expect(list_entry)
+    def put(self, id):
+        """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
+        adm = ShoppingAdministration()
+        lentry = ListEntry.from_dict(api.payload)
+
+
+        if lentry is not None:
+            lentry.set_id(id)
+            adm.update_listentry(lentry)
+            return "", 200
+        else:
+            return "", 500
+
+    def delete(self, id):
+        """Löschen des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
+        adm = ShoppingAdministration()
+        lentry = adm.get_list_by_id(id)
+        adm.delete_listentry(lentry)
+        return "", 200
+
+
+"""Party Related"""
+@shopping.route("/party/<int:id>")
+@shopping.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@shopping.param('id', 'Die ID des Account-Objekts')
+class PartyOperations(Resource):
+    @shopping.marshal_with(party)
+    def get(self, id):
+        """Auslesen eines spezifizierten Party Objekts aus der DB """
+        adm = ShoppingAdministration()
+        p = adm.get_party_by_id(id)
+        return p
+
+    @shopping.expect(party)
+    def put(self, id):
+        """Update der spezifizierten party. Es ist die id relevant welche per Link übergeben wird."""
+        adm = ShoppingAdministration()
+        p = Party.from_dict(api.payload)
+
+        if p is not None:
+            p.set_id(id)
+            adm.update_party(p)
+            return "", 200
+        else:
+            return "", 500
+
+    def delete(self, id):
+        """Löschen der spezifizierten party"""
+        adm = ShoppingAdministration()
+        p = adm.get_party_by_id(id)
+
+        if p is not None:
+            adm.delete_party(p)
+            return "", 200
+        else:
+            return "", 500
+
+    @shopping.route("/party")
+    class PartyListOperations(Resource):
+        @shopping.marshal_with(party)
+        @shopping.expect(party)
+        def post(self):
+            """Anlegen einer neuen Party: Die vom Client vorgegebenen Daten werden dabei als Vorschlag aufgenommen."""
+            adm = ShoppingAdministration()
+            proposal = Party.from_dict(api.payload)
+
+            if proposal is not None:
+                print(proposal.get_name())
+                result = adm.create_party(proposal.get_name())
+                return result, 200
+            else:
+                return "", 500
+
+
+
+"""Retailer related."""
+@shopping.route("retailer/<int:id>")
+class RetailerOperations (Resource):
+    @shopping.marshal_with(retailer)
+    def get(self, id):
+        """Auslesen des Spezifizierten Retailers aus der DB."""
+        adm = ShoppingAdministration()
+        ret = adm.get_retailer_by_id(id)
+
+        if ret is not None:
+            return ret
+        else:
+            return "", 500
+
+    def put(self, id):
+        """Updaten des Spezifizierten Retailers aus der DB."""
+        adm = ShoppingAdministration()
+        ret = Retailer.from_dict(api.payload)
+
+        if ret is not None:
+            ret.set_id(id)
+            adm.update_retailer(ret)
+            return "", 200
+        else:
+            return "", 500
+
+    def delete(self, id):
+        """Löschen des Spezifizierten Retailers aus der DB."""
+        adm = ShoppingAdministration()
+        ret = adm.get_retailer_by_id(id)
+
+        if ret is not None:
+            adm.delete_retailer(ret)
+            return "", 200
+        else:
+            return "", 500
+
+@shopping.route("/retailer")
+class RetailerListOperations(Resource):
+    @shopping.marshal_with(retailer)
+    @shopping.expect(retailer)
+    def post(self):
+        adm = ShoppingAdministration()
+        proposal = Retailer.from_dict(api.payload)
+
+        if proposal is not None:
+            result = adm.create_retailer(proposal.get_name())
+            return result, 200
+        else:
+            return "", 500
+
+"""StandardListEntry related"""
+@shopping.route("/standardlistentry-by-list/<int:id>")
+@shopping.param("id", "Die ID der Shopping List ")
+class StandardListEntryByListOperations(Resource):
+    @shopping.marshal_with(standard_list_entry)
+    def get(self, id):
+        """Auslesen eines StandardListentry Objekts welches die mit dieser  List ID verbunden sind."""
+        adm = ShoppingAdministration()
+        entry = adm.get_standard_list_entry_by_id(id)
+        return entry
+
+
+@shopping.route("/standardlistentry-by-user/<int:id>")
+@shopping.param("id", "Die id des Users")
+class StandardListEntryByUserOperations(Resource):
+    @shopping.marshal_with(standard_list_entry)
+    def get(self, id):
+        adm = ShoppingAdministration()
+        entry = adm.get_standard_listentry_by_user_id(id)
+
+        return entry
+
+
+@shopping.route("/standardlistentry")
+class StandardListEntryListOperations(Resource):
+    @shopping.marshal_with(standard_list_entry)
+    @shopping.expect(standard_list_entry)
+    def post(self):
+        """Die vom Client gesendeten Daten werden als Vorschlag aufgefasst (siehe Thies)
+        """
+        print("anlegen eines Standardlistentries")
+        adm = ShoppingAdministration()
+        proposal = StandardListEntry.from_dict(api.payload)
+        if proposal is not None:
+            slentry = adm.create_standard_list_entry(proposal.get_name(), proposal.get_item_id(),
+                                                     proposal.get_retailer_id(), proposal.set_user_id(),
+                                                     proposal.get_list_id())
+            return slentry, 200
+        else:
+            return "", 500
+
+
+
+@shopping.route("/standardlistentry/<int:id>")
+class StandardListEntryOperations(Resource):
+    @shopping.marshal_with(standard_list_entry)
+    def put(self, id):
+        """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
+        adm = ShoppingAdministration()
+        slentry = StandardListEntry.from_dict(api.payload)
+
+        if slentry is not None:
+            slentry.set_id(id)
+            adm.update_standard_list_entry(slentry)
+            return "", 200
+        else:
+            return "", 500
+
+    def delete(self, id):
+        """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
+        adm = ShoppingAdministration()
+        slentry = StandardListEntry.from_dict(api.payload)
+
+        if slentry is not None:
+            slentry.set_id(id)
+            adm.delete_listentry(list_entry)
+            return "", 200
+        else:
+            return "", 500
+
+"""User related."""
+@shopping.route("/user/<int:id>")
+@shopping.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@shopping.param('id', 'Die ID des User-Objekts')
+class UserOperations(Resource):
+    @shopping.marshal_with(user)
+    def get(self, id):
+        """Auslesen des spezifizierten Users"""
+        print("id:", id)
+        adm = ShoppingAdministration()
+        u = adm.get_user_by_id(id)
+        print("objekt", u)
+        return u
+
+    def put(self, id):
+        """Update des Spezifizierten Users."""
+        adm = ShoppingAdministration()
+        u = User.from_dict(api.payload)
+
+        if u is not None:
+            u.set_id(id)
+            adm.update_user(u)
+            return "", 200
+        else:
+            return "", 500
+
+    def delete(self, id):
+        """Löschen des Spezifizierten Retailers aus der DB."""
+        adm = ShoppingAdministration()
+        u = adm.get_user_by_id(id)
+
+        if u is not None:
+            adm.delete_user(u)
+            return "", 200
+        else:
+            return "", 500
+
+
+@shopping.route("/user-by-email/<string:email>")
+class UserByEmailOperations(Resource):
+    @shopping.marshal_with(user)
+    def get(self, email):
+        """Auslesen des durch die email spezifizierten Users."""
+        adm = ShoppingAdministration()
+        u = adm.get_user_by_email(email)
+        return u
 
 """Um Flask in einer lokalen Entwicklungsumgebung zu starten"""
 if __name__ == '__main__':

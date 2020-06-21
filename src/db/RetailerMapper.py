@@ -65,6 +65,25 @@ class RetailerMapper(Mapper):
 
         return result
 
+    def find_by_name(self, name):
+        cursor = self._cnx.cursor()
+        command = "SELECT id, name, creation_date FROM retailer WHERE name LIKE '{}' ".format(name)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            result = self.build_bo(tuples)
+
+        except IndexError:
+            """Falls keine Party mit der angegebenen id gefunden werden konnte,
+                wird hier None als Rückgabewert deklariert"""
+            result = None
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
     def insert(self, retailer):
         cursor = self._cnx.cursor()
         cursor.execute("SELECT MAX(id) as maxid from retailer")

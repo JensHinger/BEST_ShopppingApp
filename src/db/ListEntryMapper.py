@@ -77,6 +77,47 @@ class ListEntryMapper(Mapper):
 
         return result
 
+    def find_by_list_id(self, list_id):
+
+        cursor = self._cnx.cursor()
+        command = "SELECT id, name, creation_date, item_id, retailer_id, user_id, list_id FROM listentry \
+                   WHERE list_id LIKE ('{}')".format(list_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            result = self.build_bo(tuples)
+        except IndexError:
+            """Falls kein ListEntry mit der angegebenen id gefunden werden konnte,
+                            wird hier None als Rückgabewert deklariert"""
+            result = None
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
+
+    def find_by_user_id(self, user_id):
+
+        cursor = self._cnx.cursor()
+        command = "SELECT id, name, creation_date, item_id, retailer_id, user_id, list_id FROM listentry \
+                   WHERE user_id LIKE ('{}')".format(user_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            result = self.build_bo(tuples)
+        except IndexError:
+            """Falls kein ListEntry mit der angegebenen id gefunden werden konnte,
+                            wird hier None als Rückgabewert deklariert"""
+            result = None
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
     def insert(self, listentry):
 
         cursor = self._cnx.cursor()
@@ -96,13 +137,12 @@ class ListEntryMapper(Mapper):
         cursor.close()
 
     def update(self, listentry):
-
         cursor = self._cnx.cursor()
-        command = "UPDATE listentry SET name = ('{}'), creation_date = ('{}'), item_id = ('{}'), retailer_id = ('{}'),"\
-                  " user_id = ('{}'), list_id = ('{}') WHERE id LIKE ('{}')" \
-            .format(listentry.get_name(), listentry.get_creation_date(), listentry.get_item_id()
-                    , listentry.get_retailer_id(), listentry.get_user_id(), listentry.get_list_id(), listentry.get_id())
-        cursor.execute(command)
+        command = "UPDATE listentry SET name = %s, creation_date = %s, item_id = %s, retailer_id = %s,"\
+                  " user_id = %s, list_id = %s WHERE id LIKE %s"
+        data = (listentry.get_name(), listentry.get_creation_date(), listentry.get_item_id()
+                 ,listentry.get_retailer_id(), listentry.get_user_id(), listentry.get_list_id(), listentry.get_id())
+        cursor.execute(command, data )
 
         self._cnx.commit()
         cursor.close()
@@ -119,6 +159,6 @@ class ListEntryMapper(Mapper):
 
 if __name__ == "__main__":
     with ListEntryMapper() as mapper:
-        l = mapper.find_by_id(5)
-        l.set_retailer_id(4)
+        l = mapper.find_by_id(1)
+        l.set_name("Russia")
         mapper.update(l)
