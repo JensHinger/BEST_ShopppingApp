@@ -15,7 +15,7 @@ export default class ShoppingAPI {
     //URL für Fakebackend
     //#shoppingServerBaseURL = '/api/shopping';
 
-    //Invitation
+    //Invitation related
     #getInvitationByIdURL = (id) => `${this.#shoppingServerBaseURL}/invitation/${id}`
     #getPendInvitationsBySourceUserIdURL = (id) => `${this.#shoppingServerBaseURL}/pending-invitation-by-source-user/${id}`
     #getPendInvitationsByTargetUserIdURL = (id) => `${this.#shoppingServerBaseURL}/pending-invitation-by-target-user/${id}`
@@ -94,49 +94,28 @@ export default class ShoppingAPI {
         }
     )
 
-    //Items
 
-    getAllItems() {
-        return this.#fetchAdvanced(this.#getAllItemsURL()).then((responseJSON) => {
-            let ItemBOs = ItemBO.fromJSON(responseJSON);
-            return new Promise(function (resolve) {
-                resolve(ItemBOs)
-            })
-        })
-    }
-
-    //Parties
-
-    getPartiesByUser(id) {
-        return this.#fetchAdvanced(this.#getAllPartiesByUserURL()).then((responseJSON) => {
-            let PartyBOs = PartyBO.fromJSON(responseJSON);
-            return new Promise(function (resolve) {
-                resolve(PartyBOs)
-            })
-        })
-    }
+    //Invitation related
 
 
-    //User
-
-    getUser() {
-        return this.#fetchAdvanced(this.#getUserURL()).then((responseJSON) => {
-            let UserBOs = UserBO.fromJSON(responseJSON);
-            return new Promise(function (resolve) {
-                resolve(UserBOs)
-            })
-        })
-    }
+    //Item related
 
 
-    //ShoppingList
+    //List related
+    
 
-    getListsByParty(id) {
-        return this.#fetchAdvanced(this.#getAllListsByPartyURL()).then((responseJSON) => {
-            let ListBOs = ListBO.fromJSON(responseJSON);
-            return new Promise(function (resolve) {
-                resolve(ListBOs)
-            })
-        })
-    }
+    //Listentry related
+  
+
+    //Party related
+
+    
+    //Retailer related
+
+
+    //StandardListEntry related
+
+
+    //User related
+
 }
