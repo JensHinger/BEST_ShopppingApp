@@ -2,7 +2,7 @@ import ItemBO from './ItemBO'
 import PartyBO from './PartyBO'
 import UserBO from './UserBO'
 import ListBO from './ListBO'
-
+import ListEntryBO from './ListEntryBO'
 
 export default class ShoppingAPI {
 
@@ -105,7 +105,20 @@ export default class ShoppingAPI {
     
 
     //Listentry related
-  
+    //#getListEntryByIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
+    getListEntryById(id){
+        return this.#fetchAdvanced(this.#getListEntryByIdURL(id)).then((responseJSON) => {
+            let responseListEntryBO = ListEntryBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseListEntryBO)
+                })
+        })
+    }
+    //#getListEntryByListIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-list/${id}`
+    #getListEntryByUserIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-user/${id}`
+    #addListEntryURL = () => `${this.#shoppingServerBaseURL}/listentry`
+    #updateListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
+    #deleteListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
 
     //Party related
 
@@ -114,8 +127,8 @@ export default class ShoppingAPI {
 
 
     //StandardListEntry related
-
+        //Ich
 
     //User related
-
+        //Ich
 }
