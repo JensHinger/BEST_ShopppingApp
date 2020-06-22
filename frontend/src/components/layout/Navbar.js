@@ -10,6 +10,7 @@ import { Link as RouterLink, Router } from 'react-router-dom';
 import { Divider } from '@material-ui/core';
 import {ThemeProvider} from "@material-ui/core"
 import Theme from "../../Theme"
+import LogOutDialog from '../dialogs/LogOutDialog'
 
 
 const useStyles = makeStyles({
@@ -73,9 +74,12 @@ export default function TemporaryDrawer() {
           <ListItem>
               <Button component={RouterLink} to={`/standardlistentry`}>StandardListEntry</Button>
           </ListItem>
-          <Divider/>
           <ListItem >
               <Button component={RouterLink} to={`/about`}>About</Button>
+          </ListItem>
+          <Divider/>
+          <ListItem>
+              <LogOutDialog/>
           </ListItem>
         </List>
       </ThemeProvider>

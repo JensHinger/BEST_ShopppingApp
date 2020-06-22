@@ -5,6 +5,7 @@ from src.bo.Invitation import Invitation
 from src.bo.Party import Party
 from src.bo.User import User
 from src.bo.StandardListEntry import StandardListEntry
+from src.bo.Retailer import Retailer
 
 from src.db.ListMapper import ListMapper
 from src.db.ListEntryMapper import ListEntryMapper
@@ -13,6 +14,7 @@ from src.db.InvitationMapper import InvitationMapper
 from src.db.PartyMapper import PartyMapper
 from src.db.UserMapper import UserMapper
 from src.db.StandardListEntryMapper import StandardListEntryMapper
+from src.db.RetailerMapper import RetailerMapper
 
 """
 Autoren: 
@@ -75,12 +77,12 @@ class ShoppingAdministration(object):
 
     def update_list(self, list):
         """Eine Liste updaten."""
-        with ListMapper as mapper:
+        with ListMapper() as mapper:
             mapper.update(list)
 
     def delete_list(self, list):
         """Eine Liste löschen."""
-        with ListMapper as mapper:
+        with ListMapper() as mapper:
             mapper.delete(list)
 
     """
@@ -91,6 +93,14 @@ class ShoppingAdministration(object):
         """Alle Listeneinträge auslesen."""
         with ListEntryMapper() as mapper:
             return mapper.find_all()
+
+    def get_listentry_by_list_id(self, list_id):
+        with ListEntryMapper() as mapper:
+            return mapper.find_by_list_id(list_id)
+
+    def get_listentry_by_user_id(self, user_id):
+        with ListEntryMapper() as mapper:
+            return mapper.find_by_user_id(user_id)
 
     def get_listentry_by_id(self, id):
         """Einen Listeneintrag auslesen."""
@@ -119,6 +129,30 @@ class ShoppingAdministration(object):
         with ListEntryMapper() as mapper:
             mapper.delete(listentry)
 
+    """
+    Ab hier geht es um Retailer.
+    """
+    def get_retailer_by_id(self, id):
+        with RetailerMapper() as mapper:
+            return mapper.find_by_id(id)
+
+    def get_retailer_by_name(self, name):
+        with RetailerMapper() as mapper:
+            return mapper.find_by_name(name)
+
+    def create_retailer(self, name):
+        retailer = Retailer()
+        retailer.set_name(name)
+
+        with RetailerMapper() as mapper:
+            mapper.insert(retailer)
+
+    def update_retailer(self, retailer):
+        with RetailerMapper as mapper:
+            mapper.insert(retailer)
+
+    def delete_retailer(self, retailer):
+        pass
     """
     Ab hier geht es um Items.
     """
@@ -167,10 +201,15 @@ class ShoppingAdministration(object):
         with InvitationMapper() as mapper:
             return mapper.find_by_id(id)
 
-    def get_all_user_in_party(self, partyi_id):
-        """Alle User einer Party auslesen."""
+    def get_all_pend_user_in_party(self, partyi_id):
+        """Alle User mit pend invites für eine Party auslesen."""
         with InvitationMapper() as mapper:
-            return mapper.find_all_user_in_party(partyi_id)
+            return mapper.find_all_pend_user_in_party(partyi_id)
+
+    def get_all_accepted_user_in_party(self, partyi_id):
+        """Alle User welche in einer Party sind auslesen."""
+        with InvitationMapper() as mapper:
+            return mapper.find_all_accepted_user_in_party(partyi_id)
 
     def get_pen_invites_by_target_user(self, target_user_id):
         """Alle pending-Invitations von dem Target-User auslesen."""
@@ -178,24 +217,19 @@ class ShoppingAdministration(object):
             return mapper.find_pend_invites_by_target_user(target_user_id)
 
     def get_pen_invites_by_source_user(self, source_user_id):
-        """Alle Invitations von Source-User auslesen."""
+        """Alle pending-Invitations von Source-User auslesen."""
         with InvitationMapper() as mapper:
             return mapper.find_pend_invites_by_source_user(source_user_id)
 
-    def get_source_user_by_id(self, source_user_id):
-        """Den source-user auslesen."""
+    def get_accepted_invites_by_source_user_by_id(self, source_user_id):
+        """Invitation nach Source-User auslesen, welche akzeptiert wurde."""
         with InvitationMapper() as mapper:
-            return mapper.find_source_user(source_user_id)
+            return mapper.find_accepted_invites_by_source_user(source_user_id)
 
-    def get_target_user_by_id(self, target_user_id):
-        """Den target-user auslesen."""
+    def get_accepted_invites_by_target_user_by_id(self, target_user_id):
+        """Invitation nach Target-User auslesen, welche akzeptiert wurde."""
         with InvitationMapper() as mapper:
-            return mapper.find_target_user(target_user_id)
-
-    def get_all_parties_corr_user(self, target_user_id):
-        """Alle Parties zu denen ein User gehört auslesen."""
-        with InvitationMapper() as mapper:
-            return mapper.find_all_parties_corr_user(target_user_id)
+            return mapper.find_accepted_invites_by_target_user(target_user_id)
 
     def get_all_pend_invites(self):
         """Alle pending-invitations auslesen."""
@@ -229,12 +263,12 @@ class ShoppingAdministration(object):
     def get_all_parties(self):
         """Alle Gruppen auslesen."""
         with PartyMapper() as mapper:
-            mapper.find_all()
+            return mapper.find_all()
 
     def get_party_by_id(self, id):
         """Eine Gruppe anhand der ID auslesen."""
         with PartyMapper() as mapper:
-            mapper.find_by_id(id)
+            return mapper.find_by_id(id)
 
     def create_party(self, name):
         """Eine Gruppe erstellen."""
@@ -261,22 +295,22 @@ class ShoppingAdministration(object):
     def get_all_users(self):
         """Alle User auslesen."""
         with UserMapper() as mapper:
-            mapper.find_all()
+            return mapper.find_all()
 
     def get_user_by_email(self, email):
         """Einen User nach der email auslesen."""
         with UserMapper() as mapper:
-            mapper.find_user_by_email(email)
+            return mapper.find_user_by_email(email)
 
     def get_user_by_google_id(self, google_id):
         """Einen User nach der Google-ID auslesen."""
         with UserMapper() as mapper:
-            mapper.find_user_by_google_id(google_id)
+            return mapper.find_user_by_google_id(google_id)
 
     def get_user_by_id(self, id):
         """Einen User nach seiner ID auslesen"""
         with UserMapper() as mapper:
-            mapper.find_by_id(id)
+            return mapper.find_by_id(id)
 
     def create_user(self, name, email, google_id):
         """Einen User erstellen."""
@@ -305,17 +339,21 @@ class ShoppingAdministration(object):
     def get_all_standard_list_entrys(self):
         """Alle Standartlisteneinträge auslesen."""
         with StandardListEntryMapper() as mapper:
-            mapper.find_all()
+            return mapper.find_all()
 
     def get_standard_list_entry_by_id(self, id):
         """Standartlisteneintrag nach ID auslesen."""
         with StandardListEntryMapper() as mapper:
-            mapper.find_by_id(id)
+            return mapper.find_by_id(id)
 
     def get_standard_list_entry_by_party_id(self, party_id):
         """Standartlisteneinträge nach Gruppen-ID auslesen."""
         with StandardListEntryMapper() as mapper:
-            mapper.find_by_party_id(party_id)
+            return mapper.find_by_party_id(party_id)
+
+    def get_standard_listentry_by_user_id(self, user_id):
+        with StandardListEntryMapper() as mapper:
+            return mapper.find_user_by_id(user_id)
 
     def create_standard_list_entry(self, name, item_id, retailer_id, user_id, party_id):
         """Ein Standartlisteneintrag erstellen."""
