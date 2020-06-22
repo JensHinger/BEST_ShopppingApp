@@ -77,12 +77,12 @@ class ShoppingAdministration(object):
 
     def update_list(self, list):
         """Eine Liste updaten."""
-        with ListMapper as mapper:
+        with ListMapper() as mapper:
             mapper.update(list)
 
     def delete_list(self, list):
         """Eine Liste löschen."""
-        with ListMapper as mapper:
+        with ListMapper() as mapper:
             mapper.delete(list)
 
     """
