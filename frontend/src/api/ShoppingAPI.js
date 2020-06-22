@@ -33,9 +33,9 @@ export default class ShoppingAPI {
     //List related
     #getListByIdURL = (id) => `${this.#shoppingServerBaseURL}/list/${id}`
     #getListsByPartyIdURL = (id) => `${this.#shoppingServerBaseURL}/list-by-party/${id}`
-    #addInvitiationURL = () => `${this.#shoppingServerBaseURL}/list`
-    #updateInvitaitonURL = (id) => `${this.#shoppingServerBaseURL}/list/${id}`
-    #deleteInvitaitonURL = (id) => `${this.#shoppingServerBaseURL}/list/${id}`
+    #addListnURL = () => `${this.#shoppingServerBaseURL}/list`
+    #updateListURL = (id) => `${this.#shoppingServerBaseURL}/list/${id}`
+    #deleteListURL = (id) => `${this.#shoppingServerBaseURL}/list/${id}`
 
     //Listentry related
     #getListEntryByIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
@@ -115,10 +115,10 @@ export default class ShoppingAPI {
         })
     }
     //#getListEntryByListIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-list/${id}`
-    #getListEntryByUserIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-user/${id}`
-    #addListEntryURL = () => `${this.#shoppingServerBaseURL}/listentry`
-    #updateListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
-    #deleteListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
+    //#getListEntryByUserIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-user/${id}`
+    //#addListEntryURL = () => `${this.#shoppingServerBaseURL}/listentry`
+    //#updateListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
+    //#deleteListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
 
     //Party related
 
