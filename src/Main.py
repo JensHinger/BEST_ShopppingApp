@@ -2,6 +2,15 @@ from flask import Flask
 from flask_restx import Resource, Api, fields
 from flask_cors import CORS
 
+from bo.ListEntry import ListEntry
+from bo.Party import Party
+from bo.Retailer import Retailer
+from bo.StandardListEntry import StandardListEntry
+from bo.User import User
+from bo.Invitation import Invitation
+from bo.Item import Item
+from bo.List import List
+
 from ShoppingAdministration import ShoppingAdministration
 
 
@@ -26,7 +35,7 @@ invitation = api.inherit('Invitation', bo, {
     'partyi_id': fields.Integer(attribute='_partyi_id', description='Die Einheit eines gewählten Produktes'),
     'target_user_id': fields.Integer(attribute='_target_user_id', description='Die Menge eines gewählten Produktes'),
     'source_user_id': fields.Integer(attribute='_source_user_id', description='Die Menge eines gewählten Produktes'),
-    'is_accepted': fields.Boolean(attribute='_is_accepted', description='Die Menge eines gewählten Produktes'),
+    'is_accepted': fields.Integer(attribute='_is_accepted', description='Die Menge eines gewählten Produktes'),
 })
 
 item = api.inherit('Item', bo, {
@@ -52,6 +61,7 @@ standard_list_entry = api.inherit('StandardListEntry', bo, {
     'item_id': fields.Integer(attribute='_item_id', description='Die Einheit eines gewählten Produktes'),
     'retailer_id': fields.Integer(attribute='_retailer_id', description='Die Einheit eines gewählten Produktes'),
     'user_id': fields.Integer(attribute='_user_id', description='Die Einheit eines gewählten Produktes'),
+    'party_id': fields.Integer(attribute='_party_id', description='Die Einheit eines gewählten Produktes'),
 })
 
 user = api.inherit('User', bo, {
@@ -62,28 +72,195 @@ user = api.inherit('User', bo, {
 retailer = api.inherit('retailer', bo, {
 })
 
+"""Invitation related"""
 
-@shopping.route('/item')
-class Item(Resource):
+@shopping.route("/invitation")
+class InvitationListOperations(Resource):
 
-    @shopping.marshal_list_with(item)
-    def get(self):
+    @shopping.marshal_with(invitation)
+    @shopping.expect(invitation)
+    def post(self):
         adm = ShoppingAdministration()
-        item = adm.get_all_items()
-        return item
+        proposal = Invitation.from_dict(api.payload)
+        print("proposal", proposal)
+        if proposal is not None:
+            invi = adm.create_invitation(proposal.get_source_user_id(), proposal.get_target_user_id(),
+                                         proposal.get_partyi_id())
+            return invi, 200
+        else:
+            return "", 500
+
+@shopping.route("/invitation/<int:id>")
+@shopping.param("id", "Die ID der Invitation")
+class InvitationOperations(Resource):
+
+    @shopping.marshal_with(invitation)
+    def get(self, id):
+        """Auslesen von Invitaion Objekten welche die mit dieser ID verbunden sind."""
+        adm = ShoppingAdministration()
+        entry = adm.get_invitation_by_id(id)
+        return entry
+
+    @shopping.expect(invitation)
+    def put(self, id):
+        """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
+        adm = ShoppingAdministration()
+        invi = Invitation.from_dict(api.payload)
+
+        if invi is not None:
+            invi.set_id(id)
+            adm.update_invitation(invi)
+            return "", 200
+        else:
+            return "", 500
+
+    def delete(self, id):
+        """Löschen der spezifizierten party"""
+        adm = ShoppingAdministration()
+        p = adm.get_invitation_by_id(id)
+
+        if p is not None:
+            adm.delete_invitation(p)
+            return "", 200
+        else:
+            return "", 500
+
+@shopping.route("/pending-invitation-by-source-user/<int:id>")
+@shopping.param("id", "Die ID des Source Users")
+class PendingInvitationBySourceUser(Resource):
+
+    @shopping.marshal_with(invitation)
+    def get(self, id):
+        """Auslesen von pending Invitation Objekten welche die mit dieser Source User ID verbunden sind."""
+        adm = ShoppingAdministration()
+        entry = adm.get_pen_invites_by_source_user(id)
+        return entry
+
+@shopping.route("/pending-invitation-by-target-user/<int:id>")
+@shopping.param("id", "Die ID des Target Users")
+class PendingInvitationByTargetUser(Resource):
+
+    @shopping.marshal_with(invitation)
+    def get(self, id):
+        """Auslesen von pending Invitation Objekten welche die mit dieser Target User ID verbunden sind."""
+        adm = ShoppingAdministration()
+        entry = adm.get_pen_invites_by_target_user(id)
+        return entry
+
+@shopping.route("/accepted-invitation-by-source-user/<int:id>")
+@shopping.param("id", "Die ID des Source Users")
+class AcceptedInvitationBySourceUser(Resource):
+
+    @shopping.marshal_with(invitation)
+    def get(self, id):
+        """Auslesen von pending Invitation Objekten welche die mit dieser Source User ID verbunden sind."""
+        adm = ShoppingAdministration()
+        entry = adm.get_accepted_invites_by_source_user_by_id(id)
+        return entry
+
+@shopping.route("/accepted-invitation-by-target-user/<int:id>")
+@shopping.param("id", "Die ID des Target Users")
+class AcceptedInvitationByTargetUser(Resource):
+
+    @shopping.marshal_with(invitation)
+    def get(self, id):
+        """Auslesen von pending Invitation Objekten welche die mit dieser Target User ID verbunden sind."""
+        adm = ShoppingAdministration()
+        entry = adm.get_accepted_invites_by_target_user_by_id(id)
+        return entry
+
+@shopping.route("/pending-invitations-by-user-in-party/<int:id>")
+@shopping.param("id", "Die ID der Party")
+class PendingInvitationsByParty(Resource):
+
+    @shopping.marshal_with(invitation)
+    def get(self, id):
+        """Auslesen von pending Invitation Objekten welche die mit dieser Party ID verbunden sind."""
+        adm = ShoppingAdministration()
+        entry = adm.get_all_pend_user_in_party(id)
+        return entry
 
 
+@shopping.route("/accepted-invitations-by-user-in-party/<int:id>")
+@shopping.param("id", "Die ID der Party")
+class AcceptedInvitationsByParty(Resource):
+
+    @shopping.marshal_with(invitation)
+    def get(self, id):
+        """Auslesen von pending Invitation Objekten welche die mit dieser Party ID verbunden sind."""
+        adm = ShoppingAdministration()
+        entry = adm.get_all_accepted_user_in_party(id)
+        return entry
+
+"""Item related"""
 
 
-"""Ab hier Jonathan immer vor den Blöcken bitte "****** related" hinschreiben"""
-"""Jonathan macht die letzten 4 und Jens macht die ersten 4 """
-from bo.ListEntry import ListEntry
-from bo.Party import Party
-from bo.Retailer import Retailer
-from bo.StandardListEntry import StandardListEntry
-from bo.User import User
+"""List related"""
+
+@shopping.route("/list")
+class ListListOperations(Resource):
+
+    @shopping.marshal_with(list)
+    @shopping.expect(list)
+    def post(self):
+        adm = ShoppingAdministration()
+        proposal = List.from_dict(api.payload)
+        print("proposal", proposal)
+        if proposal is not None:
+            list = adm.create_list(proposal.get_name(), proposal.get_partyl_id())
+            return list, 200
+        else:
+            return "", 500
+
+@shopping.route("/list/<int:id>")
+@shopping.param("id", "Die ID der Party")
+class ListOperations(Resource):
+
+    @shopping.marshal_with(list)
+    def get(self, id):
+        """Auslesen von pending Invitation Objekten welche die mit dieser Party ID verbunden sind."""
+        adm = ShoppingAdministration()
+        entry = adm.get_list_by_id(id)
+        return entry
+
+    @shopping.marshal_with(list)
+    @shopping.expect(list)
+    def put(self, id):
+        """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
+        adm = ShoppingAdministration()
+        list = List.from_dict(api.payload)
+
+        if list is not None:
+            list.set_id(id)
+            adm.update_list(list)
+            return "", 200
+        else:
+            return "", 500
+
+    def delete(self, id):
+        """Löschen der spezifizierten party"""
+        adm = ShoppingAdministration()
+        p = adm.get_list_by_id(id)
+
+        if p is not None:
+            adm.delete_list(p)
+            return "", 200
+        else:
+            return "", 500
+
+@shopping.route("/list-by-party/<int:id>")
+@shopping.param("id", "Die ID der Party")
+class ListByPartyOperations(Resource):
+
+    @shopping.marshal_with(list)
+    def get(self, id):
+        """Auslesen von pending Invitation Objekten welche die mit dieser Party ID verbunden sind."""
+        adm = ShoppingAdministration()
+        entry = adm.get_all_lists_by_partyl_id(id)
+        return entry
 
 """ListEntry related"""
+
 @shopping.route("/listentry-by-list/<int:id>")
 @shopping.param("id", "Die ID der Shopping List ")
 class ListEntryByListOperations(Resource):
@@ -191,26 +368,26 @@ class PartyOperations(Resource):
         else:
             return "", 500
 
-    @shopping.route("/party")
-    class PartyListOperations(Resource):
-        @shopping.marshal_with(party)
-        @shopping.expect(party)
-        def post(self):
-            """Anlegen einer neuen Party: Die vom Client vorgegebenen Daten werden dabei als Vorschlag aufgenommen."""
-            adm = ShoppingAdministration()
-            proposal = Party.from_dict(api.payload)
+@shopping.route("/party")
+class PartyListOperations(Resource):
+    @shopping.marshal_with(party)
+    @shopping.expect(party)
+    def post(self):
+        """Anlegen einer neuen Party: Die vom Client vorgegebenen Daten werden dabei als Vorschlag aufgenommen."""
+        adm = ShoppingAdministration()
+        proposal = Party.from_dict(api.payload)
 
-            if proposal is not None:
-                print(proposal.get_name())
-                result = adm.create_party(proposal.get_name())
-                return result, 200
-            else:
-                return "", 500
+        if proposal is not None:
+            print(proposal.get_name())
+            result = adm.create_party(proposal.get_name())
+            return result, 200
+        else:
+            return "", 500
 
 
 
 """Retailer related."""
-@shopping.route("retailer/<int:id>")
+@shopping.route("/retailer/<int:id>")
 class RetailerOperations (Resource):
     @shopping.marshal_with(retailer)
     def get(self, id):
@@ -292,11 +469,12 @@ class StandardListEntryListOperations(Resource):
         """
         print("anlegen eines Standardlistentries")
         adm = ShoppingAdministration()
+        print(api.payload)
         proposal = StandardListEntry.from_dict(api.payload)
         if proposal is not None:
             slentry = adm.create_standard_list_entry(proposal.get_name(), proposal.get_item_id(),
-                                                     proposal.get_retailer_id(), proposal.set_user_id(),
-                                                     proposal.get_list_id())
+                                                     proposal.get_retailer_id(), proposal.get_user_id(),
+                                                     proposal.get_party_id())
             return slentry, 200
         else:
             return "", 500
