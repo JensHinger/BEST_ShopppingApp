@@ -10,10 +10,10 @@ export default class ShoppingAPI {
     static #api = null;
 
     //Standard URL für MySQL Backend
-    //#shoppingServerBaseURL = '/shopping';
+    #shoppingServerBaseURL = '/shopping';
 
     //URL für Fakebackend
-    #shoppingServerBaseURL = '/api/shopping';
+    //#shoppingServerBaseURL = '/api/shopping';
 
     //Item related
     #getAllItemsURL = () => `${this.#shoppingServerBaseURL}/item`;

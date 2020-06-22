@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { List } from '@material-ui/core'
+import { List, Typography } from '@material-ui/core'
 
 class GroupShoppingList extends Component{
 
@@ -14,12 +14,8 @@ class GroupShoppingList extends Component{
 
     render(){
         return(
-            
-            <>
-                PLACEHOLDER
-            </>
-    
-    
+           <Typography> 
+           </Typography>
         )
     }
 }

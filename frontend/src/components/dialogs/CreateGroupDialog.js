@@ -120,18 +120,3 @@ class CreateGroupDialog extends Component{
 } 
 
 export default CreateGroupDialog;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
