@@ -15,19 +15,63 @@ export default class ShoppingAPI {
     //URL für Fakebackend
     //#shoppingServerBaseURL = '/api/shopping';
 
+    //Invitation
+    #getInvitationByIdURL = (id) => `${this.#shoppingServerBaseURL}/invitation/${id}`
+    #getPendInvitationsBySourceUserIdURL = (id) => `${this.#shoppingServerBaseURL}/pending-invitation-by-source-user/${id}`
+    #getPendInvitationsByTargetUserIdURL = (id) => `${this.#shoppingServerBaseURL}/pending-invitation-by-target-user/${id}`
+    #getAcceptedInvitationsBySourceUserIdURL = (id) => `${this.#shoppingServerBaseURL}/accepted-invitation-by-source-user/${id}`
+    #getAcceptedInvitationsByTargetUserIdURL = (id) => `${this.#shoppingServerBaseURL}/accepted-invitation-by-target-user/${id}`
+    #getPendInvitationsByPartyIdURL = (id) => `${this.#shoppingServerBaseURL}/pending-invitations-by-user-in-party/${id}`
+    #getAcceptedInvitationsByPartyIdURL = (id) => `${this.#shoppingServerBaseURL}/accepted-invitations-by-user-in-party/${id}`
+    #addInvitiationURL = () => `${this.#shoppingServerBaseURL}/invitation`
+    #updateInvitaitonURL = (id) => `${this.#shoppingServerBaseURL}/invitation/${id}`
+    #deleteInvitaitonURL = (id) => `${this.#shoppingServerBaseURL}/invitation/${id}`
+
     //Item related
-    #getAllItemsURL = () => `${this.#shoppingServerBaseURL}/item`;
+
+
+    //List related
+    #getListByIdURL = (id) => `${this.#shoppingServerBaseURL}/list/${id}`
+    #getListsByPartyIdURL = (id) => `${this.#shoppingServerBaseURL}/list-by-party/${id}`
+    #addInvitiationURL = () => `${this.#shoppingServerBaseURL}/list`
+    #updateInvitaitonURL = (id) => `${this.#shoppingServerBaseURL}/list/${id}`
+    #deleteInvitaitonURL = (id) => `${this.#shoppingServerBaseURL}/list/${id}`
+
+    //Listentry related
+    #getListEntryByIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
+    #getListEntryByListIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-list/${id}`
+    #getListEntryByUserIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-user/${id}`
+    #addListEntryURL = () => `${this.#shoppingServerBaseURL}/listentry`
+    #updateListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
+    #deleteListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
 
     //Party related
-    #getAllPartiesByUserURL = () => `${this.#shoppingServerBaseURL}/party`;
+    #getPartyByIdURL = (id) => `${this.#shoppingServerBaseURL}/party/${id}`
+    #addPartyURL = () => `${this.#shoppingServerBaseURL}/party`
+    #updatePartyURL = (id) => `${this.#shoppingServerBaseURL}/party/${id}`
+    #deletePartyURL = (id) => `${this.#shoppingServerBaseURL}/party/${id}`
 
+    
+    //Retailer related
+    #getRetailerByidURL = (id) => `${this.#shoppingServerBaseURL}/retailer/${id}`
+    #addRetailerURL = () => `${this.#shoppingServerBaseURL}/retailer`
+    #updateRetailerURL = (id) => `${this.#shoppingServerBaseURL}/retailer/${id}`
+    #deleteRetailerURL = (id) => `${this.#shoppingServerBaseURL}/retailer/${id}`
+
+
+    //StandardListEntry related
+    #getStandardListEntryURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry/${id}`
+    #getStandardListEntryByListIdURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry-by-list/${id}`
+    #getStandardListEntryByUserIdURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry-by-user/${id}`
+    #addStandardListEntryURL = () => `${this.#shoppingServerBaseURL}/standardlistentry`
+    #updateStandardListEntryURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry/${id}`
+    #deleteStandardListEntryURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry/${id}`
 
     //User related
-    #getUserURL = () => `${this.#shoppingServerBaseURL}/user8`;
-
-    //Shoppinglist related
-    #getAllListsByPartyURL = () => `${this.#shoppingServerBaseURL}/list`
-
+    #getUserByIdURL = (id) => `${this.#shoppingServerBaseURL}/user/${id}` 
+    #getUserByEmailURL = (email) => `${this.#shoppingServerBaseURL}/user-by-email/${email}`
+    #updateUserURL = (id) => `${this.#shoppingServerBaseURL}/user/${id}`
+    #deleteUserURL = (id) => `${this.#shoppingServerBaseURL}/user/${id}`
 
     static getAPI() {
         if (this.#api == null) {
