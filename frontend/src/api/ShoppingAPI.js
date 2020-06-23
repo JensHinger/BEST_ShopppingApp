@@ -4,6 +4,7 @@ import UserBO from './UserBO'
 import ListBO from './ListBO'
 import ListEntryBO from './ListEntryBO'
 import RetailerBO from './RetailerBO'
+import InvitationBO from './InvitationBO'
 
 export default class ShoppingAPI {
 
@@ -25,8 +26,8 @@ export default class ShoppingAPI {
     #getPendInvitationsByPartyIdURL = (id) => `${this.#shoppingServerBaseURL}/pending-invitations-by-user-in-party/${id}`
     #getAcceptedInvitationsByPartyIdURL = (id) => `${this.#shoppingServerBaseURL}/accepted-invitations-by-user-in-party/${id}`
     #addInvitiationURL = () => `${this.#shoppingServerBaseURL}/invitation`
-    #updateInvitaitonURL = (id) => `${this.#shoppingServerBaseURL}/invitation/${id}`
-    #deleteInvitaitonURL = (id) => `${this.#shoppingServerBaseURL}/invitation/${id}`
+    #updateInvitationURL = (id) => `${this.#shoppingServerBaseURL}/invitation/${id}`
+    #deleteInvitationURL = (id) => `${this.#shoppingServerBaseURL}/invitation/${id}`
 
     //Item related
     #getItemByIdURL = (id) => `${this.#shoppingServerBaseURL}/item/${id}`
@@ -100,6 +101,118 @@ export default class ShoppingAPI {
 
 
     //Invitation related
+
+    getInvitationById(id){
+        return this.#fetchAdvanced(this.#getInvitationByIdURL(id)).then((responseJSON) => {
+            let responseInvitationBO = InvitationBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseInvitationBO)
+                })
+        })
+    }
+
+    getPendInvitationsBySourceUserId(id){
+        return this.#fetchAdvanced(this.#getPendInvitationsBySourceUserIdURL(id)).then((responseJSON) => {
+            let responseInvitationBO = InvitationBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseInvitationBO)
+                })
+        })
+    }
+
+    getPendInvitationsByTargetUserId(id){
+        return this.#fetchAdvanced(this.#getPendInvitationsByTargetUserIdURL(id)).then((responseJSON) => {
+            let responseInvitationBO = InvitationBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseInvitationBO)
+                })
+        })
+    }
+
+    getAcceptedInvitationsBySourceUserId(id){
+        return this.#fetchAdvanced(this.#getAcceptedInvitationsBySourceUserIdURL(id)).then((responseJSON) => {
+            let responseInvitationBO = InvitationBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseInvitationBO)
+                })
+        })
+    }
+
+    getAcceptedInvitationsByTargetUserId(id){
+        return this.#fetchAdvanced(this.#getAcceptedInvitationsByTargetUserIdURL(id)).then((responseJSON) => {
+            let responseInvitationBO = InvitationBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseInvitationBO)
+                })
+        })
+    }
+
+    getPendInvitationsByPartyId(id){
+        return this.#fetchAdvanced(this.#getPendInvitationsByPartyIdURL(id)).then((responseJSON) => {
+            let responseInvitationBO = InvitationBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseInvitationBO)
+                })
+        })
+    }
+
+    getAcceptedInvitationsByPartyId(id){
+        return this.#fetchAdvanced(this.#getAcceptedInvitationsByPartyIdURL(id)).then((responseJSON) => {
+            let responseInvitationBO = InvitationBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseInvitationBO)
+                })
+        })
+    }
+
+    addInvitation(invitationBO){
+        return this.#fetchAdvanced(this.#addInvitiationURL(), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(invitationBO)
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON, but only need one object
+            let responseInvitationBO = InvitationBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responseInvitationBO);
+            })
+        })
+    }
+
+    updateInvitation(invitationBO){
+        return this.#fetchAdvanced(this.#updateInvitationURL(invitationBO.getID()), {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(invitationBO)
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON
+            let responseInvitationBO = InvitationBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responseInvitationBO);
+            })
+        })
+    }
+
+    deleteInvitation(InvitationID){
+        return this.#fetchAdvanced(this.#deleteInvitationURL(InvitationID), {
+            method: 'DELETE'
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON
+            let responseInvitationBO = InvitationBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responseInvitationBO);
+            })
+        })
+    }
 
 
     //Item related
@@ -391,14 +504,14 @@ export default class ShoppingAPI {
         })
     }
 
-    updateUser(id){
-        return this.#fetchAdvanced(this.#updateUserURL(id.getID()), {
+    updateUser(userBO){
+        return this.#fetchAdvanced(this.#updateUserURL(userBO.getID()), {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify(id)
+            body: JSON.stringify(userBO)
         }).then((responseJSON) => {
             // We always get an array of CustomerBOs.fromJSON
             let responseUserBO = UserBO.fromJSON(responseJSON)[0];
@@ -409,8 +522,8 @@ export default class ShoppingAPI {
         })
     }
 
-    deleteUser(id){
-        return this.#fetchAdvanced(this.#deleteUserURL(id), {
+    deleteUser(userID){
+        return this.#fetchAdvanced(this.#deleteUserURL(userID), {
             method: 'DELETE'
         }).then((responseJSON) => {
             // We always get an array of CustomerBOs.fromJSON
