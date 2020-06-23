@@ -3,6 +3,7 @@ import PartyBO from './PartyBO'
 import UserBO from './UserBO'
 import ListBO from './ListBO'
 import ListEntryBO from './ListEntryBO'
+import RetailerBO from './RetailerBO'
 
 export default class ShoppingAPI {
 
@@ -33,7 +34,7 @@ export default class ShoppingAPI {
     //List related
     #getListByIdURL = (id) => `${this.#shoppingServerBaseURL}/list/${id}`
     #getListsByPartyIdURL = (id) => `${this.#shoppingServerBaseURL}/list-by-party/${id}`
-    #addListnURL = () => `${this.#shoppingServerBaseURL}/list`
+    #addListURL = () => `${this.#shoppingServerBaseURL}/list`
     #updateListURL = (id) => `${this.#shoppingServerBaseURL}/list/${id}`
     #deleteListURL = (id) => `${this.#shoppingServerBaseURL}/list/${id}`
 
@@ -103,6 +104,72 @@ export default class ShoppingAPI {
 
     //List related
     
+    getListById(id){
+        return this.#fetchAdvanced(this.#getListByIdURL(id)).then((responseJSON) => {
+            let responseListBO = ListBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseListBO)
+                })
+        })
+    }
+
+    getListByPartyId(id){
+        return this.#fetchAdvanced(this.#getListsByPartyIdURL(id)).then((responseJSON) => {
+            let responseListBO = ListBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseListBO)
+                })
+        })
+    }
+
+    addList(listBO){
+        return this.#fetchAdvanced(this.#addListURL(), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(listBO)
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON, but only need one object
+            let responseListBO = ListBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responseListBO);
+            })
+        })
+    }
+
+    updateList(listBO){
+        return this.#fetchAdvanced(this.#updateListURL(listBO.getID()), {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(listBO)
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON
+            let responseListBO = ListBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responseListBO);
+            })
+        })
+    }
+
+    deleteList(listID){
+        return this.#fetchAdvanced(this.#deleteListURL(listID), {
+            method: 'DELETE'
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON
+            let responseListBO = ListBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responseListBO);
+            })
+        })
+    }
 
     //Listentry related
     //#getListEntryByIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
@@ -122,9 +189,123 @@ export default class ShoppingAPI {
 
     //Party related
 
-    
+    getPartyById(id){
+        return this.#fetchAdvanced(this.#getPartyByIdURL(id)).then((responseJSON) => {
+            let responsePartyBO = PartyBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responsePartyBO)
+                })
+        })
+    }
+
+    addParty(partyBO){
+        return this.#fetchAdvanced(this.#addPartyURL(), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(partyBO)
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON, but only need one object
+            let responsePartyBO = PartyBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responsePartyBO);
+            })
+        })
+    }
+
+    updateParty(partyBO){
+        return this.#fetchAdvanced(this.#updatePartyURL(partyBO.getID()), {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(partyBO)
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON
+            let responsePartyBO = PartyBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responsePartyBO);
+            })
+        })
+    }
+
+    deleteParty(partyID){
+        return this.#fetchAdvanced(this.#deletePartyURL(partyID), {
+            method: 'DELETE'
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON
+            let responsePartyBO = PartyBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responsePartyBO);
+            })
+        })
+    }
+
     //Retailer related
 
+    getRetailerById(id){
+        return this.#fetchAdvanced(this.#getRetailerByidURL(id)).then((responseJSON) => {
+            let responseRetailerBO = RetailerBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseRetailerBO)
+                })
+        })
+    }
+
+    addRetailer(retailerBO){
+        return this.#fetchAdvanced(this.#addRetailerURL(), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(retailerBO)
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON, but only need one object
+            let responseRetailerBO = RetailerBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responseRetailerBO);
+            })
+        })
+    }
+
+    updateRetailer(retailerBO){
+        return this.#fetchAdvanced(this.#updateRetailerURL(retailerBO.getID()), {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(retailerBO)
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON
+            let responseRetailerBO = RetailerBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responseRetailerBO);
+            })
+        })
+    }
+
+    deleteRetailer(retailerID){
+        return this.#fetchAdvanced(this.#deleteRetailerURL(retailerID), {
+            method: 'DELETE'
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON
+            let responseRetailerBO = RetailerBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responseRetailerBO);
+            })
+        })
+    }
 
     //StandardListEntry related
         //Ich
