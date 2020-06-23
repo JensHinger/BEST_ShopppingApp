@@ -3,7 +3,7 @@ import { Typography, Grid, Card, CardMedia, Button} from '@material-ui/core';
 import CreateGroupDialog from '../dialogs/CreateGroupDialog'
 import UserParties from '../subcomponents/UserParties'
 import ShoppingAPI from '../../api/ShoppingAPI' 
-
+import StandardListentryBO from '../../api/StandardListEntryBO'
 class Overview extends Component {
 
     constructor(props){
@@ -15,8 +15,26 @@ class Overview extends Component {
     }
 
     getObj(id){
-        ShoppingAPI.getAPI().getListEntryById(id).then(obj => console.log(obj))    
+        ShoppingAPI.getAPI().getStandardListEntryByUserId(id).then(obj => console.log(obj))    
     }
+
+    manipulateObj(){
+        var mybo = new StandardListentryBO()
+        mybo.setID(8)
+        mybo.setItemId(76)
+        mybo.setName("MaMama")
+        mybo.setRetailerId(6)
+        mybo.setUserId(7)
+        mybo.set_PartyId(3)
+        console.log(mybo)
+        ShoppingAPI.getAPI().updateStandardListEntry(mybo).then(obj => console.log(obj))    
+    }
+
+    deleteObj(id){
+        ShoppingAPI.getAPI().deleteStandardListEntry(id).then(obj => console.log(obj))    
+
+    }
+    
 
     render() {
         return ( 
@@ -28,7 +46,7 @@ class Overview extends Component {
                 <CreateGroupDialog />
                 <UserParties />
 
-                <Button  onClick = {() => this.getObj(2)}>HIER KLICKEN!!!</Button>
+                <Button  onClick = {() => this.deleteObj(8)}>HIER KLICKEN!!!</Button>
 
             </Grid>
 
