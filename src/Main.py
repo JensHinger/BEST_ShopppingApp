@@ -128,7 +128,6 @@ class InvitationOperations(Resource):
 @shopping.route("/pending-invitation-by-source-user/<int:id>")
 @shopping.param("id", "Die ID des Source Users")
 class PendingInvitationBySourceUser(Resource):
-
     @shopping.marshal_with(invitation)
     def get(self, id):
         """Auslesen von pending Invitation Objekten welche die mit dieser Source User ID verbunden sind."""
