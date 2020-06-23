@@ -128,7 +128,6 @@ class InvitationOperations(Resource):
 @shopping.route("/pending-invitation-by-source-user/<int:id>")
 @shopping.param("id", "Die ID des Source Users")
 class PendingInvitationBySourceUser(Resource):
-
     @shopping.marshal_with(invitation)
     def get(self, id):
         """Auslesen von pending Invitation Objekten welche die mit dieser Source User ID verbunden sind."""
@@ -192,7 +191,112 @@ class AcceptedInvitationsByParty(Resource):
         entry = adm.get_all_accepted_user_in_party(id)
         return entry
 
+
 """Item related"""
+@shopping.route("/shopping/item")
+class ItemListOperations(Resource):
+    @shopping.marshal_with(item)
+    @shopping.expect(item)
+    def post(self):
+        """Anlegen eines neuen Items: Die vom Client vorgegebenen Daten werden dabei als Vorschlag aufgenommen."""
+        adm = ShoppingAdministration()
+        proposal = Item.from_dict(api.payload)
+
+        if proposal is not None:
+            print(proposal.get_name())
+            result = adm.create_party(proposal.get_name())
+            return result, 200
+        else:
+            return "", 500
+
+
+@shopping.route("/shopping/item")
+@shopping.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@shopping.param('id', 'Die ID des Account-Objekts')
+class ItemOperations(Resource):
+    @shopping.marshal_with(Item)
+    def get(self, id):
+        """Auslesen eines spezifizierten Party Objekts aus der DB """
+        adm = ShoppingAdministration()
+        items = adm.get_item_by_id(id)
+        return items
+
+    @shopping.expect(Item)
+    def put(self, id):
+        """Update des spezifizierten Items. Es ist die id relevant welche per Link übergeben wird."""
+        adm = ShoppingAdministration()
+        items = Item.from_dict(api.payload)
+
+        if items is not None:
+            item.set_id(id)
+            adm.update_item(items)
+            return "", 200
+        else:
+            return "", 500
+
+    def delete(self, id):
+        """Löschen des spezifizierten Item"""
+        adm = ShoppingAdministration()
+        items = adm.get_item_by_id(id)
+
+        if items is not None:
+            adm.delete_party(items)
+            return "", 200
+        else:
+            return "", 500
+
+@shopping.route("/item")
+class ItemListOperations(Resource):
+    @shopping.marshal_with(item)
+    @shopping.expect(item)
+    def post(self):
+        """Anlegen eines neuen Items: Die vom Client vorgegebenen Daten werden dabei als Vorschlag aufgenommen."""
+        adm = ShoppingAdministration()
+        proposal = Item.from_dict(api.payload)
+
+        if proposal is not None:
+            print(proposal.get_name())
+            result = adm.create_item(proposal.get_name(), proposal.get_amount(), proposal.get_unit())
+            return result, 200
+        else:
+            return "", 500
+
+
+@shopping.route("/item/<int:id>")
+@shopping.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@shopping.param('id', 'Die ID des Account-Objekts')
+class ItemOperations(Resource):
+
+    @shopping.marshal_with(item)
+    def get(self, id):
+        """Auslesen eines spezifizierten Party Objekts aus der DB """
+        adm = ShoppingAdministration()
+        item = adm.get_item_by_id(id)
+        return item
+
+    @shopping.expect(Item)
+    def put(self, id):
+        """Update des spezifizierten Items. Es ist die id relevant welche per Link übergeben wird."""
+        adm = ShoppingAdministration()
+        item = Item.from_dict(api.payload)
+
+        if item is not None:
+            item.set_id(id)
+            adm.update_item(item)
+            return "", 200
+        else:
+            return "", 500
+
+    def delete(self, id):
+        """Löschen des spezifizierten Item"""
+        adm = ShoppingAdministration()
+        items = adm.get_item_by_id(id)
+
+        if items is not None:
+            adm.delete_item(items)
+            return "", 200
+        else:
+            return "", 500
 
 
 """List related"""
@@ -308,6 +412,13 @@ class ListEntryListOperations(Resource):
 
 @shopping.route("/listentry/<int:id>")
 class ListEntryOperations(Resource):
+
+    @shopping.marshal_with(list_entry)
+    def get(self, id):
+        adm = ShoppingAdministration()
+        entry = adm.get_listentry_by_id(id)
+        return entry
+
     @shopping.marshal_with(list_entry)
     def get(self, id):
         """Auslesen eines spezifizierten Party Objekts aus der DB """
@@ -489,6 +600,13 @@ class StandardListEntryListOperations(Resource):
 
 @shopping.route("/standardlistentry/<int:id>")
 class StandardListEntryOperations(Resource):
+
+    @shopping.marshal_with(standard_list_entry)
+    def get(self,id):
+        adm = ShoppingAdministration()
+        entry = adm.get_standard_list_entry_by_id(id)
+        return entry
+
     @shopping.marshal_with(standard_list_entry)
 
     def get(self, id):
