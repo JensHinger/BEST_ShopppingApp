@@ -1,9 +1,22 @@
 import React, { Component } from 'react';
-import { Typography, Grid, Card, CardMedia} from '@material-ui/core';
+import { Typography, Grid, Card, CardMedia, Button} from '@material-ui/core';
 import CreateGroupDialog from '../dialogs/CreateGroupDialog'
 import UserParties from '../subcomponents/UserParties'
+import ShoppingAPI from '../../api/ShoppingAPI' 
 
 class Overview extends Component {
+
+    constructor(props){
+        super(props)
+
+        this.state = {
+            obj : null
+        }
+    }
+
+    getObj(id){
+        ShoppingAPI.getAPI().getListEntryById(id).then(obj => console.log(obj))    
+    }
 
     render() {
         return ( 
@@ -14,6 +27,9 @@ class Overview extends Component {
                 </Card>
                 <CreateGroupDialog />
                 <UserParties />
+
+                <Button  onClick = {() => this.getObj(2)}>HIER KLICKEN!!!</Button>
+
             </Grid>
 
         </Typography>

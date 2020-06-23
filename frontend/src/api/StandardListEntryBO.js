@@ -1,6 +1,6 @@
 import BusinessObject from './BusinessObject'
 
-export default class StandardListEntry extends BusinessObject{
+export default class StandardListEntryBO extends BusinessObject{
 
     constructor() {
         super();
@@ -42,5 +42,20 @@ export default class StandardListEntry extends BusinessObject{
         return this.list_id
     }
 
-
+    static fromJSON(standardlistentries) {
+        let result = [];
+        
+        if (Array.isArray(standardlistentries)) {
+            standardlistentries.forEach((c) => {
+                Object.setPrototypeOf(c, StandardListEntryBO.prototype)
+                result.push(c)
+            })
+        } else {
+            // Es handelt sich offenbar um ein singuläres Objekt
+            let c = standardlistentries;
+            Object.setPrototypeOf(c, StandardListEntryBO.prototype)
+            result.push(c)
+        }
+        return result;
+    }
 }

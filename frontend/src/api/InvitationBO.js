@@ -1,6 +1,6 @@
 import BusinessObject from './BusinessObject'
 
-export default class Invitation extends BusinessObject{
+export default class InvitationBO extends BusinessObject{
 
     constructor() {
         super();
@@ -40,6 +40,22 @@ export default class Invitation extends BusinessObject{
 
     getIsAccepted() {
         return this.is_accepted
+    }
+    static fromJSON(invitations) {
+        let result = [];
+        
+        if (Array.isArray(invitations)) {
+            invitations.forEach((c) => {
+                Object.setPrototypeOf(c, InvitationBO.prototype)
+                result.push(c)
+            })
+        } else {
+            // Es handelt sich offenbar um ein singuläres Objekt
+            let c = invitations;
+            Object.setPrototypeOf(c, InvitationBO.prototype)
+            result.push(c)
+        }
+        return result;
     }
 
 }
