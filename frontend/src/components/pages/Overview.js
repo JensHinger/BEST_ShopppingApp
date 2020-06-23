@@ -3,6 +3,7 @@ import { Typography, Grid, Card, CardMedia, Button} from '@material-ui/core';
 import CreateGroupDialog from '../dialogs/CreateGroupDialog'
 import UserParties from '../subcomponents/UserParties'
 import ShoppingAPI from '../../api/ShoppingAPI' 
+import ItemBO from '../../api/ItemBO'
 
 class Overview extends Component {
 
@@ -15,7 +16,13 @@ class Overview extends Component {
     }
 
     getObj(id){
-        ShoppingAPI.getAPI().getListEntryById(id).then(obj => console.log(obj))    
+        var p = new ItemBO()
+        p.setID(101)
+        p.setName("Ich bin Batman")
+        p.setAmount(200)
+        p.setUnit(100)
+
+        ShoppingAPI.getAPI().deleteItem(id).then(obj => console.log(obj))    
     }
 
     render() {
@@ -28,7 +35,7 @@ class Overview extends Component {
                 <CreateGroupDialog />
                 <UserParties />
 
-                <Button  onClick = {() => this.getObj(2)}>HIER KLICKEN!!!</Button>
+                <Button  onClick = {() => this.getObj(101)}>HIER KLICKEN!!!</Button>
 
             </Grid>
 
