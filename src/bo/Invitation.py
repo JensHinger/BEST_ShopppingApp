@@ -9,7 +9,7 @@ class Invitation(BusinessObject):
         self._partyi_id = None
         self._target_user_id = None
         self._source_user_id = None
-        self._is_accepted = None
+        self._is_accepted = 0
 
 
     def get_partyi_id(self):
@@ -39,6 +39,22 @@ class Invitation(BusinessObject):
     def get_is_accepted(self):
         return self._is_accepted
 
-    def set_is_accepted(self, boolean):
-        self._is_accepted = boolean
+    def set_is_accepted(self, is_accepted):
+        self._is_accepted = is_accepted
 
+    @staticmethod
+    def from_dict(dictionary=dict()):
+        """Umwandeln eines Python dict() in einen Invitation()."""
+        obj = Invitation()
+        obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
+        obj.set_is_accepted(dictionary["is_accepted"])
+        obj.set_source_user_id(dictionary["source_user_id"])
+        obj.set_target_user_id(dictionary["target_user_id"])
+        obj.set_partyi_id(dictionary["partyi_id"])
+        return obj
+
+    def __str__(self):
+        """Erzeugen eines Strings welcher das Objekt beschreibt"""
+        return "Invitation id: {}, name: {}, is_accepted: {}, source_user_id: {}, target_user_id:{}," \
+               " partyi_id: {} ".format(self.get_id(), self.get_name(), self.get_is_accepted(),
+                                        self.get_source_user_id(), self.get_target_user_id(), self.get_partyi_id())
