@@ -309,6 +309,13 @@ class ListEntryListOperations(Resource):
 
 @shopping.route("/listentry/<int:id>")
 class ListEntryOperations(Resource):
+
+    @shopping.marshal_with(list_entry)
+    def get(self, id):
+        adm = ShoppingAdministration()
+        entry = adm.get_listentry_by_id(id)
+        return entry
+
     @shopping.marshal_with(list_entry)
     @shopping.expect(list_entry)
     def put(self, id):
@@ -483,6 +490,13 @@ class StandardListEntryListOperations(Resource):
 
 @shopping.route("/standardlistentry/<int:id>")
 class StandardListEntryOperations(Resource):
+
+    @shopping.marshal_with(standard_list_entry)
+    def get(self,id):
+        adm = ShoppingAdministration()
+        entry = adm.get_standard_list_entry_by_id(id)
+        return entry
+
     @shopping.marshal_with(standard_list_entry)
     def put(self, id):
         """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""

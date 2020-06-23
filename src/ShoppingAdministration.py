@@ -148,11 +148,12 @@ class ShoppingAdministration(object):
             mapper.insert(retailer)
 
     def update_retailer(self, retailer):
-        with RetailerMapper as mapper:
-            mapper.insert(retailer)
+        with RetailerMapper() as mapper:
+            mapper.update(retailer)
 
     def delete_retailer(self, retailer):
-        pass
+        with RetailerMapper() as mapper:
+            mapper.delete(retailer)
     """
     Ab hier geht es um Items.
     """
