@@ -614,8 +614,7 @@ export default class ShoppingAPI {
                 resolve(responseListEntryBO);
             })
         })
-    }
-}      
+    } 
           
 //User related
     
@@ -646,12 +645,12 @@ export default class ShoppingAPI {
                 'Content-type': 'application/json',
             },
             body: JSON.stringify(userBO)
-        }).then((responseJSON) => {
-            // We always get an array of CustomerBOs.fromJSON
-            let responseUserBO = UserBO.fromJSON(responseJSON)[0];
-            // console.info(accountBOs);
-            return new Promise(function (resolve) {
-                resolve(responseUserBO);
+                }).then((responseJSON) => {
+                    // We always get an array of CustomerBOs.fromJSON
+                    let responseUserBO = UserBO.fromJSON(responseJSON)[0];
+                    // console.info(accountBOs);
+                    return new Promise(function (resolve) {
+                        resolve(responseUserBO);
             })
         })
     }
@@ -669,4 +668,3 @@ export default class ShoppingAPI {
         })
     }
 }
-
