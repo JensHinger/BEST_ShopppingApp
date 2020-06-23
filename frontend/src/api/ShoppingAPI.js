@@ -504,14 +504,14 @@ export default class ShoppingAPI {
         })
     }
 
-    updateUser(id){
-        return this.#fetchAdvanced(this.#updateUserURL(id.getID()), {
+    updateUser(userBO){
+        return this.#fetchAdvanced(this.#updateUserURL(userBO.getID()), {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify(id)
+            body: JSON.stringify(userBO)
         }).then((responseJSON) => {
             // We always get an array of CustomerBOs.fromJSON
             let responseUserBO = UserBO.fromJSON(responseJSON)[0];
@@ -522,8 +522,8 @@ export default class ShoppingAPI {
         })
     }
 
-    deleteUser(id){
-        return this.#fetchAdvanced(this.#deleteUserURL(id), {
+    deleteUser(userID){
+        return this.#fetchAdvanced(this.#deleteUserURL(userID), {
             method: 'DELETE'
         }).then((responseJSON) => {
             // We always get an array of CustomerBOs.fromJSON
