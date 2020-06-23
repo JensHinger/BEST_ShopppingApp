@@ -371,5 +371,54 @@ export default class ShoppingAPI {
         //Ich
 
     //User related
-        //Ich
+    
+     //#getUserByIdURL = (id) => `${this.#shoppingServerBaseURL}/user/${id}`
+    getUserById(id){
+        return this.#fetchAdvanced(this.#getUserByIdURL(id)).then((responseJSON) => {
+            let responseUserBO = UserBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseUserBO)
+                })
+        })
+    }
+
+    getUserByEmail(email){
+        return this.#fetchAdvanced(this.#getUserByEmailURL(email)).then((responseJSON) => {
+            let responseUserBO = UserBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseUserBO)
+                })
+        })
+    }
+
+    updateUser(id){
+        return this.#fetchAdvanced(this.#updateUserURL(id.getID()), {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(id)
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON
+            let responseUserBO = UserBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responseUserBO);
+            })
+        })
+    }
+
+    deleteUser(id){
+        return this.#fetchAdvanced(this.#deleteUserURL(id), {
+            method: 'DELETE'
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON
+            let responseUserBO = UserBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responseUserBO);
+            })
+        })
+    }
 }
