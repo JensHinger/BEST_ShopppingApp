@@ -3,6 +3,7 @@ import PartyBO from './PartyBO'
 import UserBO from './UserBO'
 import ListBO from './ListBO'
 import ListEntryBO from './ListEntryBO'
+import StandardListEntryBO from './StandardListEntryBO'
 import RetailerBO from './RetailerBO'
 import InvitationBO from './InvitationBO'
 
@@ -44,8 +45,8 @@ export default class ShoppingAPI {
 
     //Listentry related
     #getListEntryByIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
-    #getListEntryByListIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-list/${id}`
-    #getListEntryByUserIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-user/${id}`
+    #getListEntriesByListIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-list/${id}`
+    #getListEntriesByUserIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-user/${id}`
     #addListEntryURL = () => `${this.#shoppingServerBaseURL}/listentry`
     #updateListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
     #deleteListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
@@ -65,8 +66,8 @@ export default class ShoppingAPI {
 
 
     //StandardListEntry related
-    #getStandardListEntryURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry/${id}`
-    #getStandardListEntryByListIdURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry-by-list/${id}`
+    #getStandardListEntrybyIdURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry/${id}`
+    #getStandardListEntryByPartyIdURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry-by-party/${id}`
     #getStandardListEntryByUserIdURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry-by-user/${id}`
     #addStandardListEntryURL = () => `${this.#shoppingServerBaseURL}/standardlistentry`
     #updateStandardListEntryURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry/${id}`
@@ -348,18 +349,79 @@ export default class ShoppingAPI {
     //#getListEntryByIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
     getListEntryById(id){
         return this.#fetchAdvanced(this.#getListEntryByIdURL(id)).then((responseJSON) => {
-            let responseListEntryBO = ListEntryBO.fromJSON(responseJSON)[0];
+            let responseListEntryBO = ListEntryBO.fromJSON(responseJSON[0]);
                 return new Promise(function(resolve){
                     resolve(responseListEntryBO)
                 })
         })
     }
     //#getListEntryByListIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-list/${id}`
-    //#getListEntryByUserIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-user/${id}`
+    getListEntriesByListId(id){
+        return this.#fetchAdvanced(this.#getListEntriesByListIdURL(id)).then((responseJSON) => {
+            let responseListEntryBOs = ListEntryBO.fromJSON(responseJSON);
+                return new Promise(function(resolve){
+                    resolve(responseListEntryBOs)
+                })
+        })
+    }
+    //#getListEntriesByUserIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-user/${id}`
+    getListEntriesByUserId(id){
+        return this.#fetchAdvanced(this.#getListEntriesByUserIdURL(id)).then((responseJSON) => {
+            let responseListEntryBOs = ListEntryBO.fromJSON(responseJSON);
+                return new Promise(function(resolve){
+                    resolve(responseListEntryBOs)
+                })
+        })
+    }
     //#addListEntryURL = () => `${this.#shoppingServerBaseURL}/listentry`
-    //#updateListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
-    //#deleteListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
+    addListEntry(listEntryBO) {
+        return this.#fetchAdvanced(this.#addListEntryURL(), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(listEntryBO)
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON, but only need one object
+            let responseListEntryBO = ListEntryBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseListEntryBO);
+            })
+        })
+    }
 
+    //#updateListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
+    updateListEntry(listEntryBO) {
+        return this.#fetchAdvanced(this.#updateListEntryURL(listEntryBO.getID()), {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(listEntryBO)
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON, but only need one object
+            let responseListEntryBO = ListEntryBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseListEntryBO);
+            })
+        })
+    }
+    
+    //#deleteListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
+    deleteListEntry(id) {
+        return this.#fetchAdvanced(this.#deleteListEntryURL(id), {
+            method: 'DELETE'
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON
+            let responseListEntryBO = ListEntryBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responseListEntryBO);
+            })
+        })
+    }
     //Party related
 
     getPartyById(id){
@@ -481,11 +543,83 @@ export default class ShoppingAPI {
     }
 
     //StandardListEntry related
-        //Ich
+    //#getStandardListEntrybyIdURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry/${id}`
+    getStandardListEntrybyId(id){
+        return this.#fetchAdvanced(this.#getStandardListEntrybyIdURL(id)).then((responseJSON) => {
+            let responseStandardListEntryBO = StandardListEntryBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseStandardListEntryBO)
+                })
+        })
+    }
+    //#getStandardListEntryByPartyIdURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry-by-list/${id}`
+    getStandardListEntryByPartyId(id){
+        return this.#fetchAdvanced(this.#getStandardListEntryByPartyIdURL(id)).then((responseJSON) => {
+            let responseStandardListEntryBO = StandardListEntryBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseStandardListEntryBO)
+                })
+        })
+    }
+    //#getStandardListEntryByUserIdURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry-by-user/${id}`
+    getStandardListEntryByUserId(id){
+        return this.#fetchAdvanced(this.#getStandardListEntryByUserIdURL(id)).then((responseJSON) => {
+            let responseStandardListEntryBO = StandardListEntryBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseStandardListEntryBO)
+                })
+        })
+    }
+    //#addStandardListEntryURL = () => `${this.#shoppingServerBaseURL}/standardlistentry`
+    addStandardListEntry(standardListEntryBO) {
+        return this.#fetchAdvanced(this.#addStandardListEntryURL(), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(standardListEntryBO)
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON, but only need one object
+            let responseListEntryBO = StandardListEntryBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseListEntryBO);
+            })
+        })
+    }
 
-    //User related
+
+    //#updateStandardListEntryURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry/${id}`
+    updateStandardListEntry(listEntryBO) {
+        return this.#fetchAdvanced(this.#updateStandardListEntryURL(listEntryBO.getID()), {
+          body: JSON.stringify(listEntryBO)
+          }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON, but only need one object
+            let responseListEntryBO = StandardListEntryBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseListEntryBO);
+            })
+        })
+    }
+
+    //#deleteStandardListEntryURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry/${id}`
+    deleteStandardListEntry(id) {
+        return this.#fetchAdvanced(this.#deleteStandardListEntryURL(id), {
+            method: 'DELETE'
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON
+            let responseListEntryBO = StandardListEntryBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responseListEntryBO);
+            })
+        })
+    }
+}      
+          
+//User related
     
-     //#getUserByIdURL = (id) => `${this.#shoppingServerBaseURL}/user/${id}`
+    //#getUserByIdURL = (id) => `${this.#shoppingServerBaseURL}/user/${id}`
     getUserById(id){
         return this.#fetchAdvanced(this.#getUserByIdURL(id)).then((responseJSON) => {
             let responseUserBO = UserBO.fromJSON(responseJSON)[0];
@@ -503,7 +637,7 @@ export default class ShoppingAPI {
                 })
         })
     }
-
+    
     updateUser(userBO){
         return this.#fetchAdvanced(this.#updateUserURL(userBO.getID()), {
             method: 'PUT',
@@ -535,3 +669,4 @@ export default class ShoppingAPI {
         })
     }
 }
+
