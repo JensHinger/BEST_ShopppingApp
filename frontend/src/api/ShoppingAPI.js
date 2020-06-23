@@ -29,7 +29,10 @@ export default class ShoppingAPI {
     #deleteInvitaitonURL = (id) => `${this.#shoppingServerBaseURL}/invitation/${id}`
 
     //Item related
-
+    #getItemByIdURL = (id) => `${this.#shoppingServerBaseURL}/item/${id}`
+    #addItemURL = () => `${this.#shoppingServerBaseURL}/item`
+    #updateItemURL = (id) => `${this.#shoppingServerBaseURL}/item/${id}`
+    #deleteItemURL = (id) => `${this.#shoppingServerBaseURL}/item/${id}`
 
     //List related
     #getListByIdURL = (id) => `${this.#shoppingServerBaseURL}/list/${id}`
@@ -100,7 +103,64 @@ export default class ShoppingAPI {
 
 
     //Item related
+    
+    getItemById(id){
+        return this.#fetchAdvanced(this.#getItemByIdURL(id)).then((responseJSON) => {
+            let responseItemBO = ItemBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseItemBO)
+                })
+        })
+    }
 
+    addItem(itemBO){
+        return this.#fetchAdvanced(this.#addItemURL(), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(itemBO)
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON, but only need one object
+            let responseItemBO = ItemBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responseItemBO);
+            })
+        })
+    }
+
+    updateItem(itemBO){
+        return this.#fetchAdvanced(this.#updateItemURL(itemBO.getID()), {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(itemBO)
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON
+            let responseItemBO = ItemBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responseItemBO);
+            })
+        })
+    }
+
+    deleteItem(itemID){
+        return this.#fetchAdvanced(this.#deleteItemURL(itemID), {
+            method: 'DELETE'
+        }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON
+            let responseItemBO = ItemBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+                resolve(responseItemBO);
+            })
+        })
+    }
 
     //List related
     
