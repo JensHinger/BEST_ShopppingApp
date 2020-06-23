@@ -175,7 +175,7 @@ class ShoppingAdministration(object):
         item.set_amount(amount)
         item.set_unit(unit)
 
-        with ListMapper() as mapper:
+        with ItemMapper() as mapper:
             mapper.insert(item)
 
     def update_item(self, item):
