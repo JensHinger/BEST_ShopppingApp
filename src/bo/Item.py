@@ -28,6 +28,13 @@ class Item(BusinessObject):
     def from_dict(dictionary=dict()):
         """Umwandeln eines Python dict() in einen listentry()."""
         obj = Item()
-        obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
         obj.set_name(dictionary["name"])
+        obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
+        obj.set_amount(dictionary["amount"])
+        obj.set_unit(dictionary["unit"])
         return obj
+
+    def __str__(self):
+        """Erzeugen eines Strings welcher das Objekt beschreibt"""
+        return "Item id: {}, name: {}, amount: {}, unit:{}".format(self.get_id(), self.get_name(),
+                                                                   self.get_unit(), self.get_amount())

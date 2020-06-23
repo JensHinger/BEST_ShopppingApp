@@ -20,19 +20,9 @@ class UserParties extends Component{
     }
 
     getListsByParty(){
-        // Hier muss bei getListsByParty noch die partyID bei dem Übergabewert ergänzt werden kann Gruppenname übergeben werden als prop??
-        ShoppingAPI.getAPI().getListsByParty().then(ListBOs =>
-           this.setState({
-               lists: ListBOs
-           }))
    }
 
     getPartiesByUser = () => {
-        // Hier muss bei getPartiesByUser noch this.props.user.getID() bei dem Übergabewert ergänzt werden
-        ShoppingAPI.getAPI().getPartiesByUser().then(PartyBOs =>
-            this.setState({
-                parties: PartyBOs
-            }))
     }
     
     render(){

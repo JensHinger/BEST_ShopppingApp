@@ -129,7 +129,7 @@ class InvitationMapper(Mapper):
         """Invite mit entsprechendem source user finden"""
         cursor = self._cnx.cursor()
         command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
-                  "source_user LIKE '{}' ".format(source_user_id)
+                  "source_user LIKE '{}' AND is_accepted = 1 ".format(source_user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -143,7 +143,7 @@ class InvitationMapper(Mapper):
         """Invite mit entsprechendem target user finden"""
         cursor = self._cnx.cursor()
         command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
-                  "target_user LIKE '{}' ".format(target_user_id)
+                  "target_user LIKE '{}' AND is_accepted = 1".format(target_user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
