@@ -38,7 +38,7 @@ class Header extends Component{
       }))
   }
 
-  componentWillMount(){
+  componentDidMount(){
     this.getCurrentUser()
   }
 
@@ -73,9 +73,10 @@ class Header extends Component{
       </Menu>
     );
 
-    
+    var user = this.state.currentUser
+
     return (
-      <div >
+      <div>
         <AppBar position="static">
           <Toolbar>
             <Navbar />
@@ -89,9 +90,7 @@ class Header extends Component{
               <IconButton color="inherit">
                 <NotificationsIcon />
               </IconButton>
-              <Typography>
-                
-              </Typography>
+              <Typography>{user.getName()}</Typography>
               <IconButton
                 edge="end"
                 onClick={this.handleProfileMenuOpen}
