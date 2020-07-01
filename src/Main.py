@@ -193,57 +193,6 @@ class AcceptedInvitationsByParty(Resource):
 
 
 """Item related"""
-@shopping.route("/shopping/item")
-class ItemListOperations(Resource):
-    @shopping.marshal_with(item)
-    @shopping.expect(item)
-    def post(self):
-        """Anlegen eines neuen Items: Die vom Client vorgegebenen Daten werden dabei als Vorschlag aufgenommen."""
-        adm = ShoppingAdministration()
-        proposal = Item.from_dict(api.payload)
-
-        if proposal is not None:
-            print(proposal.get_name())
-            result = adm.create_party(proposal.get_name())
-            return result, 200
-        else:
-            return "", 500
-
-
-@shopping.route("/shopping/item")
-@shopping.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@shopping.param('id', 'Die ID des Account-Objekts')
-class ItemOperations(Resource):
-    @shopping.marshal_with(Item)
-    def get(self, id):
-        """Auslesen eines spezifizierten Party Objekts aus der DB """
-        adm = ShoppingAdministration()
-        items = adm.get_item_by_id(id)
-        return items
-
-    @shopping.expect(Item)
-    def put(self, id):
-        """Update des spezifizierten Items. Es ist die id relevant welche per Link übergeben wird."""
-        adm = ShoppingAdministration()
-        items = Item.from_dict(api.payload)
-
-        if items is not None:
-            item.set_id(id)
-            adm.update_item(items)
-            return "", 200
-        else:
-            return "", 500
-
-    def delete(self, id):
-        """Löschen des spezifizierten Item"""
-        adm = ShoppingAdministration()
-        items = adm.get_item_by_id(id)
-
-        if items is not None:
-            adm.delete_party(items)
-            return "", 200
-        else:
-            return "", 500
 
 @shopping.route("/item")
 class ItemListOperations(Resource):
