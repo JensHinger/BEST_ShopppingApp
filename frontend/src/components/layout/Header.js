@@ -90,7 +90,14 @@ class Header extends Component{
               <IconButton color="inherit">
                 <NotificationsIcon />
               </IconButton>
-              <Typography>{user.getName()}</Typography>
+              {
+                user ?
+              
+                <Typography>
+                  user: {user.getName()}
+                </Typography>
+                : null
+              }
               <IconButton
                 edge="end"
                 onClick={this.handleProfileMenuOpen}
