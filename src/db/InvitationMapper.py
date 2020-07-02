@@ -69,13 +69,32 @@ class InvitationMapper(Mapper):
 
         return result
 
-    def find_all_user_in_party(self, partyi):
+    def find_all_pend_user_in_party(self, partyi_id):
         """Alle User einer party auslesen, gibt nur die ID zurück """
         cursor = self._cnx.cursor()
-        command = "SELECT target_user FROM invitation WHERE " \
-                  "partyi_id LIKE '{}' ".format(partyi)
+        command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
+                  "partyi_id LIKE '{}' AND is_accepted = 0".format(partyi_id)
         cursor.execute(command)
-        result = cursor.fetchall()
+        tuples = cursor.fetchall()
+
+        try:
+            result = self.build_bo(tuples)
+        except IndexError:
+            result = None
+        return result
+
+    def find_all_accepted_user_in_party(self, partyi_id):
+        """Alle User einer party auslesen, gibt nur die ID zurück """
+        cursor = self._cnx.cursor()
+        command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
+                  "partyi_id LIKE '{}' AND is_accepted = 1".format(partyi_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            result = self.build_bo(tuples)
+        except IndexError:
+            result = None
         return result
 
     def find_pend_invites_by_target_user(self, target_user_id):
@@ -106,11 +125,11 @@ class InvitationMapper(Mapper):
             result = None
         return result
 
-    def find_source_user(self, source_user_id):
+    def find_accepted_invites_by_source_user(self, source_user_id):
         """Invite mit entsprechendem source user finden"""
         cursor = self._cnx.cursor()
         command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
-                  "source_user LIKE '{}' ".format(source_user_id)
+                  "source_user LIKE '{}' AND is_accepted = 1 ".format(source_user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -120,27 +139,14 @@ class InvitationMapper(Mapper):
             result = None
         return result
 
-    def find_target_user(self, target_user_id):
+    def find_accepted_invites_by_target_user(self, target_user_id):
         """Invite mit entsprechendem target user finden"""
         cursor = self._cnx.cursor()
         command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
-                  "target_user LIKE '{}' ".format(target_user_id)
+                  "target_user LIKE '{}' AND is_accepted = 1".format(target_user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        try:
-            result = self.build_bo(tuples)
-        except IndexError:
-            result = None
-        return result
-
-    def find_all_parties_corr_user(self, target_user_id):
-        "Alle parties zu denen ein bestimmter User gehört auslesen"
-        cursor = self._cnx.cursor()
-        command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
-                  "target_user LIKE '{}' AND is_accepted = 1 ".format(target_user_id)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
         try:
             result = self.build_bo(tuples)
         except IndexError:
@@ -200,7 +206,4 @@ if (__name__ == "__main__"):
         mapper.delete(testinv)
         thisinv = mapper.find_by_id(7)
         mapper.delete(thisinv)
-
-
-
 

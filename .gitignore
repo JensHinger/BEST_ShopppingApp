@@ -1,2 +1,5 @@
 /.idea/
+/.vscode/
 /venv/
+/frontend/node_modules/.cache
+/node_modules/
