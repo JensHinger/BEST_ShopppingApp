@@ -15,16 +15,17 @@ import Theme from "../../Theme"
 
    }
 
+
     render() {
         return (
             <ThemeProvider theme = {Theme}>
             <div align = "center">
             <ArticleAmountUnit/>
             <br margin-top = '100px'/>
-            <Grid container>
-            <Grid sm>
+            <Grid container justify = "center">
+            
             <Button variant = "contained" color = "primary"> fertig </Button>
-            </Grid>
+            
             </Grid>   
             </div>
             </ThemeProvider>
