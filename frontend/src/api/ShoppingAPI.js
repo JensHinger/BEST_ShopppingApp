@@ -59,6 +59,7 @@ export default class ShoppingAPI {
 
     
     //Retailer related
+    #getAllRetailerURL = () => `${this.#shoppingServerBaseURL}/retailer`
     #getRetailerByidURL = (id) => `${this.#shoppingServerBaseURL}/retailer/${id}`
     #addRetailerURL = () => `${this.#shoppingServerBaseURL}/retailer`
     #updateRetailerURL = (id) => `${this.#shoppingServerBaseURL}/retailer/${id}`
@@ -483,6 +484,15 @@ export default class ShoppingAPI {
     }
 
     //Retailer related
+
+    getAllRetailer(){
+        return this.#fetchAdvanced(this.#getAllRetailerURL()).then((responseJSON) => {
+            let responseRetailerBO = RetailerBO.fromJSON(responseJSON);
+                return new Promise(function(resolve){
+                    resolve(responseRetailerBO)
+                })
+        })
+    }
 
     getRetailerById(id){
         return this.#fetchAdvanced(this.#getRetailerByidURL(id)).then((responseJSON) => {
