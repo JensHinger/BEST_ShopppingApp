@@ -114,7 +114,7 @@ export default class ShoppingAPI {
 
     getPendInvitationsBySourceUserId(id){
         return this.#fetchAdvanced(this.#getPendInvitationsBySourceUserIdURL(id)).then((responseJSON) => {
-            let responseInvitationBO = InvitationBO.fromJSON(responseJSON)[0];
+            let responseInvitationBO = InvitationBO.fromJSON(responseJSON);
                 return new Promise(function(resolve){
                     resolve(responseInvitationBO)
                 })
@@ -123,7 +123,7 @@ export default class ShoppingAPI {
 
     getPendInvitationsByTargetUserId(id){
         return this.#fetchAdvanced(this.#getPendInvitationsByTargetUserIdURL(id)).then((responseJSON) => {
-            let responseInvitationBO = InvitationBO.fromJSON(responseJSON)[0];
+            let responseInvitationBO = InvitationBO.fromJSON(responseJSON);
                 return new Promise(function(resolve){
                     resolve(responseInvitationBO)
                 })
@@ -132,7 +132,7 @@ export default class ShoppingAPI {
 
     getAcceptedInvitationsBySourceUserId(id){
         return this.#fetchAdvanced(this.#getAcceptedInvitationsBySourceUserIdURL(id)).then((responseJSON) => {
-            let responseInvitationBO = InvitationBO.fromJSON(responseJSON)[0];
+            let responseInvitationBO = InvitationBO.fromJSON(responseJSON);
                 return new Promise(function(resolve){
                     resolve(responseInvitationBO)
                 })
@@ -141,7 +141,7 @@ export default class ShoppingAPI {
 
     getAcceptedInvitationsByTargetUserId(id){
         return this.#fetchAdvanced(this.#getAcceptedInvitationsByTargetUserIdURL(id)).then((responseJSON) => {
-            let responseInvitationBO = InvitationBO.fromJSON(responseJSON)[0];
+            let responseInvitationBO = InvitationBO.fromJSON(responseJSON);
                 return new Promise(function(resolve){
                     resolve(responseInvitationBO)
                 })
@@ -150,7 +150,7 @@ export default class ShoppingAPI {
 
     getPendInvitationsByPartyId(id){
         return this.#fetchAdvanced(this.#getPendInvitationsByPartyIdURL(id)).then((responseJSON) => {
-            let responseInvitationBO = InvitationBO.fromJSON(responseJSON)[0];
+            let responseInvitationBO = InvitationBO.fromJSON(responseJSON);
                 return new Promise(function(resolve){
                     resolve(responseInvitationBO)
                 })
@@ -159,7 +159,7 @@ export default class ShoppingAPI {
 
     getAcceptedInvitationsByPartyId(id){
         return this.#fetchAdvanced(this.#getAcceptedInvitationsByPartyIdURL(id)).then((responseJSON) => {
-            let responseInvitationBO = InvitationBO.fromJSON(responseJSON)[0];
+            let responseInvitationBO = InvitationBO.fromJSON(responseJSON);
                 return new Promise(function(resolve){
                     resolve(responseInvitationBO)
                 })
@@ -287,9 +287,9 @@ export default class ShoppingAPI {
         })
     }
 
-    getListByPartyId(id){
+    getListsByPartyId(id){
         return this.#fetchAdvanced(this.#getListsByPartyIdURL(id)).then((responseJSON) => {
-            let responseListBO = ListBO.fromJSON(responseJSON)[0];
+            let responseListBO = ListBO.fromJSON(responseJSON);
                 return new Promise(function(resolve){
                     resolve(responseListBO)
                 })
