@@ -15,27 +15,36 @@ class UserParties extends Component{
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.getPartiesByUser()
-        this.getListsByParty()
     }
 
     getListsByParty(){
-        this.state.parties.map((party) => 
-            ShoppingAPI.getAPI().getListsByPartyId(party.getId())
-            .then(listBOs => this.setState({lists : listBOs}))
-        )
+        var parties = this.state.parties
+        parties.forEach(party => {
+            ShoppingAPI.getAPI().getListsByPartyId(party.getID())
+            .then(partyLists => partyLists.forEach(list => {
+                this.setState({
+                    lists : [...this.state.lists, list]
+                })
+            }))
+        });
    }
 
     getPartiesByUser = () => {
-        console.log("halolo")
         ShoppingAPI.getAPI().getAcceptedInvitationsBySourceUserId(2)
-        .then(InvitationBOs => function(){
-            var partyiId = InvitationBOs.getPartyiId()
-            ShoppingAPI.getAPI().getPartyById(partyiId)
-            .then(partyBOs => this.setState({parties : partyBOs})
-            )
-        })
+        .then(invitations => this.getPartyByInvitations(invitations))
+    }
+    
+    getPartyByInvitations = (invitations) => {
+       invitations.forEach(invitation => {
+           ShoppingAPI.getAPI().getPartyById(invitation.getPartyiId())
+           .then(function(party){ 
+               this.setState({
+                parties: [...this.state.parties, party]
+           })
+        }.bind(this))
+       });
     }
     
     render(){
