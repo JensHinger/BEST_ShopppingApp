@@ -11,7 +11,7 @@ class UserParties extends Component{
 
         this.state = {
             parties : [],
-            lists : []
+            listPartyDic : []
         }
     }
 
@@ -24,9 +24,7 @@ class UserParties extends Component{
         parties.forEach(party => {
             ShoppingAPI.getAPI().getListsByPartyId(party.getID())
             .then(partyLists => partyLists.forEach(list => {
-                this.setState({
-                    lists : [...this.state.lists, list]
-                })
+                this.setState(state => this.state.listPartyDic.push({key: party.getID(), value: list}))
             }))
         });
    }
@@ -49,7 +47,8 @@ class UserParties extends Component{
     
     render(){
         const userParties = this.state.parties
-        const lists = this.state.lists
+        const listPartyDic = this.state.listPartyDic
+
         return(
             <div>
                 {userParties.map((party) =>
@@ -59,7 +58,7 @@ class UserParties extends Component{
                         >
                             {party.getName()}
                         </ExpansionPanelSummary>
-                            {lists.map((list) => 
+                            {listPartyDic.map((party,list) => 
                                 <ExpansionPanelDetails>
                                     <Typography>
                                         <Button>{list.getName()}</Button>
