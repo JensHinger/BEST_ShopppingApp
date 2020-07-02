@@ -6,9 +6,9 @@ import ManageGroup from "./components/pages/ManageGroup";
 import ManageUser from "./components/pages/ManageUser"
 import MyArticle from './components/pages/MyArticle';
 import GroupShoppingList from "./components/pages/GroupShoppingList";
-import ShoppingListEntry from "./components/pages/ShoppingListEntry";
-import StandardList from "./components/pages/StandardList";
-import StandardListEntry from "./components/pages/StandardListEntry"
+import ShoppingListEntry from "./components/subcomponents/ListEntryCard";
+import StandardList from "./components/pages/StandardListManagement";
+import StandardListEntry from "./components/subcomponents/StandardListEntryCard"
 import Header from "./components/layout/Header";
 import { ThemeProvider } from '@material-ui/core';
 import Theme from "./Theme"

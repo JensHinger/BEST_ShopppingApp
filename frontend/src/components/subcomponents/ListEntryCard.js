@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import ArticleAmountUnit from '../subcomponents/ArticleAmountUnit'
+import ArticleAmountUnit from './AddListEntry'
 import {Button, ThemeProvider, Grid} from '@material-ui/core'
 import Theme from "../../Theme"
 
