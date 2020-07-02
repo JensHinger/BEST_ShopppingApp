@@ -28,6 +28,7 @@ class UserParties extends Component{
    }
 
     getPartiesByUser = () => {
+        console.log("halolo")
         ShoppingAPI.getAPI().getAcceptedInvitationsBySourceUserId(2)
         .then(InvitationBOs => function(){
             var partyiId = InvitationBOs.getPartyiId()

@@ -2,10 +2,10 @@ import React,{Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Overview from './components/pages/Overview';
 import About from './components/pages/About';
-import ManageGroup from "./components/pages/ManageGroup";
+import ManageGroup from "./components/pages/ManageParty";
 import ManageUser from "./components/pages/ManageUser"
 import MyArticle from './components/pages/MyArticle';
-import GroupShoppingList from "./components/pages/GroupShoppingList";
+import PartyShoppingList from "./components/pages/PartyShoppingList";
 import ShoppingListEntry from "./components/subcomponents/ListEntryCard";
 import StandardList from "./components/pages/StandardListManagement";
 import StandardListEntry from "./components/subcomponents/StandardListEntryCard"
@@ -36,8 +36,8 @@ class App extends Component {
                 <Route path='/manageuser'>
                     <ManageUser />
                 </Route>
-                <Route path='/groupshoppinglist'>
-                    <GroupShoppingList />
+                <Route path='/partyshoppinglist'>
+                    <PartyShoppingList />
                 </Route>
                 <Route path='/shoppinglistentry'>
                     <ShoppingListEntry />

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { List, Typography } from '@material-ui/core'
 
-class GroupShoppingList extends Component{
+class PartyShoppingList extends Component{
 
     constructor(props){
         super(props)
@@ -20,4 +20,4 @@ class GroupShoppingList extends Component{
     }
 }
 
-export default GroupShoppingList
+export default PartyShoppingList
