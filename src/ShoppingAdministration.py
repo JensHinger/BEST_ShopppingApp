@@ -132,6 +132,10 @@ class ShoppingAdministration(object):
     """
     Ab hier geht es um Retailer.
     """
+    def get_all_retailer(self):
+        with RetailerMapper() as mapper:
+            return mapper.find_all()
+
     def get_retailer_by_id(self, id):
         with RetailerMapper() as mapper:
             return mapper.find_by_id(id)

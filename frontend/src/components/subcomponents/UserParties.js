@@ -24,13 +24,13 @@ class UserParties extends Component{
         this.getPartiesByUser()
     }
 
+
     getListsByParty(party_id){
         ShoppingAPI.getAPI().getListsByPartyId(party_id)
         .then(list => 
             this.setState({lists : list}),
             this.setState({expanded: this.state.expanded != party_id ? party_id : false})
-        )
-              
+        )           
    }
 
 
@@ -56,7 +56,8 @@ class UserParties extends Component{
     
     render(){
         const userParties = this.state.parties
-        const lists = this.state.lists
+        const listPartyDic = this.state.listPartyDic
+
         return(
             <div>
                 {userParties.map((party) =>
@@ -66,7 +67,7 @@ class UserParties extends Component{
                         >
                             {party.getName()}
                         </ExpansionPanelSummary>
-                            {lists.map((list) => 
+                            {listPartyDic.map((party,list) => 
                                 <ExpansionPanelDetails>
                                     <Typography>
                                         <Button component={RouterLink} to={`/groupshoppinglist`} >{list.getName()} </Button>
