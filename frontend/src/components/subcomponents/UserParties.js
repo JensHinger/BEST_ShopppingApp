@@ -2,6 +2,10 @@ import React, { Component } from 'react'
 import {ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Button, Typography} from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ShoppingAPI from '../../api/ShoppingAPI'
+import ManageGroup from "../pages/ManageUser"
+//import ManageGroup from "./components/pages/ManageParty";
+import { Link as RouterLink } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect, } from 'react-router-dom';
 import InvitationBO from '../../api/InvitationBO'
 
 class UserParties extends Component{
@@ -11,28 +15,27 @@ class UserParties extends Component{
 
         this.state = {
             parties : [],
-            lists : []
+            lists : [],
+            expanded: true 
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.getPartiesByUser()
     }
 
-    getListsByParty(){
-        var parties = this.state.parties
-        parties.forEach(party => {
-            ShoppingAPI.getAPI().getListsByPartyId(party.getID())
-            .then(partyLists => partyLists.forEach(list => {
-                this.setState({
-                    lists : [...this.state.lists, list]
-                })
-            }))
-        });
+    getListsByParty(party_id){
+        ShoppingAPI.getAPI().getListsByPartyId(party_id)
+        .then(list => 
+            this.setState({lists : list}),
+            this.setState({expanded: this.state.expanded != party_id ? party_id : false})
+        )
+              
    }
 
+
     getPartiesByUser = () => {
-        ShoppingAPI.getAPI().getAcceptedInvitationsBySourceUserId(2)
+        ShoppingAPI.getAPI().getAcceptedInvitationsBySourceUserId(1)
         .then(invitations => this.getPartyByInvitations(invitations))
     }
     
@@ -47,13 +50,17 @@ class UserParties extends Component{
        });
     }
     
+    
+
+
+    
     render(){
         const userParties = this.state.parties
         const lists = this.state.lists
         return(
             <div>
                 {userParties.map((party) =>
-                    <ExpansionPanel key={party.getID()}>
+                    <ExpansionPanel expanded = {this.state.expanded === party.getID()} onChange = {() => this.getListsByParty(party.getID())} key={party.getID()}>
                         <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                         >
@@ -62,7 +69,7 @@ class UserParties extends Component{
                             {lists.map((list) => 
                                 <ExpansionPanelDetails>
                                     <Typography>
-                                        <Button>{list.getName()}</Button>
+                                        <Button component={RouterLink} to={`/groupshoppinglist`} >{list.getName()} </Button>
                                     </Typography>
                                 </ExpansionPanelDetails>
                             )}                  
@@ -71,6 +78,5 @@ class UserParties extends Component{
             </div>  
         )
     }
-
 }
 export default UserParties
