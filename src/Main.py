@@ -491,6 +491,18 @@ class RetailerOperations (Resource):
 
 @shopping.route("/retailer")
 class RetailerListOperations(Resource):
+
+    @shopping.marshal_with(retailer)
+    def get(self):
+        """Auslesen des aller Retailer aus der DB."""
+        adm = ShoppingAdministration()
+        ret = adm.get_all_retailer()
+
+        if ret is not None:
+            return ret
+        else:
+            return "", 500
+
     @shopping.marshal_with(retailer)
     @shopping.expect(retailer)
     def post(self):

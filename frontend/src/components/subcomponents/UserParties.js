@@ -11,36 +11,44 @@ class UserParties extends Component{
 
         this.state = {
             parties : [],
-            lists : []
+            listPartyDic : []
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.getPartiesByUser()
-        this.getListsByParty()
     }
 
     getListsByParty(){
-        this.state.parties.map((party) => 
-            ShoppingAPI.getAPI().getListsByPartyId(party.getId())
-            .then(listBOs => this.setState({lists : listBOs}))
-        )
+        var parties = this.state.parties
+        parties.forEach(party => {
+            ShoppingAPI.getAPI().getListsByPartyId(party.getID())
+            .then(partyLists => partyLists.forEach(list => {
+                this.setState(state => this.state.listPartyDic.push({key: party.getID(), value: list}))
+            }))
+        });
    }
 
     getPartiesByUser = () => {
-        console.log("halolo")
         ShoppingAPI.getAPI().getAcceptedInvitationsBySourceUserId(2)
-        .then(InvitationBOs => function(){
-            var partyiId = InvitationBOs.getPartyiId()
-            ShoppingAPI.getAPI().getPartyById(partyiId)
-            .then(partyBOs => this.setState({parties : partyBOs})
-            )
-        })
+        .then(invitations => this.getPartyByInvitations(invitations))
+    }
+    
+    getPartyByInvitations = (invitations) => {
+       invitations.forEach(invitation => {
+           ShoppingAPI.getAPI().getPartyById(invitation.getPartyiId())
+           .then(function(party){ 
+               this.setState({
+                parties: [...this.state.parties, party]
+           })
+        }.bind(this))
+       });
     }
     
     render(){
         const userParties = this.state.parties
-        const lists = this.state.lists
+        const listPartyDic = this.state.listPartyDic
+
         return(
             <div>
                 {userParties.map((party) =>
@@ -50,7 +58,7 @@ class UserParties extends Component{
                         >
                             {party.getName()}
                         </ExpansionPanelSummary>
-                            {lists.map((list) => 
+                            {listPartyDic.map((party,list) => 
                                 <ExpansionPanelDetails>
                                     <Typography>
                                         <Button>{list.getName()}</Button>
