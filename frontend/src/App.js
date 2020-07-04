@@ -23,7 +23,7 @@ class App extends Component {
             <Router basename={process.env.PUBLIC_URL}>
               <Header />
               <>
-                <Redirect from='/' to='overview' />
+                <Redirect from='/' to='/overview' />
                 <Route exact path='/overview'>
                     <Overview />
                 </Route>
@@ -36,8 +36,8 @@ class App extends Component {
                 <Route path='/manageuser'>
                     <ManageUser />
                 </Route>
-                <Route path='/partyshoppinglist'>
-                    <PartyShoppingList />
+                <Route path={`/partyshoppinglist/:listid`} component={PartyShoppingList}>
+                    
                 </Route>
                 <Route path='/AddListEntry'>
                     <AddListEntry />
