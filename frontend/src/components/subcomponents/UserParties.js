@@ -7,6 +7,7 @@ import ManageGroup from "../pages/ManageUser"
 import { Link as RouterLink } from 'react-router-dom';
 import { BrowserRouter as Router, Route, Redirect, } from 'react-router-dom';
 import InvitationBO from '../../api/InvitationBO'
+import PartyShoppingList from "../pages/PartyShoppingList"
 
 class UserParties extends Component{
 
@@ -50,6 +51,7 @@ class UserParties extends Component{
        });
     }
     
+    panelClickHandler
     
 
 
@@ -68,9 +70,9 @@ class UserParties extends Component{
                         </ExpansionPanelSummary>
                             {lists.map((list) => 
                                 <ExpansionPanelDetails>
-                                    <Typography>
-                                        <Button component={RouterLink} to={`/groupshoppinglist`} >{list.getName()} </Button>
-                                    </Typography>
+                                    
+                                        <Button  component={RouterLink} to={`/partyshoppinglist/${list.getID()}`} > {list.getName()} </Button>
+                                        
                                 </ExpansionPanelDetails>
                             )}                  
                     </ExpansionPanel> 
