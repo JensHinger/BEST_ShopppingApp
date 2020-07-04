@@ -58,8 +58,7 @@ class UserParties extends Component{
     
     render(){
         const userParties = this.state.parties
-        const listPartyDic = this.state.listPartyDic
-
+        const lists = this.state.lists
         return(
             <div>
                 {userParties.map((party) =>
@@ -69,13 +68,11 @@ class UserParties extends Component{
                         >
                             {party.getName()}
                         </ExpansionPanelSummary>
-                            {listPartyDic.map((party,list) => 
+                            {lists.map((list) =>
                                 <ExpansionPanelDetails>
-                                    
                                         <Button  component={RouterLink} to={`/partyshoppinglist/${list.getID()}`} > {list.getName()} </Button>
-                                        
-                                </ExpansionPanelDetails>
-                            )}                  
+                                </ExpansionPanelDetails> 
+                            )}    
                     </ExpansionPanel> 
                 )} 
             </div>  
