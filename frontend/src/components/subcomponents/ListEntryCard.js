@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ArticleAmountUnit from './AddListEntry'
-import {Button, ThemeProvider, Grid} from '@material-ui/core'
+import { ThemeProvider, Grid} from '@material-ui/core'
 import Theme from "../../Theme"
 
  class ShoppingListEntry extends Component {
@@ -23,9 +23,6 @@ import Theme from "../../Theme"
             <ArticleAmountUnit/>
             <br margin-top = '100px'/>
             <Grid container justify = "center">
-            
-            <Button variant = "contained" color = "primary"> fertig </Button>
-            
             </Grid>   
             </div>
             </ThemeProvider>

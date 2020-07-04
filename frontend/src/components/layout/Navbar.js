@@ -66,7 +66,7 @@ export default function TemporaryDrawer() {
               <Button component={RouterLink} to={`/groupshoppinglist`}>GroupShoppingList</Button>
           </ListItem>
           <ListItem>
-              <Button component={RouterLink} to={`/shoppinglistentry`}>ShoppingListEntry</Button>
+              <Button component={RouterLink} to={`/AddListEntry`}>AddListEntry</Button>
           </ListItem>
           <ListItem>
               <Button component={RouterLink} to={`/standardlist`}>StandardList</Button>

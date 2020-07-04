@@ -6,7 +6,7 @@ import ManageGroup from "./components/pages/ManageParty";
 import ManageUser from "./components/pages/ManageUser"
 import MyArticle from './components/pages/MyArticle';
 import PartyShoppingList from "./components/pages/PartyShoppingList";
-import ShoppingListEntry from "./components/subcomponents/ListEntryCard";
+import AddListEntry from "./components/subcomponents/AddListEntry";
 import StandardList from "./components/pages/StandardListManagement";
 import StandardListEntry from "./components/subcomponents/StandardListEntryCard"
 import Header from "./components/layout/Header";
@@ -39,8 +39,8 @@ class App extends Component {
                 <Route path='/partyshoppinglist'>
                     <PartyShoppingList />
                 </Route>
-                <Route path='/shoppinglistentry'>
-                    <ShoppingListEntry />
+                <Route path='/AddListEntry'>
+                    <AddListEntry />
                 </Route>
                 <Route path='/standardlist'>
                     <StandardList />
