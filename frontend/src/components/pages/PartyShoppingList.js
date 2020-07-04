@@ -39,7 +39,7 @@ class PartyShoppingList extends Component{
         <div >
             {
                 listentries ?
-                listentries.map(listentry => <ListEntryCard listentry = {listentry} key = {listentry.getID()}/>)
+                listentries.map(listentry => <ListEntryCard listid = {this.props.match.params} listentry = {listentry} key = {listentry.getID()}/>)
                 : null 
             }            
         </div>
