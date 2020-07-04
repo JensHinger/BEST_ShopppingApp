@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Collapse from '@material-ui/core/Collapse';
 import TextField from '@material-ui/core/TextField';
 
+
  class ListEntryCard extends Component {
     
     constructor(props){
@@ -28,6 +29,7 @@ import TextField from '@material-ui/core/TextField';
     componentDidMount(){
         this.getListentryInformation()
     }
+
 
     getListentryInformation = () => {
             // Informationen über die Listeneinträge  erhalten 

@@ -21,7 +21,7 @@ class UserParties extends Component{
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.getPartiesByUser()
     }
 
