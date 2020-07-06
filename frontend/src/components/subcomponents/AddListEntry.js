@@ -4,7 +4,7 @@ import {Button, TextField, Typography, Divider, Grid} from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import ShoppingAPI from '../../api/ShoppingAPI';
-
+import Checkbox from '@material-ui/core/Checkbox';
 
  class ArticleAmountUnit extends Component {
 
@@ -63,6 +63,10 @@ import ShoppingAPI from '../../api/ShoppingAPI';
         ShoppingAPI.getAPI().addListEntry(this.props.list.getID())
     }*/
     
+    handleClicked =() =>{
+        this.setState({checked: !this.state.checked})
+        console.log("checked:", this.state.checked)
+    }
 
     render() {
 
@@ -105,6 +109,10 @@ import ShoppingAPI from '../../api/ShoppingAPI';
         const user = this.state.users
         console.log(retailer)
         console.log(user)
+        
+       
+     
+        
 
         return (
             <div>
@@ -182,10 +190,22 @@ import ShoppingAPI from '../../api/ShoppingAPI';
                                 </MenuItem>
                             ))}
                         </TextField>
+                        
+                       
+                    </Grid>      
+                    </Grid>
+                    </div>
+                    <div>
+                    <Grid container justify="center">
+                    <Grid xs>
+                        <br margin-top ='20px'/>
+                        <Checkbox 
+                        checked={this.state.checked} onClick={()=> {this.handleClicked()}}
+                        />
+                        Standardartikel
                     </Grid>
                     </Grid>
                     </div>
-                    
                     <div>
                     <br margin-top = '20px'/>
                     <Grid container 
@@ -194,7 +214,7 @@ import ShoppingAPI from '../../api/ShoppingAPI';
                         
                         
                         <br margin-top = '20px'/>
-                        <Button onClick = {} variant = "contained" color = "primary"> fertig </Button>
+                        <Button variant = "contained" color = "primary"> fertig </Button>
                        
                         <br margin-top = '20px'/>
                         <Button  variant = "contained" color = "secondary"> abbrechen </Button>
@@ -203,6 +223,7 @@ import ShoppingAPI from '../../api/ShoppingAPI';
                         
                     </Grid>
                     </div>
+
                     
                 </Typography>
                 
