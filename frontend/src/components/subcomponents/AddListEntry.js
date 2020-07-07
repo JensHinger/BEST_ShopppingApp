@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import {Button, TextField, Typography, Divider, Grid} from '@material-ui/core';
+import {Button, TextField, Typography, Divider, Grid, ListItemIcon} from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import Checkbox from '@material-ui/core/Checkbox';
+import ListEntryBO from '../../api/ListEntryBO'
+import ItemBO from '../../api/ItemBO';
 
  class ArticleAmountUnit extends Component {
 
@@ -18,7 +20,10 @@ import Checkbox from '@material-ui/core/Checkbox';
         unit: 0,
         retailer: [],
         users: [],
-        
+        pickedUser: null,
+        pickedRetailer: null,
+        item: null,
+
     }
 
     
@@ -28,14 +33,7 @@ import Checkbox from '@material-ui/core/Checkbox';
         this.getAllRetailer()
         this.getAcceptedInvitationsByParty()
     }
-    handleAmountChange (value) {
-        this.setState({amount:value})
-        console.log(this.state.amount)
-    };
-   
-    handleUnitChange (value) {
-        this.setState({unit:value})
-    };
+    
 
     getAllRetailer(){
         ShoppingAPI.getAPI().getAllRetailer()
@@ -58,18 +56,57 @@ import Checkbox from '@material-ui/core/Checkbox';
         });
      }
 
-    /*createNewListEntry(){
-        //hier fehlt noch die Prop Übergabe
-        ShoppingAPI.getAPI().addListEntry(this.props.list.getID())
-    }*/
+    createNewItem=()=>{
+        var Item = new ItemBO
+        Item.setName(this.state.article)
+        Item.setAmount(this.state.amount)
+        Item.setUnit(this.state.unit)
+        ShoppingAPI.getAPI().addItem(Item)
+        .then(function (item) {this.setState({item: item}); this.createNewListEntry()}.bind(this))
+    }
+    
+    createNewListEntry=()=>{
+        var ListEntry = new ListEntryBO
+        console.log(this.state.item)
+        ListEntry.setItemId(this.state.item.getID())
+        ListEntry.setListId(5)
+        console.log(this.state.pickedRetailer)
+        ListEntry.setRetailerId(this.state.pickedRetailer.getID())
+        ListEntry.setUserId(this.state.pickedUser.getID())
+        ListEntry.setName("Wir sind die besten!")
+        ShoppingAPI.getAPI().addListEntry(ListEntry)
+
+    }
+
+    handleAmountChange  =(value) =>{
+        this.setState({amount:value})
+        console.log(this.state.amount)
+    };
+   
+    handleArticleChange=  (value) =>{
+        this.setState({article:value})
+        console.log(this.state.article)
+    };
+
+    handleUnitChange = (value)=> {
+        this.setState({unit:value})
+    };
     
     handleClicked =() =>{
         this.setState({checked: !this.state.checked})
         console.log("checked:", this.state.checked)
-    }
+    };
+
+    handleUserChange = (value) =>{
+        this.setState({pickedUser: value})
+    };
+
+    handleRetailerChange = (event) =>{
+        this.setState({pickedRetailer: event.target.value})
+    };
 
     render() {
-
+        console.log(this.state.item)
         const units = [
             {
                 value: 0,
@@ -130,6 +167,7 @@ import Checkbox from '@material-ui/core/Checkbox';
                     {user?
                         <Autocomplete
                         id="combo-box-demo"
+                        onInputChange={(event, value)=> this.handleUserChange(value)}
                         options={user}
                         getOptionLabel={(option) => option.getName()}
                         style={{ width: 300 }}
@@ -145,6 +183,7 @@ import Checkbox from '@material-ui/core/Checkbox';
                     {retailer?
                         <Autocomplete
                         id="combo-box-demo"
+                        onInputChange={(event, value)=> this.handleRetailerChange(event)}
                         options={retailer}
                         getOptionLabel={(option) => option.getName()}
                         style={{ width: 300 }}
@@ -161,7 +200,7 @@ import Checkbox from '@material-ui/core/Checkbox';
                         <TextField
                         label="Artikel"
                         helperText="Geben Sie einen Artikel ein"
-                        onChange = {(event) => this.handleAmountChange(event.target.value)}/>
+                        onChange = {(event) => this.handleArticleChange(event.target.value)}/>
                     </Grid>
 
                     <Grid xs>
@@ -214,7 +253,7 @@ import Checkbox from '@material-ui/core/Checkbox';
                         
                         
                         <br margin-top = '20px'/>
-                        <Button variant = "contained" color = "primary"> fertig </Button>
+                        <Button onClick ={this.createNewItem}variant = "contained" color = "primary"> fertig </Button>
                        
                         <br margin-top = '20px'/>
                         <Button  variant = "contained" color = "secondary"> abbrechen </Button>
