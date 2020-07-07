@@ -240,6 +240,7 @@ export default class ShoppingAPI {
             // We always get an array of CustomerBOs.fromJSON, but only need one object
             let responseItemBO = ItemBO.fromJSON(responseJSON)[0];
             // console.info(accountBOs);
+            console.log(responseItemBO)
             return new Promise(function (resolve) {
                 resolve(responseItemBO);
             })
