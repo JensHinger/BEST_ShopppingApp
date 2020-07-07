@@ -88,6 +88,8 @@ class ItemMapper(Mapper):
         self._cnx.commit()
         cursor.close()
 
+        return item
+
     def update(self, item):
 
         cursor = self._cnx.cursor()
