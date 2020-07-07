@@ -33,8 +33,8 @@ class App extends Component {
                 <Route path='/managegroup'>
                     <ManageGroup />
                 </Route>
-                <Route path='/manageuser'>
-                    <ManageUser />
+                <Route path={'/manageuser/:userid'} component={ManageUser}>
+                    
                 </Route>
                 <Route path={`/partyshoppinglist/:listid`} component={PartyShoppingList}>
                     
