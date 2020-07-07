@@ -114,3 +114,5 @@ if __name__ == "__main__":
     with ItemMapper() as mapper:
         i = mapper.find_by_id(101)
         mapper.delete(i)
+        i.set_name("test")
+        print(mapper.insert(i))
