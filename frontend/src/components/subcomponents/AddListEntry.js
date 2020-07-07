@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import {TextField, Typography, Divider, Grid} from '@material-ui/core';
+import {Button, TextField, Typography, Divider, Grid} from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import ShoppingAPI from '../../api/ShoppingAPI';
-
+import Checkbox from '@material-ui/core/Checkbox';
 
  class ArticleAmountUnit extends Component {
 
@@ -16,13 +16,18 @@ import ShoppingAPI from '../../api/ShoppingAPI';
         article: "",
         amount: 0,
         unit: 0,
+        retailer: [],
+        users: [],
         
     }
 
     
 
   }
-
+    componentDidMount(){
+        this.getAllRetailer()
+        this.getAcceptedInvitationsByParty()
+    }
     handleAmountChange (value) {
         this.setState({amount:value})
         console.log(this.state.amount)
@@ -31,6 +36,37 @@ import ShoppingAPI from '../../api/ShoppingAPI';
     handleUnitChange (value) {
         this.setState({unit:value})
     };
+
+    getAllRetailer(){
+        ShoppingAPI.getAPI().getAllRetailer()
+        .then(retailer => this.setState({retailer: retailer}))
+    } 
+
+    getAcceptedInvitationsByParty(){
+        ShoppingAPI.getAPI().getAcceptedInvitationsByPartyId(2)
+        .then(invitations => this.getUserById(invitations))
+    }
+
+    getUserById = (invitations) => {
+        invitations.forEach(invitation => {
+            ShoppingAPI.getAPI().getUserById(invitation.getTargetUserId())
+            .then(function(user){ 
+                this.setState({
+                 users: [...this.state.users, user]
+            })
+         }.bind(this))
+        });
+     }
+
+    /*createNewListEntry(){
+        //hier fehlt noch die Prop Übergabe
+        ShoppingAPI.getAPI().addListEntry(this.props.list.getID())
+    }*/
+    
+    handleClicked =() =>{
+        this.setState({checked: !this.state.checked})
+        console.log("checked:", this.state.checked)
+    }
 
     render() {
 
@@ -63,12 +99,20 @@ import ShoppingAPI from '../../api/ShoppingAPI';
                 value: 6,
                 label: 'cm',
             },
+            {
+                value: 7,
+                label: 'Pckg',
+            },
           ];
 
-          const retailer = () => {
-              ShoppingAPI.getAPI().getAllRetailer()
-              .then(retailer => this.setState({retailer: retailer}))
-          } 
+        const retailer = this.state.retailer
+        const user = this.state.users
+        console.log(retailer)
+        console.log(user)
+        
+       
+     
+        
 
         return (
             <div>
@@ -83,14 +127,32 @@ import ShoppingAPI from '../../api/ShoppingAPI';
                     <div>
                     <br margin-top = '20px'/>
                     <Grid container justify ="center">
-                    <Autocomplete
-                    id="combo-box-demo"
-                    options={retailer}
-                    getOptionLabel={(option) => option.title}
-                    style={{ width: 300 }}
-                    renderInput={(params) =><TextField {...params} label="Laden"  />}/>
+                    {user?
+                        <Autocomplete
+                        id="combo-box-demo"
+                        options={user}
+                        getOptionLabel={(option) => option.getName()}
+                        style={{ width: 300 }}
+                        renderInput={(params) =><TextField {...params} label="Person"  />}/>
+                    :null}
                     </Grid>
                     </div>
+
+
+                    <div>
+                    <br margin-top = '20px'/>
+                    <Grid container justify ="center">
+                    {retailer?
+                        <Autocomplete
+                        id="combo-box-demo"
+                        options={retailer}
+                        getOptionLabel={(option) => option.getName()}
+                        style={{ width: 300 }}
+                        renderInput={(params) =><TextField {...params} label="Laden"  />}/>
+                    :null}
+                    </Grid>
+                    </div>
+                    
 
                     <div>
                     <Grid container justify = "center" spacing = {2}>
@@ -128,9 +190,41 @@ import ShoppingAPI from '../../api/ShoppingAPI';
                                 </MenuItem>
                             ))}
                         </TextField>
+                        
+                       
+                    </Grid>      
+                    </Grid>
+                    </div>
+                    <div>
+                    <Grid container justify="center">
+                    <Grid xs>
+                        <br margin-top ='20px'/>
+                        <Checkbox 
+                        checked={this.state.checked} onClick={()=> {this.handleClicked()}}
+                        />
+                        Standardartikel
                     </Grid>
                     </Grid>
                     </div>
+                    <div>
+                    <br margin-top = '20px'/>
+                    <Grid container 
+                    direction= "row"
+                    justify = "center">
+                        
+                        
+                        <br margin-top = '20px'/>
+                        <Button variant = "contained" color = "primary"> fertig </Button>
+                       
+                        <br margin-top = '20px'/>
+                        <Button  variant = "contained" color = "secondary"> abbrechen </Button>
+                        
+                       
+                        
+                    </Grid>
+                    </div>
+
+                    
                 </Typography>
                 
             </div>

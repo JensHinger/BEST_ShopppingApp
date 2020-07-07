@@ -9,6 +9,7 @@ class ListEntry(BusinessObject):
         self._retailer_id = 0
         self._user_id = 0
         self._list_id = 0
+        self._checked = 0
 
     def get_item_id(self):
         """Auslesen des Produkts in dem Listeneintrag"""
@@ -42,6 +43,12 @@ class ListEntry(BusinessObject):
         """Setzen der Übergeordneten Liste des Listenelements"""
         self._list_id = list_id
 
+    def get_checked(self):
+        return self._checked
+
+    def set_checked(self, condition):
+        self._checked = condition
+
     @staticmethod
     def from_dict(dictionary=dict()):
         """Umwandeln eines Python dict() in einen listentry()."""
@@ -52,8 +59,11 @@ class ListEntry(BusinessObject):
         obj.set_list_id(dictionary["list_id"])
         obj.set_retailer_id(dictionary["retailer_id"])
         obj.set_user_id(dictionary["user_id"])
+        obj.set_checked(dictionary["checked"])
         return obj
+
     def __str__(self):
         """Erzeugen eines Strings welcher das Objekt beschreibt"""
-        return "Listentry id: {}, name: {}, item_id: {}, retailer_id:{}, user_id: {}, list_id: {} ".format(self.get_id(),
-               self.get_name(), self.get_item_id(), self.get_retailer_id(), self.get_user_id(), self.get_list_id(),)
+        return "Listentry id: {}, name: {}, item_id: {}, retailer_id:{}, user_id: {}, list_id: {}, checked: {} "\
+            .format(self.get_id(),self.get_name(), self.get_item_id(),
+                    self.get_retailer_id(), self.get_user_id(), self.get_list_id(), self.get_checked())
