@@ -107,7 +107,7 @@ class ShoppingAdministration(object):
         with ListEntryMapper() as mapper:
             return mapper.find_by_id(id)
 
-    def create_listentry(self, name, item_id, retailer_id, user_id, list_id):
+    def create_listentry(self, name, item_id, retailer_id, user_id, list_id, condition):
         """Einen Listeneintrag erstellen."""
         listentry = ListEntry()
         listentry.set_name(name)
@@ -115,6 +115,7 @@ class ShoppingAdministration(object):
         listentry.set_retailer_id(retailer_id)
         listentry.set_user_id(user_id)
         listentry.set_list_id(list_id)
+        listentry.set_checked(condition)
 
         with ListEntryMapper() as mapper:
             mapper.insert(listentry)
@@ -381,3 +382,4 @@ class ShoppingAdministration(object):
         """Einen Standartlisteneintrag löschen."""
         with StandardListEntryMapper() as mapper:
             mapper.delete(standardlistentry)
+
