@@ -30,6 +30,15 @@ class PartyShoppingList extends Component{
               
     }
 
+    deleteListEntryHandler = (deletedListEntry) => {
+        console.log("diesen ListEntry haben wir gelöscht:", deletedListEntry.getID())
+        this.setState({
+            listentries: this.state.listentries.filter(listEntry => listEntry.getID() !== deletedListEntry.getID())
+        })
+
+    }
+
+
     render(){
 
         //const { classes, list } = this.props;
@@ -39,7 +48,7 @@ class PartyShoppingList extends Component{
         <div >
             {
                 listentries ?
-                listentries.map(listentry => <ListEntryCard listid = {this.props.match.params} listentry = {listentry} key = {listentry.getID()}/>)
+                listentries.map(listentry => <ListEntryCard onListEntryDeleted = {this.deleteListEntryHandler} listid = {this.props.match.params} listentry = {listentry} key = {listentry.getID()}/>)
                 : null 
             }            
         </div>

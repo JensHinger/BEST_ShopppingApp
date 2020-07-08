@@ -27,9 +27,16 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
             user: null, 
             retailer: null,
             expanded : null,
+            all_retailers: [],
             all_retailers_name: [],
             party_users: [],
-            party_user_names: []
+            party_user_names: [],
+            sel_retailer: null, 
+            sel_user: null,
+            sel_item_amount: null,
+            sel_item_unit: null,
+            sel_item_name: null,
+            units : ['St', 'kg', 'g', 'L', 'ml', 'm', 'cm', 'Pckg'] 
 
         }
     }
@@ -38,6 +45,18 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
         this.getListentryInformation()
         this.getListEntryPossibleUsersInvitations()
 
+    }
+
+    componentWillUnmount(){
+        console.log("schließe die komponente!")
+        this.setLeavingCheckState()
+    }
+
+    setLeavingCheckState = () => {
+        const mylistentry = this.state.listentry
+        mylistentry.setchecked(this.state.checked ? 1 : 0 )
+        console.log("setze den checked state entsprechend.")
+        ShoppingAPI.getAPI().updateListEntry(mylistentry)
     }
 
     getListentryInformation = () => {
@@ -62,7 +81,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
                 )
             
             ShoppingAPI.getAPI().getAllRetailer()
-            .then(retailerBOs => retailerBOs.map((retailerBO) => this.setState({all_retailers_name: [...this.state.all_retailers_name, retailerBO.getName()]}))
+            .then(retailerBOs => retailerBOs.map((retailerBO) => this.setState({all_retailers: [...this.state.all_retailers, retailerBO]}))
                 )
             
         }
@@ -73,13 +92,20 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
             .then((party) => ShoppingAPI.getAPI().getAcceptedInvitationsByPartyId(party.getID())
             .then((invitations) => invitations.map((inv) => this.getListEntryPossibleUsers(inv.getTargetUserId(),
             )))))}
-    
+
     getListEntryPossibleUsers = (target_user_id) => {
-    ShoppingAPI.getAPI().getUserById(target_user_id)
-        .then((user) => this.setState({party_users: [...this.state.party_users, user]})
-        //.then(console.log("später"))
-        )    
+        ShoppingAPI.getAPI().getUserById(target_user_id)
+            .then((user) => this.setState({party_users: [...this.state.party_users, user]})
+            //.then(console.log("später"))
+            )    
     
+    }
+
+    getListEntryPossibleRetailerNames = () => {
+        var ret_names = this.state.all_retailers.map((retailer) => retailer.getName()
+        )
+        //console.log(ret_names)
+        return (ret_names)
     }
 
     getListEntryPossibleUserNames = () => { 
@@ -94,89 +120,134 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
     scoreThroughHandler = () => {
         this.setState({checked :!this.state.checked})
+        if (this.state.expanded === true){
+            this.setState({expanded : !this.state.expanded})}
         console.log("checked:", this.state.checked)
     }
     
-    updateLEntry = () => {
-        console.log("update")
+    updateItem = () => {
+        
+        
+        const myitem = this.state.item; 
+        console.log(this.state.sel_item_amount)
+        myitem.setName(this.state.sel_item_name ? this.state.sel_item_name : this.state.item.getName())
+        myitem.setAmount(this.state.sel_item_amount ? this.state.sel_item_amount : this.state.item.getAmount())
+        myitem.setUnit(this.state.units.indexOf(this.state.sel_item_unit))
+        //console.log("item zum updaten:", myitem)
+        ShoppingAPI.getAPI().updateItem(myitem)
+        .then(ShoppingAPI.getAPI().getItemById(this.state.item.getID())
+              .then(
+                  (updateditem) => this.setState({item: updateditem}),
+                  //console.log("itemstate:", )
+                  this.updateListEntry()
+              )
+              
+            )
     }
+
+    updateListEntry(){
+        const mylistentry = this.state.listentry 
+        mylistentry.setItemId(this.state.item.getID())
+        //find retailer Id corresponding to retailer ID
+        mylistentry.setRetailerId(this.state.all_retailers[this.getListEntryPossibleRetailerNames().indexOf(this.state.sel_retailer)].getID())
+        // find user Id corresponding to User Id
+        mylistentry.setUserId(this.state.party_users[this.getListEntryPossibleUserNames().indexOf(this.state.sel_user)].getID())
+        //mylistentry.setchecked(this.convertChecked())
+        mylistentry.setchecked(this.state.checked ? 1 : 0 )
+        console.log("mein LENTRY:", mylistentry)
+        ShoppingAPI.getAPI().updateListEntry(mylistentry)
+        //.then(ShoppingAPI.getAPI().getListEntryById(this.state.listentry.getID())
+              //.then((updated_list_entry) => console.log(updated_list_entry)
+
+              //)
+        //)
+    }
+
+    matchRetailerNameToId = () => {
+        const my_retailer_name = this.state.sel_retailer
+        const ret_name_arr = this.getListEntryPossibleRetailerNames()
+        const target_index = ret_name_arr.indexOf(this.state.sel_retailer)
+        //console.log(this.state.all_retailers[target_index].getName())
+    }
+    
 
     deleteLEntry = () => {
         console.log("versuche einen Eintrag zu löschen")
-        ShoppingAPI.getAPI().deleteListEntry(this.state.listentry.getID())
+        ShoppingAPI.getAPI().deleteListEntry(this.state.listentry.getID()).then(
+            () => {
+                this.props.onListEntryDeleted(this.state.listentry)
+            }
+        )
 
     }
-    
+
     render(){
         const units = ['St', 'kg', 'g', 'L', 'ml', 'm', 'cm', 'Pckg']   
-        //console.log("checked?:", this.state.checked)
-       
+        //console.log("sel_retailer:", this.state.sel_retailer)
+        //console.log("state.sel_user",this.state.sel_user)
+        //console.log("this.state.sel_item_amount", this.state.sel_item_amount)
+        //console.log("this.state.sel_item_unit", this.state.sel_item_unit)
+        //console.log("this.state.sel_item_name", this.state.sel_item_name)
+        //console.log("item:", this.state.item)
 
         return(
 
             <div>
-                <Checkbox checked={this.state.checked} onClick ={() => {this.scoreThroughHandler()}}/>
+                
 
             { 
                 this.state.item && this.state.user && this.state.retailer && this.state.all_retailers_name && this.state.party_users  ? 
                 <Card>
-                    
+                    <Checkbox checked={this.state.checked} onClick ={() => {this.scoreThroughHandler()}}/>
                     <CardContent disabled = {true} style={{ textDecoration : this.state.checked ? 'line-through' : null}} >{this.state.item.getName()} {this.state.item.getAmount()}  {units[this.state.item.getUnit()]} 
                     {this.state.user.getName()} {this.state.retailer.getName()} 
-                        <IconButton  disabled = {this.state.checked ? true : false} justify ="right" onClick = {() => {this.expandHandler()}}
-                                     
-                        
-                        
+                        <IconButton  disabled = {this.state.checked ? true : false} justify ="right" onClick = {() => {this.expandHandler()}} 
                         >
                             <ExpandMoreIcon/>
                         </IconButton>
                     </CardContent>
-                    <Collapse in={this.state.expanded } timeout="auto" unmountOnExit>
+                    <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
                         <Card>
                             <CardContent>
-                                <TextField required id="standard-required" label="Name" defaultValue = {this.state.item.getName()} />
-                                <TextField required id="standard-required" label="Menge" defaultValue = {this.state.item.getAmount()} />
+                                <TextField onChange = {(e) => {this.setState({sel_item_name: e.target.value })}} required id="standard-required" label="Name" defaultValue = {this.state.item.getName()} />
+                                <TextField onChange = {(e)=> {this.setState({sel_item_amount: e.target.value })}} required id="standard-required" label="Menge" defaultValue = {this.state.item.getAmount()} />
                                 <Autocomplete
                                 id="combo-box-demo"
                                 options={units}
                                 defaultValue = {units[this.state.item.getUnit()]}
+                                onInputChange = {(event, value) => this.setState({sel_item_unit: value})}
                                 style={{ width: 300 }}
                                 renderInput={(params) =><TextField {...params} label="Einheit" />}/>
 
                                 <Autocomplete
                                 id="combo-box-demo"
-                                options={this.state.all_retailers_name}
+                                options={this.getListEntryPossibleRetailerNames()}
                                 defaultValue = {this.state.retailer.getName()}
+                                onInputChange = {(event, value) => this.setState({sel_retailer: value})}
+                                //getOptionSelected	= {(option, value) => console.log("value:",value , "optionn", option)} 
                                 style={{ width: 300 }}
                                 renderInput={(params) =><TextField {...params} label="Laden" />}/>
                                 
                                 <Autocomplete
                                 id="combo-box-demo"
                                 options={this.getListEntryPossibleUserNames()}
+                                onInputChange = {(event, value) => this.setState({sel_user: value})}
                                 defaultValue={this.state.user.getName()}
                                 style={{ width: 300 }}
-                                renderInput={(params) =><TextField {...params} label="User"  />}/>
-        
-                                <Button onClick={() => this.updateLEntry()} size ="large" color="primary" startIcon={< CheckCircleOutlineIcon/>} />
+                                renderInput={(params) =><TextField {...params}  label="User"  />}/>
+                                
+                                <Button onClick={() => this.updateItem()} size ="large" color="primary" startIcon={< CheckCircleOutlineIcon/>} />
                                 <Button onClick={() => this.deleteLEntry()} size="large" color="primary" startIcon={<DeleteForeverIcon/>}/>          
                                 
 
                             </CardContent>
                         </Card>
-                        
-                    
                     </Collapse>
                 </Card> 
                 : null 
             }    
             </div>
-        )
-        
+        ) 
     }
-
-
-
-
-
  }
 export default ListEntryCard
