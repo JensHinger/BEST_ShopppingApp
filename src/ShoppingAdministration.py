@@ -181,7 +181,7 @@ class ShoppingAdministration(object):
         item.set_unit(unit)
 
         with ItemMapper() as mapper:
-            mapper.insert(item)
+           return mapper.insert(item)
 
     def update_item(self, item):
         """Ein Item updaten."""

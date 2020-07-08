@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import {TextField, Typography, Divider, Grid} from '@material-ui/core';
+import {Button, TextField, Typography, Divider, Grid, ListItemIcon} from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import ShoppingAPI from '../../api/ShoppingAPI';
-
+import Checkbox from '@material-ui/core/Checkbox';
+import ListEntryBO from '../../api/ListEntryBO'
+import ItemBO from '../../api/ItemBO';
 
  class ArticleAmountUnit extends Component {
 
@@ -16,24 +18,95 @@ import ShoppingAPI from '../../api/ShoppingAPI';
         article: "",
         amount: 0,
         unit: 0,
-        
+        retailer: [],
+        users: [],
+        pickedUser: null,
+        pickedRetailer: null,
+        item: null,
+
     }
 
     
 
   }
+    componentDidMount(){
+        this.getAllRetailer()
+        this.getAcceptedInvitationsByParty()
+    }
+    
 
-    handleAmountChange (value) {
+    getAllRetailer(){
+        ShoppingAPI.getAPI().getAllRetailer()
+        .then(retailer => this.setState({retailer: retailer}))
+    } 
+
+    getAcceptedInvitationsByParty(){
+        ShoppingAPI.getAPI().getAcceptedInvitationsByPartyId(2)
+        .then(invitations => this.getUserById(invitations))
+    }
+
+    getUserById = (invitations) => {
+        invitations.forEach(invitation => {
+            ShoppingAPI.getAPI().getUserById(invitation.getTargetUserId())
+            .then(function(user){ 
+                this.setState({
+                 users: [...this.state.users, user]
+            })
+         }.bind(this))
+        });
+     }
+
+    createNewItem=()=>{
+        var Item = new ItemBO
+        Item.setName(this.state.article)
+        Item.setAmount(this.state.amount)
+        Item.setUnit(this.state.unit)
+        ShoppingAPI.getAPI().addItem(Item)
+        .then(function (item) {this.setState({item: item}); this.createNewListEntry()}.bind(this))
+    }
+    
+    createNewListEntry=()=>{
+        var ListEntry = new ListEntryBO
+        console.log(this.state.item)
+        ListEntry.setItemId(this.state.item.getID())
+        ListEntry.setListId(5)
+        console.log(this.state.pickedRetailer)
+        ListEntry.setRetailerId(this.state.pickedRetailer.getID())
+        ListEntry.setUserId(this.state.pickedUser.getID())
+        ListEntry.setName("Wir sind die besten!")
+        ShoppingAPI.getAPI().addListEntry(ListEntry)
+
+    }
+
+    handleAmountChange  =(value) =>{
         this.setState({amount:value})
         console.log(this.state.amount)
     };
    
-    handleUnitChange (value) {
+    handleArticleChange=  (value) =>{
+        this.setState({article:value})
+        console.log(this.state.article)
+    };
+
+    handleUnitChange = (value)=> {
         this.setState({unit:value})
+    };
+    
+    handleClicked =() =>{
+        this.setState({checked: !this.state.checked})
+        console.log("checked:", this.state.checked)
+    };
+
+    handleUserChange = (value) =>{
+        this.setState({pickedUser: value})
+    };
+
+    handleRetailerChange = (event) =>{
+        this.setState({pickedRetailer: event.target.value})
     };
 
     render() {
-
+        console.log(this.state.item)
         const units = [
             {
                 value: 0,
@@ -63,12 +136,20 @@ import ShoppingAPI from '../../api/ShoppingAPI';
                 value: 6,
                 label: 'cm',
             },
+            {
+                value: 7,
+                label: 'Pckg',
+            },
           ];
 
-          const retailer = () => {
-              ShoppingAPI.getAPI().getAllRetailer()
-              .then(retailer => this.setState({retailer: retailer}))
-          } 
+        const retailer = this.state.retailer
+        const user = this.state.users
+        console.log(retailer)
+        console.log(user)
+        
+       
+     
+        
 
         return (
             <div>
@@ -83,14 +164,34 @@ import ShoppingAPI from '../../api/ShoppingAPI';
                     <div>
                     <br margin-top = '20px'/>
                     <Grid container justify ="center">
-                    <Autocomplete
-                    id="combo-box-demo"
-                    options={retailer}
-                    getOptionLabel={(option) => option.title}
-                    style={{ width: 300 }}
-                    renderInput={(params) =><TextField {...params} label="Laden"  />}/>
+                    {user?
+                        <Autocomplete
+                        id="combo-box-demo"
+                        onInputChange={(event, value)=> this.handleUserChange(value)}
+                        options={user}
+                        getOptionLabel={(option) => option.getName()}
+                        style={{ width: 300 }}
+                        renderInput={(params) =><TextField {...params} label="Person"  />}/>
+                    :null}
                     </Grid>
                     </div>
+
+
+                    <div>
+                    <br margin-top = '20px'/>
+                    <Grid container justify ="center">
+                    {retailer?
+                        <Autocomplete
+                        id="combo-box-demo"
+                        onInputChange={(event, value)=> this.handleRetailerChange(event)}
+                        options={retailer}
+                        getOptionLabel={(option) => option.getName()}
+                        style={{ width: 300 }}
+                        renderInput={(params) =><TextField {...params} label="Laden"  />}/>
+                    :null}
+                    </Grid>
+                    </div>
+                    
 
                     <div>
                     <Grid container justify = "center" spacing = {2}>
@@ -99,7 +200,7 @@ import ShoppingAPI from '../../api/ShoppingAPI';
                         <TextField
                         label="Artikel"
                         helperText="Geben Sie einen Artikel ein"
-                        onChange = {(event) => this.handleAmountChange(event.target.value)}/>
+                        onChange = {(event) => this.handleArticleChange(event.target.value)}/>
                     </Grid>
 
                     <Grid xs>
@@ -128,9 +229,41 @@ import ShoppingAPI from '../../api/ShoppingAPI';
                                 </MenuItem>
                             ))}
                         </TextField>
+                        
+                       
+                    </Grid>      
+                    </Grid>
+                    </div>
+                    <div>
+                    <Grid container justify="center">
+                    <Grid xs>
+                        <br margin-top ='20px'/>
+                        <Checkbox 
+                        checked={this.state.checked} onClick={()=> {this.handleClicked()}}
+                        />
+                        Standardartikel
                     </Grid>
                     </Grid>
                     </div>
+                    <div>
+                    <br margin-top = '20px'/>
+                    <Grid container 
+                    direction= "row"
+                    justify = "center">
+                        
+                        
+                        <br margin-top = '20px'/>
+                        <Button onClick ={this.createNewItem}variant = "contained" color = "primary"> fertig </Button>
+                       
+                        <br margin-top = '20px'/>
+                        <Button  variant = "contained" color = "secondary"> abbrechen </Button>
+                        
+                       
+                        
+                    </Grid>
+                    </div>
+
+                    
                 </Typography>
                 
             </div>

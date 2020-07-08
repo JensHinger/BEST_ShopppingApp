@@ -15,6 +15,7 @@ import ListEntryBO from '../../api/ListEntryBO'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
+
  class ListEntryCard extends Component {
     
     constructor(props){
@@ -47,6 +48,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
     }
 
+
     componentWillUnmount(){
         console.log("schließe die komponente!")
         this.setLeavingCheckState()
@@ -58,6 +60,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
         console.log("setze den checked state entsprechend.")
         ShoppingAPI.getAPI().updateListEntry(mylistentry)
     }
+
 
     getListentryInformation = () => {
             // Informationen über die Listeneinträge  erhalten 
