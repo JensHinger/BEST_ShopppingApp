@@ -8,6 +8,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import ListEntryBO from '../../api/ListEntryBO'
 import ItemBO from '../../api/ItemBO';
 import {Link as RouterLink} from 'react-router-dom'
+import AddRetailerDialog from '../dialogs/AddRetailerDialog';
+
 
  class ArticleAmountUnit extends Component {
 
@@ -117,6 +119,10 @@ import {Link as RouterLink} from 'react-router-dom'
     };
 
 
+    handleNewRetailer = () =>{
+        this.getAllRetailer()
+    };
+
     render() {
         console.log("user", this.state.users)
         const units = [
@@ -202,6 +208,14 @@ import {Link as RouterLink} from 'react-router-dom'
                     </Grid>
                     </div>
                     
+                    <div>
+                    <br margin-top = '20px'/>
+                    <Grid container justify = "center">
+                    <Grid>
+                    <AddRetailerDialog handleNewRetailer = {this.handleNewRetailer}/>
+                    </Grid>
+                    </Grid>
+                    </div>
 
                     <div>
                     <Grid container justify = "center" spacing = {2}>
