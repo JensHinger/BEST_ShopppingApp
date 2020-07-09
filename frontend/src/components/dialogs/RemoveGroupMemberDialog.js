@@ -28,10 +28,12 @@ class RemoveGroupMemberDialog extends Component {
 
   handleClose = () => {
     this.setState({ open: false });
+    //this.setState({invitation: null})
   };
 
   handleInvDelete = () => {
     console.log("Invitation ID: " , this.state.invitation[0].getID())
+    console.log("invitation:", this.state.invitation)
     ShoppingAPI.getAPI().deleteInvitation(this.state.invitation[0].getID())
     .then(function() { 
       this.props.handleInvitationDelete(this.props.index);
@@ -40,6 +42,7 @@ class RemoveGroupMemberDialog extends Component {
   };
 
   render() {
+    //console.log("invitation die zu löschen ist:", this.state.invitation)
     return (
       <ThemeProvider theme={Theme}>
 

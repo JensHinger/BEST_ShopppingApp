@@ -7,6 +7,7 @@ import ShoppingAPI from '../../api/ShoppingAPI';
 import Checkbox from '@material-ui/core/Checkbox';
 import ListEntryBO from '../../api/ListEntryBO'
 import ItemBO from '../../api/ItemBO';
+import {Link as RouterLink} from 'react-router-dom'
 
  class ArticleAmountUnit extends Component {
 
@@ -18,6 +19,7 @@ import ItemBO from '../../api/ItemBO';
         article: "",
         amount: 0,
         unit: 0,
+        listid: this.props.match.params.listid,
         retailer: [],
         users: [],
         pickedUser: null,
@@ -31,7 +33,7 @@ import ItemBO from '../../api/ItemBO';
   }
     componentDidMount(){
         this.getAllRetailer()
-        this.getAcceptedInvitationsByParty()
+        this.getListEntryPossibleUsersInvitations()
     }
     
 
@@ -40,23 +42,22 @@ import ItemBO from '../../api/ItemBO';
         .then(retailer => this.setState({retailer: retailer}))
     } 
 
-    getAcceptedInvitationsByParty(){
-        ShoppingAPI.getAPI().getAcceptedInvitationsByPartyId(2)
-        .then(invitations => this.getUserById(invitations))
-    }
+    getListEntryPossibleUsersInvitations = () => {
+        ShoppingAPI.getAPI().getListById(this.state.listid)
+             .then((list) => ShoppingAPI.getAPI().getPartyById(list.getPartylId())
+             .then((party) => ShoppingAPI.getAPI().getAcceptedInvitationsByPartyId(party.getID())
+             .then((invitations) => invitations.map((inv) => this.getListEntryPossibleUsers(inv.getTargetUserId(),
+             )))))}
+    
+    getListEntryPossibleUsers = (target_user_id) => {
+        ShoppingAPI.getAPI().getUserById(target_user_id)
+            .then((user) => this.setState({users: [...this.state.users, user]})
+            )    
+    
+    }         
+    
 
-    getUserById = (invitations) => {
-        invitations.forEach(invitation => {
-            ShoppingAPI.getAPI().getUserById(invitation.getTargetUserId())
-            .then(function(user){ 
-                this.setState({
-                 users: [...this.state.users, user]
-            })
-         }.bind(this))
-        });
-     }
-
-    createNewItem=()=>{
+    createNewItem = () => {
         var Item = new ItemBO
         Item.setName(this.state.article)
         Item.setAmount(this.state.amount)
@@ -67,25 +68,39 @@ import ItemBO from '../../api/ItemBO';
     
     createNewListEntry=()=>{
         var ListEntry = new ListEntryBO
-        console.log(this.state.item)
+        //console.log(this.state.item)
         ListEntry.setItemId(this.state.item.getID())
-        ListEntry.setListId(5)
-        console.log(this.state.pickedRetailer)
-        ListEntry.setRetailerId(this.state.pickedRetailer.getID())
-        ListEntry.setUserId(this.state.pickedUser.getID())
+        ListEntry.setListId(this.state.listid)
+        ListEntry.setRetailerId(this.state.retailer[this.getListEntryPossibleRetailerNames().indexOf(this.state.pickedRetailer)].getID())
+        ListEntry.setUserId(this.state.users[this.getListEntryPossibleUserNames().indexOf(this.state.pickedUser)].getID())
         ListEntry.setName("Wir sind die besten!")
+        console.log("der neue Entry:", ListEntry)
         ShoppingAPI.getAPI().addListEntry(ListEntry)
 
     }
+ 
+    getListEntryPossibleUserNames = () => {
+        const userNames = this.state.users.map((user) => user.getName())
+        //console.log("alle Usernamen:", userNames)
+        return (userNames)
+    } 
 
-    handleAmountChange  =(value) =>{
+    getListEntryPossibleRetailerNames = () => {
+        var ret_names = this.state.retailer.map((retailer) => retailer.getName()
+        )
+        console.log("namen aller Retailer:", ret_names)
+        return (ret_names)
+    }
+    
+
+    handleAmountChange  = (value) =>{
         this.setState({amount:value})
-        console.log(this.state.amount)
+        //console.log(this.state.amount)
     };
    
     handleArticleChange=  (value) =>{
         this.setState({article:value})
-        console.log(this.state.article)
+        //console.log(this.state.article)
     };
 
     handleUnitChange = (value)=> {
@@ -94,19 +109,16 @@ import ItemBO from '../../api/ItemBO';
     
     handleClicked =() =>{
         this.setState({checked: !this.state.checked})
-        console.log("checked:", this.state.checked)
+        //console.log("checked:", this.state.checked)
     };
 
     handleUserChange = (value) =>{
         this.setState({pickedUser: value})
     };
 
-    handleRetailerChange = (event) =>{
-        this.setState({pickedRetailer: event.target.value})
-    };
 
     render() {
-        console.log(this.state.item)
+        console.log("user", this.state.users)
         const units = [
             {
                 value: 0,
@@ -144,13 +156,11 @@ import ItemBO from '../../api/ItemBO';
 
         const retailer = this.state.retailer
         const user = this.state.users
-        console.log(retailer)
-        console.log(user)
+        //console.log(retailer)
+        //console.log(user)
         
        
      
-        
-
         return (
             <div>
                 <Typography variant='h6' component='h1' align='center'>
@@ -183,7 +193,7 @@ import ItemBO from '../../api/ItemBO';
                     {retailer?
                         <Autocomplete
                         id="combo-box-demo"
-                        onInputChange={(event, value)=> this.handleRetailerChange(event)}
+                        onInputChange={(event, value)=> this.setState({pickedRetailer: value})}
                         options={retailer}
                         getOptionLabel={(option) => option.getName()}
                         style={{ width: 300 }}
@@ -239,7 +249,7 @@ import ItemBO from '../../api/ItemBO';
                     <Grid xs>
                         <br margin-top ='20px'/>
                         <Checkbox 
-                        checked={this.state.checked} onClick={()=> {this.handleClicked()}}
+                        checked={this.state.checked} onClick={() => {this.handleClicked()}}
                         />
                         Standardartikel
                     </Grid>
@@ -253,7 +263,7 @@ import ItemBO from '../../api/ItemBO';
                         
                         
                         <br margin-top = '20px'/>
-                        <Button onClick ={this.createNewItem}variant = "contained" color = "primary"> fertig </Button>
+                        <Button onClick ={this.createNewItem} variant = "contained" color = "primary"> fertig </Button>
                        
                         <br margin-top = '20px'/>
                         <Button  variant = "contained" color = "secondary"> abbrechen </Button>

@@ -8,6 +8,9 @@ import { Link as RouterLink } from 'react-router-dom';
 import { BrowserRouter as Router, Route, Redirect, } from 'react-router-dom';
 import InvitationBO from '../../api/InvitationBO'
 import PartyShoppingList from "../pages/PartyShoppingList"
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 
 class UserParties extends Component{
 
@@ -51,7 +54,7 @@ class UserParties extends Component{
        });
     }
     
-    panelClickHandler
+    
     
 
 
@@ -66,7 +69,14 @@ class UserParties extends Component{
                         <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                         >
-                            {party.getName()}
+                            
+                            {party.getName()} 
+                            <IconButton component={RouterLink} to={`/managegroup`} > 
+                                <EditIcon/>
+                            </IconButton>
+                            <IconButton >
+                                <PlaylistAddIcon/>
+                            </IconButton>
                         </ExpansionPanelSummary>
                             {lists.map((list) =>
                                 <ExpansionPanelDetails>

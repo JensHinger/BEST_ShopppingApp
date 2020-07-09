@@ -44,14 +44,35 @@ class ManageGroup extends Component{
     }
 
     handleUserDelete = (index) => {
-        let array = this.state.users
+        //let array = this.state.users
+        //let inv_array = this.state.invitations
+        //array.splice(index, 1)
+        //console.log("ausgewählter User:", this.state.users[index].getID())
+        //let inv_del = this.state.invitations.filter((invitation) => invitation.getTargetUserId() === this.state.users[index].getID())
+        //console.log("zu löschender invite:", inv_del[0])
+        //let inv_pos = this.state.invitations.findIndex(inv_del)
+        //inv_array.splice(inv_pos - 1 ,1)
+        //console.log("index der invitation:", inv_pos)
+        //this.setState({users : array})
+        //console.log("neue invites:", inv_array)
+        //this.setState({invitations: inv_array})
+        //console.log("invitations nach dem löschen:", this.state.invitations)
+        //console.log("zu löschender User", this.state.users[index])
+        //console.log("users nach gelöschtem User:", this.state.users)
+        
+        this.setState({users: []})
+        this.setState({invitations: []})
+        this.getAllUsersInParty(2)
+        console.log("users nach update:", this.state.users)
+        console.log("invitations nach update", this.state.invitations)
 
-        array.splice(index, 1)
-        this.setState({users : array})
+
     }
 
     render() {
 
+        //console.log("invitations:", this.state.invitations)
+        //console.log("users:", this.state.users)
         const currentParty = this.state.party
         const users = this.state.users
         return(
