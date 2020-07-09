@@ -150,7 +150,7 @@ class ShoppingAdministration(object):
         retailer.set_name(name)
 
         with RetailerMapper() as mapper:
-            mapper.insert(retailer)
+            return mapper.insert(retailer)
 
     def update_retailer(self, retailer):
         with RetailerMapper() as mapper:
