@@ -7,6 +7,7 @@ import ShoppingAPI from '../../api/ShoppingAPI';
 import Checkbox from '@material-ui/core/Checkbox';
 import ListEntryBO from '../../api/ListEntryBO'
 import ItemBO from '../../api/ItemBO';
+import AddRetailerDialog from '../dialogs/AddRetailerDialog';
 
  class ArticleAmountUnit extends Component {
 
@@ -105,6 +106,10 @@ import ItemBO from '../../api/ItemBO';
         this.setState({pickedRetailer: event.target.value})
     };
 
+    handleNewRetailer = () =>{
+        this.getAllRetailer()
+    };
+
     render() {
         console.log(this.state.item)
         const units = [
@@ -192,6 +197,14 @@ import ItemBO from '../../api/ItemBO';
                     </Grid>
                     </div>
                     
+                    <div>
+                    <br margin-top = '20px'/>
+                    <Grid container justify = "center">
+                    <Grid>
+                    <AddRetailerDialog handleNewRetailer = {this.handleNewRetailer}/>
+                    </Grid>
+                    </Grid>
+                    </div>
 
                     <div>
                     <Grid container justify = "center" spacing = {2}>
