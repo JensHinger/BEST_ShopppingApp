@@ -5,63 +5,73 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {ThemeProvider, Input} from "@material-ui/core"
+import { ThemeProvider, Input } from "@material-ui/core"
 import Theme from "../../Theme"
-import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
+import RemoveIcon from '@material-ui/icons/Remove';
+import ShoppingAPI from '../../api/ShoppingAPI';
 
- class RemoveGroupMemberDialog extends Component {
+class RemoveGroupMemberDialog extends Component {
 
-    constructor(props){
-        super(props);
-
-         this.state = {
-            open: false,
-         }
-
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+      open: false,
+      invitation: props.invitation,
     }
-    /** Funktion für Mitglied entfernen fehlt noch, wie Umsetzen ? */
-    handleClickOpen = () => {
-        this.setState ({open: true});
-    };
+  }
 
-    handleClose = () => {
-        this.setState ({open: false});
-    };
+  /** Funktion für Mitglied entfernen fehlt noch, wie Umsetzen ? */
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
 
-    render() {
-        return (
-            <div>
-                <ThemeProvider theme = {Theme}>
+  handleClose = () => {
+    this.setState({ open: false });
+    //this.setState({invitation: null})
+  };
 
-                    <Button onClick = {this.handleClickOpen}>
-                        <IndeterminateCheckBoxIcon  fontSize='large' color='primary'/>
-                        
-                    </Button>
+  handleInvDelete = () => {
+    console.log("Invitation ID: " , this.state.invitation[0].getID())
+    console.log("invitation:", this.state.invitation)
+    ShoppingAPI.getAPI().deleteInvitation(this.state.invitation[0].getID())
+    .then(function() { 
+      this.props.handleInvitationDelete(this.props.index);
+      this.handleClose()
+    }.bind(this))
+  };
 
-                    <Dialog open={this.state.open} onClose={this.handleClose}  aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-title">Mitglied entfernen</DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  Möchten Sie das Gruppenmitglied wirklich entfernen?
-                </DialogContentText>
-  
-              </DialogContent>
+  render() {
+    //console.log("invitation die zu löschen ist:", this.state.invitation)
+    return (
+      <ThemeProvider theme={Theme}>
 
-              <DialogActions>
-                <Button>
-                  Ja
-                </Button>
-                <Button>
-                  Nein
-                </Button>
-              </DialogActions>
-            </Dialog>
+        <Button onClick={this.handleClickOpen}>
+          <RemoveIcon fontSize='medium' color='primary' />
+        </Button>
 
-                    
-                </ThemeProvider>
-            </div>
-        )
-    }
+        <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">Mitglied entfernen</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Möchten Sie das Gruppenmitglied wirklich entfernen?
+            </DialogContentText>
+
+          </DialogContent>
+
+          <DialogActions>
+            <Button onClick={this.handleInvDelete}>
+              Ja
+            </Button>
+            <Button onClick={this.handleClose}>
+              Nein
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+      </ThemeProvider>
+    )
+  }
 }
 
 export default RemoveGroupMemberDialog

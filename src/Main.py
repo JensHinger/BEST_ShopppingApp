@@ -52,6 +52,7 @@ list_entry = api.inherit('ListEntry', bo, {
     'retailer_id': fields.Integer(attribute='_retailer_id', description='Die Einheit eines gewählten Produktes'),
     'user_id': fields.Integer(attribute='_user_id', description='Die Einheit eines gewählten Produktes'),
     'list_id': fields.Integer(attribute='_list_id', description='Die Einheit eines gewählten Produktes'),
+    'checked': fields.Integer(attribute='_checked', description='Sagt aus ob der Eintrag abgehakt wurde'),
 })
 
 party = api.inherit('Party', bo, {
@@ -352,8 +353,8 @@ class ListEntryListOperations(Resource):
         proposal = ListEntry.from_dict(api.payload)
         print("proposal", proposal)
         if proposal is not None:
-            lentry = adm.create_listentry(proposal.get_name(), proposal.get_item_id(), proposal.get_retailer_id(), proposal.get_user_id(),
-                                          proposal.get_list_id())
+            lentry = adm.create_listentry(proposal.get_name(), proposal.get_item_id(), proposal.get_retailer_id(),
+                                          proposal.get_user_id(), proposal.get_list_id(), proposal.get_checked())
             return lentry, 200
         else:
             return "", 500
@@ -491,6 +492,18 @@ class RetailerOperations (Resource):
 
 @shopping.route("/retailer")
 class RetailerListOperations(Resource):
+
+    @shopping.marshal_with(retailer)
+    def get(self):
+        """Auslesen des aller Retailer aus der DB."""
+        adm = ShoppingAdministration()
+        ret = adm.get_all_retailer()
+
+        if ret is not None:
+            return ret
+        else:
+            return "", 500
+
     @shopping.marshal_with(retailer)
     @shopping.expect(retailer)
     def post(self):

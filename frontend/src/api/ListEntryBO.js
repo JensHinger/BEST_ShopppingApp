@@ -8,6 +8,7 @@ export default class ListEntryBO extends BusinessObject{
         this.retailer_id = 0
         this.user_id = 0
         this.list_id = 0
+        this.checked = 0
     }
 
     setItemId(item_id) {
@@ -40,6 +41,14 @@ export default class ListEntryBO extends BusinessObject{
 
     getListId() {
         return this.list_id
+    }
+
+    setchecked(condition) {
+        this.checked = condition
+    }
+
+    getchecked(){
+        return this.checked
     }
 
     static fromJSON(listentries) {

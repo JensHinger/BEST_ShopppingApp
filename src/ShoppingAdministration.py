@@ -107,7 +107,7 @@ class ShoppingAdministration(object):
         with ListEntryMapper() as mapper:
             return mapper.find_by_id(id)
 
-    def create_listentry(self, name, item_id, retailer_id, user_id, list_id):
+    def create_listentry(self, name, item_id, retailer_id, user_id, list_id, condition):
         """Einen Listeneintrag erstellen."""
         listentry = ListEntry()
         listentry.set_name(name)
@@ -115,6 +115,7 @@ class ShoppingAdministration(object):
         listentry.set_retailer_id(retailer_id)
         listentry.set_user_id(user_id)
         listentry.set_list_id(list_id)
+        listentry.set_checked(condition)
 
         with ListEntryMapper() as mapper:
             mapper.insert(listentry)
@@ -132,6 +133,10 @@ class ShoppingAdministration(object):
     """
     Ab hier geht es um Retailer.
     """
+    def get_all_retailer(self):
+        with RetailerMapper() as mapper:
+            return mapper.find_all()
+
     def get_retailer_by_id(self, id):
         with RetailerMapper() as mapper:
             return mapper.find_by_id(id)
@@ -145,7 +150,7 @@ class ShoppingAdministration(object):
         retailer.set_name(name)
 
         with RetailerMapper() as mapper:
-            mapper.insert(retailer)
+            return mapper.insert(retailer)
 
     def update_retailer(self, retailer):
         with RetailerMapper() as mapper:
@@ -176,7 +181,7 @@ class ShoppingAdministration(object):
         item.set_unit(unit)
 
         with ItemMapper() as mapper:
-            mapper.insert(item)
+           return mapper.insert(item)
 
     def update_item(self, item):
         """Ein Item updaten."""
@@ -377,3 +382,4 @@ class ShoppingAdministration(object):
         """Einen Standartlisteneintrag löschen."""
         with StandardListEntryMapper() as mapper:
             mapper.delete(standardlistentry)
+

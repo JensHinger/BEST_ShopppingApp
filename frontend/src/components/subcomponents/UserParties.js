@@ -2,7 +2,15 @@ import React, { Component } from 'react'
 import {ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Button, Typography} from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ShoppingAPI from '../../api/ShoppingAPI'
+import ManageGroup from "../pages/ManageUser"
+//import ManageGroup from "./components/pages/ManageParty";
+import { Link as RouterLink } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect, } from 'react-router-dom';
 import InvitationBO from '../../api/InvitationBO'
+import PartyShoppingList from "../pages/PartyShoppingList"
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 
 class UserParties extends Component{
 
@@ -11,32 +19,45 @@ class UserParties extends Component{
 
         this.state = {
             parties : [],
-            lists : []
+            lists : [],
+            expanded: true 
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.getPartiesByUser()
-        this.getListsByParty()
     }
 
-    getListsByParty(){
-        this.state.parties.map((party) => 
-            ShoppingAPI.getAPI().getListsByPartyId(party.getId())
-            .then(listBOs => this.setState({lists : listBOs}))
-        )
+
+    getListsByParty(party_id){
+        ShoppingAPI.getAPI().getListsByPartyId(party_id)
+        .then(list => 
+            this.setState({lists : list}),
+            this.setState({expanded: this.state.expanded != party_id ? party_id : false})
+        )           
    }
 
+
     getPartiesByUser = () => {
-        console.log("halolo")
-        ShoppingAPI.getAPI().getAcceptedInvitationsBySourceUserId(2)
-        .then(InvitationBOs => function(){
-            var partyiId = InvitationBOs.getPartyiId()
-            ShoppingAPI.getAPI().getPartyById(partyiId)
-            .then(partyBOs => this.setState({parties : partyBOs})
-            )
-        })
+        ShoppingAPI.getAPI().getAcceptedInvitationsBySourceUserId(1)
+        .then(invitations => this.getPartyByInvitations(invitations))
     }
+    
+    getPartyByInvitations = (invitations) => {
+       invitations.forEach(invitation => {
+           ShoppingAPI.getAPI().getPartyById(invitation.getPartyiId())
+           .then(function(party){ 
+               this.setState({
+                parties: [...this.state.parties, party]
+           })
+        }.bind(this))
+       });
+    }
+    
+    
+    
+
+
     
     render(){
         const userParties = this.state.parties
@@ -44,24 +65,28 @@ class UserParties extends Component{
         return(
             <div>
                 {userParties.map((party) =>
-                    <ExpansionPanel key={party.getID()}>
+                    <ExpansionPanel expanded = {this.state.expanded === party.getID()} onChange = {() => this.getListsByParty(party.getID())} key={party.getID()}>
                         <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                         >
-                            {party.getName()}
+                            
+                            {party.getName()} 
+                            <IconButton component={RouterLink} to={`/managegroup`} > 
+                                <EditIcon/>
+                            </IconButton>
+                            <IconButton >
+                                <PlaylistAddIcon/>
+                            </IconButton>
                         </ExpansionPanelSummary>
-                            {lists.map((list) => 
+                            {lists.map((list) =>
                                 <ExpansionPanelDetails>
-                                    <Typography>
-                                        <Button>{list.getName()}</Button>
-                                    </Typography>
-                                </ExpansionPanelDetails>
-                            )}                  
+                                        <Button  component={RouterLink} to={`/partyshoppinglist/${list.getID()}`} > {list.getName()} </Button>
+                                </ExpansionPanelDetails> 
+                            )}    
                     </ExpansionPanel> 
                 )} 
             </div>  
         )
     }
-
 }
 export default UserParties

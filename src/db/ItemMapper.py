@@ -56,7 +56,7 @@ class ItemMapper(Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, creation_date, amount, unit FROM item WHERE id LIKE ('{}')".format(id)
+        command = "SELECT id, name, creation_date, unit, amount FROM item WHERE id LIKE ('{}')".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -88,6 +88,8 @@ class ItemMapper(Mapper):
         self._cnx.commit()
         cursor.close()
 
+        return item
+
     def update(self, item):
 
         cursor = self._cnx.cursor()
@@ -112,3 +114,5 @@ if __name__ == "__main__":
     with ItemMapper() as mapper:
         i = mapper.find_by_id(101)
         mapper.delete(i)
+        i.set_name("test")
+        print(mapper.insert(i))

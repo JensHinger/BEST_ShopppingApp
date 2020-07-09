@@ -11,6 +11,8 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { withStyles } from '@material-ui/core/styles';
 import Navbar from "./Navbar"
 import LogOutDialog from "../dialogs/LogOutDialog"
+import { Link as RouterLink } from 'react-router-dom';
+import ManageUser from "../pages/ManageUser"
 
 const styles = theme => ({
 
@@ -50,11 +52,18 @@ class Header extends Component{
     this.setState({AnchorEL : null})
   };
 
+  handleUserUpdate = () => {
+    this.getCurrentUser()
+    console.log('Hallo')
+
+  };
+
   render(){
 
     const { classes } = this.props;
 
     const isMenuOpen = Boolean(this.state.AnchorEL);
+    var user = this.state.currentUser
 
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
@@ -67,13 +76,12 @@ class Header extends Component{
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
-        <MenuItem onClick={this.handleMenuClose}><LogOutDialog></LogOutDialog></MenuItem>
+         {user? <MenuItem onClick={this.handleMenuClose}  component={RouterLink} to={`/manageuser/${user.getID()}`} /*onUserUpdated = {this.handleUserUpdate}*/>My account </MenuItem> :null}
+        <MenuItem onClick={this.handleMenuClose}><LogOutDialog></LogOutDialog></MenuItem> 
       </Menu>
     );
 
-    var user = this.state.currentUser
+    //var user = this.state.currentUser
 
     return (
       <div>
@@ -90,14 +98,14 @@ class Header extends Component{
               <IconButton color="inherit">
                 <NotificationsIcon />
               </IconButton>
-              {
+              {/*
                 user ?
               
                 <Typography>
                   user: {user.getName()}
                 </Typography>
                 : null
-              }
+              */}
               <IconButton
                 edge="end"
                 onClick={this.handleProfileMenuOpen}
