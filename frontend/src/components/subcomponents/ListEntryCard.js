@@ -201,8 +201,10 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
             { 
                 this.state.item && this.state.user && this.state.retailer && this.state.all_retailers_name && this.state.party_users  ? 
                 <Card>
+                    
+                    <CardContent disabled = {true} style={{ textDecoration : this.state.checked ? 'line-through' : null}} >
                     <Checkbox checked={this.state.checked} onClick ={() => {this.scoreThroughHandler()}}/>
-                    <CardContent disabled = {true} style={{ textDecoration : this.state.checked ? 'line-through' : null}} >{this.state.item.getName()} {this.state.item.getAmount()}  {units[this.state.item.getUnit()]} 
+                    {this.state.item.getName()} {this.state.item.getAmount()}  {units[this.state.item.getUnit()]} 
                     {this.state.user.getName()} {this.state.retailer.getName()} 
                         <IconButton  disabled = {this.state.checked ? true : false} justify ="right" onClick = {() => {this.expandHandler()}} 
                         >

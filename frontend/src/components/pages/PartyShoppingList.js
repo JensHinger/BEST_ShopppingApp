@@ -3,6 +3,7 @@ import { List, Typography } from '@material-ui/core'
 import ShoppingAPI from '../../api/ShoppingAPI'
 import {Link as RouterLink} from 'react-router-dom'
 import ListEntryCard from '../subcomponents/ListEntryCard'
+import Button from '@material-ui/core/Button';
 
 class PartyShoppingList extends Component{
 
@@ -15,7 +16,7 @@ class PartyShoppingList extends Component{
 
     componentDidMount(){
         this.getListEntriesByList()
-        console.log("log:",this.props.match.params)
+        console.log("log:", this.props.match.params)
 
     }
 
@@ -43,9 +44,11 @@ class PartyShoppingList extends Component{
 
         //const { classes, list } = this.props;
         const { listentries } = this.state;
-        console.log("render ausgeführt!", this.state)
+        //console.log("aktuelle liste", this.props.match.params.listid)
+        
         return(
         <div >
+            <Button component={RouterLink} to={`/AddListEntry/${this.props.match.params.listid}`} >Eintrag hinzufügen</Button>
             {
                 listentries ?
                 listentries.map(listentry => <ListEntryCard onListEntryDeleted = {this.deleteListEntryHandler} listid = {this.props.match.params} listentry = {listentry} key = {listentry.getID()}/>)

@@ -39,8 +39,8 @@ class App extends Component {
                 <Route path={`/partyshoppinglist/:listid`} component={PartyShoppingList}>
                     
                 </Route>
-                <Route path='/AddListEntry'>
-                    <AddListEntry />
+                <Route path={'/AddListEntry/:listid'} component={AddListEntry}>
+                  
                 </Route>
                 <Route path='/standardlist'>
                     <StandardList />
