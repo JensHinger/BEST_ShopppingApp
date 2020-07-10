@@ -121,9 +121,8 @@ class ManageUser extends Component {
                 <Divider/>
 
                 <br margin-top ='20px'/> 
-                <Grid>
                 <UserParties/>
-                </Grid>
+                
             </Grid>
         </Typography>
             

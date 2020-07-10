@@ -10,9 +10,9 @@ import InvitationBO from '../../api/InvitationBO'
 import PartyShoppingList from "../pages/PartyShoppingList"
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ListIcon from '@material-ui/icons/List';
+import AddListDialog from '../dialogs/AddListDialog';
 
 class UserParties extends Component{
 
@@ -31,11 +31,12 @@ class UserParties extends Component{
     }
 
 
-    getListsByParty(party_id){
+    getListsByParty = (party_id) =>{
         ShoppingAPI.getAPI().getListsByPartyId(party_id)
-        .then(list => 
-            this.setState({lists : list}),
+        .then( function (list)  { 
+            this.setState({lists : list});
             this.setState({expanded: this.state.expanded != party_id ? party_id : false})
+        }.bind(this)
         )           
    }
 
@@ -73,9 +74,7 @@ class UserParties extends Component{
                         >
                             
                             {party.getName()} 
-                            <IconButton >
-                                <PlaylistAddIcon/>
-                            </IconButton>
+                            <AddListDialog partyId = {party.getID()} getListsByParty = {this.getListsByParty} ></AddListDialog>
                             <IconButton color="inherit" component={RouterLink} to={`/standardlistmanagement/${party.getID()}`}>
                                 <FavoriteIcon/>
                                 <ListIcon/>
