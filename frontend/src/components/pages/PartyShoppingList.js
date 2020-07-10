@@ -36,7 +36,6 @@ class PartyShoppingList extends Component{
         this.setState({
             listentries: this.state.listentries.filter(listEntry => listEntry.getID() !== deletedListEntry.getID())
         })
-
     }
 
 
