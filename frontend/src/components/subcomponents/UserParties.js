@@ -11,6 +11,8 @@ import PartyShoppingList from "../pages/PartyShoppingList"
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ListIcon from '@material-ui/icons/List';
 
 class UserParties extends Component{
 
@@ -71,12 +73,18 @@ class UserParties extends Component{
                         >
                             
                             {party.getName()} 
-                            <IconButton component={RouterLink} to={`/managegroup`} > 
-                                <EditIcon/>
-                            </IconButton>
                             <IconButton >
                                 <PlaylistAddIcon/>
                             </IconButton>
+                            <IconButton color="inherit" component={RouterLink} to={`/standardlistmanagement/${party.getID()}`}>
+                                <FavoriteIcon/>
+                                <ListIcon/>
+                            </IconButton>
+                            <div style ={{alignSelf: "right"}}>
+                            <IconButton  component={RouterLink} to={`/managegroup/`} > 
+                                <EditIcon/>
+                            </IconButton>
+                            </div>
                         </ExpansionPanelSummary>
                             {lists.map((list) =>
                                 <ExpansionPanelDetails>

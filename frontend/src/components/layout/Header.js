@@ -13,11 +13,16 @@ import Navbar from "./Navbar"
 import LogOutDialog from "../dialogs/LogOutDialog"
 import { Link as RouterLink } from 'react-router-dom';
 import ManageUser from "../pages/ManageUser"
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
 
   divider: {
     flexGrow: 1
+  },
+
+  title: {
+    color: "white"
   }
 })
 
@@ -88,16 +93,16 @@ class Header extends Component{
         <AppBar position="static">
           <Toolbar>
             <Navbar />
-            <Typography className={classes.title} variant="h6" >
-              BE!ST
-            </Typography>
+            <Button component={RouterLink} to = {'/overview'}>
+              <Typography  className={classes.title} variant="h6" >
+                BE!ST
+              </Typography>
+            </Button>
 
             <div className={classes.divider}/>
             <div>
         
-              <IconButton color="inherit">
-                <NotificationsIcon />
-              </IconButton>
+              
               {/*
                 user ?
               
