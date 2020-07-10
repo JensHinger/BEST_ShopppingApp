@@ -10,6 +10,9 @@ import {ThemeProvider} from "@material-ui/core"
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Theme from "../../Theme"
+import ShoppingAPI from "../../api/ShoppingAPI"
+import PartyBO from "../../api/PartyBO"
+import InvitationBO from "../../api/InvitationBO"
 
 class CreateGroupDialog extends Component{
 
@@ -20,11 +23,44 @@ class CreateGroupDialog extends Component{
         open: false,
         partyName: "",
         emailList: [],
-        mail : ""
+        mail : "",
+        currentUser : 1 //Hier fehlt noch die props übergabe des eingeloggten Users sowie unten muss noch ein getID() hinzugefügt werden
       }
   }
 
-  
+  handleGroupCreation = () => {
+    const new_party = new PartyBO
+    new_party.setName(this.state.partyName)
+    ShoppingAPI.getAPI().addParty(new_party)
+    .then(party => this.handleInvitationCreation(party.getID()))  
+  }
+
+  handleInvitationCreation = (partyId) => {
+    const mailList = this.state.emailList
+    const new_invitation = new InvitationBO
+    
+    new_invitation.setSourceUserId(this.state.currentUser)
+    new_invitation.setTargetUserId(this.state.currentUser)
+    new_invitation.setPartyiId(partyId)
+    console.log(new_invitation)
+
+    ShoppingAPI.getAPI().addInvitation(new_invitation)
+
+    //Falls die MailListe leer ist können User nicht hinzugefügt werden der Originale User muss aber immer hinzugefügt werden
+    //2 Mal gleicher User einladen ist kacke ;-;
+
+    mailList.map((mail) =>
+    ShoppingAPI.getAPI().getUserByEmail(mail)
+    .then(function(user) {
+      new_invitation.setTargetUserId(user.getID());
+      new_invitation.setSourceUserId(this.state.currentUser)
+      new_invitation.setPartyiId(partyId)
+      ShoppingAPI.getAPI().addInvitation(new_invitation)
+      .then(this.handleClose)
+
+    }.bind(this)
+    ))
+  }
 
   handleClickOpen = () => {
     this.setState({open: true});
@@ -81,7 +117,7 @@ class CreateGroupDialog extends Component{
                 </DialogContentText>
                   
                 <TextField
-                  onChange = {(event) => this.setState({mail : event.target.value})}
+                  onChange = {(event) => this.setState({mail : event.target.value}) /*Textfield darf nicht leer sein muss geleert werden sobald email hinzugefügt wurde*/ }
                   margin="dense"
                   id="userEmail"
                   label="E-Mail"
@@ -105,7 +141,7 @@ class CreateGroupDialog extends Component{
               </DialogContent>
 
               <DialogActions>
-                <Button>
+                <Button onClick={() => this.handleGroupCreation()}>
                   Gruppe erstellen
                 </Button>
                 <Button onClick={() => this.handleClose()}>
