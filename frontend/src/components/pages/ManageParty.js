@@ -118,4 +118,4 @@ class ManageGroup extends Component{
     }
 }
 
-export default ManageG
+export default ManageGroup;
