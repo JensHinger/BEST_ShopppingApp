@@ -42,11 +42,11 @@ class CreateGroupDialog extends Component{
     new_invitation.setSourceUserId(this.state.currentUser)
     new_invitation.setTargetUserId(this.state.currentUser)
     new_invitation.setPartyiId(partyId)
-    console.log(new_invitation)
 
     ShoppingAPI.getAPI().addInvitation(new_invitation)
 
     //Falls die MailListe leer ist können User nicht hinzugefügt werden der Originale User muss aber immer hinzugefügt werden
+    //User ist nicht in der Database
     //2 Mal gleicher User einladen ist kacke ;-;
 
     mailList.map((mail) =>
@@ -100,10 +100,10 @@ class CreateGroupDialog extends Component{
               <DialogTitle id="form-dialog-title">Gruppe erstellen</DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  Geben sie einen Gruppennamen ein !!
+                  Geben sie einen Gruppennamen ein !! 
                 </DialogContentText>
                 <TextField
-                  onChange = {(event) => this.handleNameChange(event.target.value)}
+                  onChange = {(event) => this.handleNameChange(event.target.value) /*Name der Gruppe darf nicht leer sein*/}
                   margin="dense"
                   id="partyName"
                   label="Gruppenname"
