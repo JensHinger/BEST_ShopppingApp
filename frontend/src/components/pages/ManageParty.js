@@ -113,6 +113,8 @@ class ManageGroup extends Component{
                     <RemoveGroupMemberDialog invitation = {this.state.invitations.filter(invitation => invitation.getTargetUserId() === userBO.getID())} handleInvitationDelete = {this.handleUserDelete} index = {index}/>
                 :null}
             <Divider/>
+            <br margin-top = '20px'/>
+            <ExitGroupDialog/>
         </Typography>
         )
     }
