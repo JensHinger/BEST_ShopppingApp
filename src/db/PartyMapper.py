@@ -83,6 +83,8 @@ class PartyMapper(Mapper):
         self._cnx.commit()
         cursor.close()
 
+        return party
+
     def update(self, party):
 
         cursor = self._cnx.cursor()

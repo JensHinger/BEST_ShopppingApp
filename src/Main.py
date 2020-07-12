@@ -85,8 +85,8 @@ class InvitationListOperations(Resource):
         proposal = Invitation.from_dict(api.payload)
         print("proposal", proposal)
         if proposal is not None:
-            invi = adm.create_invitation(proposal.get_source_user_id(), proposal.get_target_user_id(),
-                                         proposal.get_partyi_id())
+            invi = adm.create_invitation(proposal.get_partyi_id(), proposal.get_target_user_id(),
+                                         proposal.get_source_user_id())
             return invi, 200
         else:
             return "", 500

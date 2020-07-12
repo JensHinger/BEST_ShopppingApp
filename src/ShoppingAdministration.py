@@ -250,7 +250,7 @@ class ShoppingAdministration(object):
         invitation.set_source_user_id(source_user_id)
 
         with InvitationMapper() as mapper:
-            mapper.insert(invitation)
+            return mapper.insert(invitation)
 
     def update_invitation(self, invitation):
         """Invitation updaten/speichern."""
@@ -282,7 +282,7 @@ class ShoppingAdministration(object):
         party.set_name(name)
 
         with PartyMapper() as mapper:
-            mapper.insert(party)
+            return mapper.insert(party)
 
     def update_party(self, party):
         """Eine Gruppe updaten."""
