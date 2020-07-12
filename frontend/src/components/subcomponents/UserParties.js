@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Button, Typography} from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ShoppingAPI from '../../api/ShoppingAPI'
-import ManageGroup from "../pages/ManageUser"
+import ManageParty from "../pages/ManageUser"
 //import ManageGroup from "./components/pages/ManageParty";
 import { Link as RouterLink } from 'react-router-dom';
 import { BrowserRouter as Router, Route, Redirect, } from 'react-router-dom';
@@ -71,7 +71,7 @@ class UserParties extends Component{
                         >
                             
                             {party.getName()} 
-                            <IconButton component={RouterLink} to={`/managegroup`} > 
+                            <IconButton component={RouterLink} to={`/manageparty/${party.getID()}`} > {party.getName()}
                                 <EditIcon/>
                             </IconButton>
                             <IconButton >

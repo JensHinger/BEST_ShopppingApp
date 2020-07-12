@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Overview from './components/pages/Overview';
 import About from './components/pages/About';
-import ManageGroup from "./components/pages/ManageParty";
+import ManageParty from "./components/pages/ManageParty";
 import ManageUser from "./components/pages/ManageUser"
 import MyArticle from './components/pages/MyArticle';
 import PartyShoppingList from "./components/pages/PartyShoppingList";
@@ -30,8 +30,8 @@ class App extends Component {
                 <Route path='/myarticle'>
                     <MyArticle />
                 </Route>
-                <Route path='/managegroup'>
-                    <ManageGroup />
+                <Route path={'/manageparty/:partyid'} component={ManageParty}>
+                  
                 </Route>
                 <Route path={'/manageuser/:userid'} component={ManageUser}>
                     
