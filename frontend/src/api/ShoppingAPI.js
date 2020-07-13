@@ -566,7 +566,7 @@ export default class ShoppingAPI {
     //#getStandardListEntryByPartyIdURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry-by-list/${id}`
     getStandardListEntryByPartyId(id){
         return this.#fetchAdvanced(this.#getStandardListEntryByPartyIdURL(id)).then((responseJSON) => {
-            let responseStandardListEntryBO = StandardListEntryBO.fromJSON(responseJSON)[0];
+            let responseStandardListEntryBO = StandardListEntryBO.fromJSON(responseJSON);
                 return new Promise(function(resolve){
                     resolve(responseStandardListEntryBO)
                 })
@@ -603,7 +603,12 @@ export default class ShoppingAPI {
     //#updateStandardListEntryURL = (id) => `${this.#shoppingServerBaseURL}/standardlistentry/${id}`
     updateStandardListEntry(listEntryBO) {
         return this.#fetchAdvanced(this.#updateStandardListEntryURL(listEntryBO.getID()), {
-          body: JSON.stringify(listEntryBO)
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(listEntryBO)
           }).then((responseJSON) => {
             // We always get an array of CustomerBOs.fromJSON, but only need one object
             let responseListEntryBO = StandardListEntryBO.fromJSON(responseJSON)[0];

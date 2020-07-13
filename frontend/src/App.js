@@ -8,6 +8,7 @@ import MyArticle from './components/pages/MyArticle';
 import PartyShoppingList from "./components/pages/PartyShoppingList";
 import AddListEntry from "./components/subcomponents/AddListEntry";
 import StandardListManagement from "./components/pages/StandardListManagement";
+import AddStandardListEntry from "./components/subcomponents/AddStandardListEntry"
 import Header from "./components/layout/Header";
 import { ThemeProvider } from '@material-ui/core';
 import Theme from "./Theme"
@@ -32,17 +33,19 @@ class App extends Component {
                 <Route path={'/manageparty/:partyid'} component={ManageParty}>
                   
                 </Route>
-                <Route path={'/manageuser/:userid'} component={ManageUser}>
+                <Route path={'/manageuser/:userid'} component = {ManageUser}>
                     
                 </Route>
-                <Route path={`/partyshoppinglist/:listid`} component={PartyShoppingList}>
+                <Route path={`/partyshoppinglist/:listid`} component = {PartyShoppingList}>
                     
                 </Route>
-                <Route path={'/AddListEntry/:listid'} component={AddListEntry}>
+                <Route path={'/AddListEntry/:listid'} component = {AddListEntry}>
                   
                 </Route>
-                
-                <Route path='/standardlistmanagement/:listid' component= {StandardListManagement}>
+                <Route path='/standardlistmanagement/:partyid' component = {StandardListManagement}>
+                </Route>
+                <Route path='/addstandardlistentry/:partyid' component = {AddStandardListEntry}>
+
                 </Route>
                 <Route path='/about'>
                     <About />

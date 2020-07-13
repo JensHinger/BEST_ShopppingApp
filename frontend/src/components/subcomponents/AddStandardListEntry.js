@@ -9,9 +9,10 @@ import ListEntryBO from '../../api/ListEntryBO'
 import ItemBO from '../../api/ItemBO';
 import {Link as RouterLink} from 'react-router-dom'
 import AddRetailerDialog from '../dialogs/AddRetailerDialog';
+import StandardListEntryBO from '../../api/StandardListEntryBO';
 
 
- class ArticleAmountUnit extends Component {
+ class AddStandardLisEntry extends Component {
 
   constructor(props){
     super(props);
@@ -22,21 +23,24 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
         article: "",
         amount: 0,
         unit: 0,
-        listid: this.props.match.params.listid,
+        partyId: this.props.match.params.partyid,
         retailer: [],
-        users: [],
+        party_users: [],
         pickedUser: null,
         pickedRetailer: null,
         item: null,
+        userAutoCompleteKey: 0,
+        retailerAutoCompleteKey: 1,
+        unitTextFieldKey: 2,
+
 
     }
 
-    
 
   }
     componentDidMount(){
         this.getAllRetailer()
-        this.getListEntryPossibleUsersInvitations()
+        this.getStandardListEntryPossibleUsersInvitations()
     }
     
 
@@ -45,19 +49,19 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
         .then(retailer => this.setState({retailer: retailer}))
     } 
 
-    getListEntryPossibleUsersInvitations = () => {
-        ShoppingAPI.getAPI().getListById(this.state.listid)
-             .then((list) => ShoppingAPI.getAPI().getPartyById(list.getPartylId())
+    getStandardListEntryPossibleUsersInvitations = () => {
+        ShoppingAPI.getAPI().getPartyById(this.state.partyId)
              .then((party) => ShoppingAPI.getAPI().getAcceptedInvitationsByPartyId(party.getID())
-             .then((invitations) => invitations.map((inv) => this.getListEntryPossibleUsers(inv.getTargetUserId(),
-             )))))}
+             .then((invitations) => invitations.map((inv) => this.getStandardListEntryPossibleUsers(inv.getTargetUserId(),
+             ))))}
     
-    getListEntryPossibleUsers = (target_user_id) => {
+    getStandardListEntryPossibleUsers = (target_user_id) => {
         ShoppingAPI.getAPI().getUserById(target_user_id)
-            .then((user) => this.setState({users: [...this.state.users, user]})
+            .then((user) => this.setState({party_users: [...this.state.party_users, user]})
+            //.then(console.log("später"))
             )    
     
-    }         
+    }        
     
 
     createNewItem = () => {
@@ -66,42 +70,65 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
         Item.setAmount(this.state.amount)
         Item.setUnit(this.state.unit)
         ShoppingAPI.getAPI().addItem(Item)
-        .then(function (item) {this.setState({item: item}); this.createNewListEntry()}.bind(this))
+        .then(function (item) {this.setState({item: item}); this.createNewStandardListEntry()}.bind(this))
+
     }
     
-    createNewListEntry=()=>{
-        var ListEntry = new ListEntryBO
+    
+    createNewStandardListEntry = () => {
+        var standardListEntry = new StandardListEntryBO
         //console.log(this.state.item)
-        ListEntry.setItemId(this.state.item.getID())
-        ListEntry.setListId(this.state.listid)
-        ListEntry.setRetailerId(this.state.retailer[this.getListEntryPossibleRetailerNames().indexOf(this.state.pickedRetailer)].getID())
-        ListEntry.setUserId(this.state.users[this.getListEntryPossibleUserNames().indexOf(this.state.pickedUser)].getID())
-        ListEntry.setName("Wir sind die besten!")
-        console.log("der neue Entry:", ListEntry)
-        ShoppingAPI.getAPI().addListEntry(ListEntry)
+        standardListEntry.setItemId(this.state.item.getID())
+        standardListEntry.setPartyId(Number(this.state.partyId))
+        standardListEntry.setRetailerId(this.state.retailer[this.getStandardListEntryPossibleRetailerNames().indexOf(this.state.pickedRetailer)].getID())
+        standardListEntry.setUserId(this.state.party_users[this.getStandardListEntryPossibleUserNames().indexOf(this.state.pickedUser)].getID())
+        standardListEntry.setName("Wir sind die besten!")
+        console.log("der neue Entry:", standardListEntry)
+        ShoppingAPI.getAPI().addStandardListEntry(standardListEntry).then(
+            this.emptyState()
+        )
 
     }
- 
-    getListEntryPossibleUserNames = () => {
-        const userNames = this.state.users.map((user) => user.getName())
-        //console.log("alle Usernamen:", userNames)
-        return (userNames)
-    } 
-
-    getListEntryPossibleRetailerNames = () => {
+    
+    emptyState = () => {
+        this.setState({
+            article: "",
+            amount: 0,
+            unit: 0,
+            partyId: this.props.match.params.partyid,
+            pickedUser: "",
+            pickedRetailer: "",
+            item: null,
+        })
+        console.log("state nachdem er geleert wurde", this.state)
+        //generating random keys to force the autocomplete boxes to re-render, thus making them empty 
+        this.setState({
+            retailerAutoCompleteKey: this.state.retailerAutoCompleteKey + 1 ,
+            userAutoCompleteKey: this.state.userAutoCompleteKey + 1,
+            unitTextFieldKey: this.state.unitTextFieldKey + 1 ,
+        })
+    }
+    getStandardListEntryPossibleRetailerNames = () => {
         var ret_names = this.state.retailer.map((retailer) => retailer.getName()
         )
-        console.log("namen aller Retailer:", ret_names)
+        //console.log(ret_names)
         return (ret_names)
+    }
+
+    getStandardListEntryPossibleUserNames = () => { 
+        var names = this.state.party_users.map((user) => user.getName()
+                      )
+        //console.log("namen:", names)
+        return (names)
     }
     
 
-    handleAmountChange  = (value) =>{
+    handleAmountChange  = (value) => {
         this.setState({amount:value})
         //console.log(this.state.amount)
     };
    
-    handleArticleChange=  (value) =>{
+    handleArticleChange =  (value) => {
         this.setState({article:value})
         //console.log(this.state.article)
     };
@@ -110,10 +137,6 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
         this.setState({unit:value})
     };
     
-    handleClicked =() =>{
-        this.setState({checked: !this.state.checked})
-        //console.log("checked:", this.state.checked)
-    };
 
     handleUserChange = (value) =>{
         this.setState({pickedUser: value})
@@ -125,7 +148,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
     };
 
     render() {
-        console.log("user", this.state.users)
+        console.log("user", this.state.party_users)
         const units = [
             {
                 value: 0,
@@ -162,10 +185,11 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
           ];
 
         const retailer = this.state.retailer
-        const user = this.state.users
+        const user = this.state.party_users
         //console.log(retailer)
         //console.log(user)
-        
+        //console.log("this.props.match.params.partyId", this.props.match.params.partyId) 
+        //console.log("this.props.match.params",  this.props.match.params)
        
      
         return (
@@ -174,7 +198,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
 
                     <br margin-top = '20px'/>
 
-                    Eintrag hinzufügen
+                    Standard Eintrag hinzufügen
 
                     <Divider/>
 
@@ -183,12 +207,13 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                     <Grid container justify ="center">
                     {user?
                         <Autocomplete
+                        key = {this.state.userAutoCompleteKey}
                         id="combo-box-demo"
                         onInputChange={(event, value)=> this.handleUserChange(value)}
                         options={user}
                         getOptionLabel={(option) => option.getName()}
                         style={{ width: 300 }}
-                        renderInput={(params) =><TextField {...params} label="Person"  />}/>
+                        renderInput={(params) =><TextField  {...params} label="Person"  />}/>
                     :null}
                     </Grid>
                     </div>
@@ -200,11 +225,12 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                     {retailer?
                         <Autocomplete
                         id="combo-box-demo"
+                        key={this.state.retailerAutoCompleteKey}
                         onInputChange={(event, value)=> this.setState({pickedRetailer: value})}
                         options={retailer}
                         getOptionLabel={(option) => option.getName()}
                         style={{ width: 300 }}
-                        renderInput={(params) =><TextField {...params} label="Laden"  />}/>
+                        renderInput={(params) =><TextField  {...params} label="Laden"  />}/>
                     :null}
                     </Grid>
                     </div>
@@ -225,7 +251,9 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                         <TextField
                         label="Artikel"
                         helperText="Geben Sie einen Artikel ein"
-                        onChange = {(event) => this.handleArticleChange(event.target.value)}/>
+                        onChange = {(event) => this.handleArticleChange(event.target.value)}
+                        value = {this.state.article}/>
+                        
                     </Grid>
 
                     <Grid xs>
@@ -233,7 +261,8 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                         <TextField
                         label="Menge"
                         helperText="Geben Sie eine Menge an"
-                        onChange = {(event) => this.handleAmountChange(event.target.value)}/>
+                        onChange = {(event) => this.handleAmountChange(event.target.value)}
+                        value = {this.state.amount}/>
                     </Grid>
 
 
@@ -241,12 +270,12 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                     <Grid xs>
                         <br margin-top = '20px'/>
                         <TextField
+                        key={this.state.unitTextFieldKey}
                         id="standard-select-currency"
                         select
                         label="Select"
-                        
                         onChange = {(event) => this.handleUnitChange(event.target.value)}
-                        helperText="Please select your Unit"
+                        helperText="Bitte wählen sie die Einheit"
                         >
                             {units.map((option) => (
                                 <MenuItem key={option.value} value={option.value}>
@@ -258,19 +287,6 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                        
                     </Grid>      
                     </Grid>
-                    </div>
-                    <div>
-                    <Grid container justify="center">
-                    <Grid xs>
-                        <br margin-top ='20px'/>
-                        <Checkbox 
-                        checked={this.state.checked} onClick={() => {this.handleClicked()}}
-                        />
-                        Standardartikel
-                    </Grid>
-                    </Grid>
-                    </div>
-                    <div>
                     <br margin-top = '20px'/>
                     <Grid container 
                     direction= "row"
@@ -278,11 +294,12 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                         
                         
                         <br margin-top = '20px'/>
-                        <Button onClick ={this.createNewItem} variant = "contained" color = "primary"> fertig </Button>
-                       
-                        <br margin-top = '20px'/>
-                        <Button  variant = "contained" color = "secondary"> abbrechen </Button>
+                        <Button onClick ={this.createNewItem} variant = "contained" color = "primary"> Neuen Standard Eintrag Hinzufügen </Button>
                         
+                        <br margin-top = '20px'/>
+                        <Button component = {RouterLink} to = {`/standardlistmanagement/${this.state.partyId}`} variant = "contained" color = "secondary"> zurück zu meinen Einträgen </Button>
+                        <br margin-top = '20px'/>
+                        <Button component = {RouterLink} to = {`/standardlistmanagement/${this.state.partyId}`} variant = "contained" color = "secondary"> abbrechen </Button>
                        
                         
                     </Grid>
@@ -296,5 +313,4 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
     }
 }
 
-export default ArticleAmountUnit
-
+export default AddStandardLisEntry
