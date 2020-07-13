@@ -34,11 +34,11 @@ export default class StandardListEntryBO extends BusinessObject{
         return this.user_id
     }
 
-    set_PartyId(party_id){
+    setPartyId(party_id){
         this.party_id = party_id
     }
 
-    get_Party_Id(){
+    getPartyId(){
         return this.party_id
     }
 
