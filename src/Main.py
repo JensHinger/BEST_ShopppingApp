@@ -517,6 +517,8 @@ class RetailerListOperations(Resource):
             return "", 500
 
 """StandardListEntry related"""
+
+
 @shopping.route("/standardlistentry-by-party/<int:id>")
 @shopping.param("id", "Die ID der Party ")
 class StandardListEntryByPartyOperations(Resource):
