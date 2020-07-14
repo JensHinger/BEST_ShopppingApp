@@ -133,7 +133,7 @@ class StandardListEntryCard extends Component {
         console.log("Listentry zum updaten:", myStandardListEntry)
         ShoppingAPI.getAPI().updateStandardListEntry(myStandardListEntry)
         .then(ShoppingAPI.getAPI().getStandardListEntrybyId(this.state.standardListEntry.getID())
-              .then((updated_list_entry) => console.log(updated_list_entry)
+              .then(() => this.props.onStandardListEntryUpdated(this.state.standardListEntry)
 
               )
         )
