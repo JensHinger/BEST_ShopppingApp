@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+import ShoppingAPI from '../../api/ShoppingAPI'
 
 class ExitGroupDialog extends Component{
 
@@ -7,8 +9,8 @@ class ExitGroupDialog extends Component{
         super(props)
 
         this.state = {
-
-            open: false
+          open: false,
+          invitation : this.props.invitation
         }
 
 
@@ -19,7 +21,11 @@ class ExitGroupDialog extends Component{
 
     handleClose = () => {
         this.setState({open: false});}
-
+    
+    handleInvitationDelete = () => {
+      ShoppingAPI.getAPI().deleteInvitation(invitation.getID())
+      .then(this.handleClose())
+    }
     render (){
 
         return (
@@ -43,7 +49,7 @@ class ExitGroupDialog extends Component{
           <Button onClick={this.handleClose} color="primary">
             Nein
           </Button>
-          <Button onClick={this.handleClose} color="primary" autoFocus>
+          <Button component={RouterLink} to={`/overview`} onClick={this.handleInvitationDelete} color="primary" autoFocus >
             Ja
           </Button>
         </DialogActions>

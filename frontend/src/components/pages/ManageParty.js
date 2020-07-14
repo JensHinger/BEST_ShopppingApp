@@ -106,9 +106,8 @@ class ManageGroup extends Component{
             <Divider/>
             <br margin-top = '20px'/>
                 
-                <ExitGroupDialog/>
+                <ExitGroupDialog invitation = {this.state.invitations.filter(invitation => invitation.getTargetUserId() === this.state.userBO.getID())}/>
                 <br margin-top = '20px'/>
-                    {/*<RemoveGroupMemberDialog invitation = {this.state.invitations.filter(invitation => invitation.getTargetUserId() === this.state.user.getID())} /> */}
                     
                 <Divider/>
                 <br margin-top = '20px'/>
