@@ -92,7 +92,7 @@ class ManageGroup extends Component {
                 Gruppennamen ändern
                 <Divider />
                 <TextField id="outlined-basic" placeholder={currentParty ? currentParty.getName() : null} variant="outlined" />
-
+                <Button />
                 <br margin-top='20px' />
                 Gruppenmitglieder
                 {users ?
