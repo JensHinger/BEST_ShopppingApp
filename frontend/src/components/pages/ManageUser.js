@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Typography, Grid, Button } from '@material-ui/core';
 import ShoppingAPI from '../../api/ShoppingAPI'
-import {Link as RouterLink} from 'react-router-dom'
-import {Divider} from '@material-ui/core'
-import {TextField, Collapse, IconButton} from '@material-ui/core'
+import { Link as RouterLink } from 'react-router-dom'
+import { Divider } from '@material-ui/core'
+import { TextField, Collapse, IconButton } from '@material-ui/core'
 import UserParties from '../subcomponents/UserParties'
 import UserBO from '../../api/UserBO';
 import Alert from '@material-ui/lab/Alert';
@@ -12,14 +12,14 @@ import Header from '../layout/Header';
 import PropTypes from 'prop-types'
 
 class ManageUser extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
 
         this.state = {
-            userBO : null,
+            userBO: null,
             user: props.match.params.userid,
-            newName : null,
-            alertOpen : false
+            newName: null,
+            alertOpen: false
 
         }
     }
@@ -31,35 +31,35 @@ class ManageUser extends Component {
     getUserById = () => {
         // Hier muss bei getPartiesByUser noch this.props.user.getID() bei dem Übergabewert ergänzt werden
         ShoppingAPI.getAPI().getUserById(this.state.user).then(UserBO =>
-                this.setState({
-                    userBO: UserBO
-                }))
+            this.setState({
+                userBO: UserBO
+            }))
     }
 
     updateUser = () => {
-       var user = this.state.userBO
-       user.setName(this.state.newName)
-      ShoppingAPI.getAPI().updateUser(user)
-        .then(function(){
-         this.setAlertOpen(true);
-      ShoppingAPI.getAPI().getUserById(user.getID())
-        .then(UserBO =>
-            this.setState({
-                userBO: UserBO
-            }),
-           // this.props.onUserUpdated(),
-            )
-        }.bind(this))
-        
-        
+        var user = this.state.userBO
+        user.setName(this.state.newName)
+        ShoppingAPI.getAPI().updateUser(user)
+            .then(function () {
+                this.setAlertOpen(true);
+                ShoppingAPI.getAPI().getUserById(user.getID())
+                    .then(UserBO =>
+                        this.setState({
+                            userBO: UserBO
+                        }),
+                        // this.props.onUserUpdated(),
+                    )
+            }.bind(this))
+
+
     }
 
     handleUserNameChange = (event) => {
-        this.setState({newName: event.target.value})
+        this.setState({ newName: event.target.value })
     }
 
     setAlertOpen = (opened) => {
-        this.setState({alertOpen: opened})
+        this.setState({ alertOpen: opened })
 
 
 
@@ -70,64 +70,64 @@ class ManageUser extends Component {
         //console.log(this.state.user)
         //console.log(this.refs.newname.input.value)
 
-        return ( 
-        <Typography variant='h6' component='h1' align='center'> 
-            <Grid>
-                <br margin-top ='20px'/> 
+        return (
+            <Typography variant='h6' component='h1' align='center'>
+                <Grid>
+                    <br margin-top='20px' />
 
                 Mein Konto
-                <Divider/>
+                <Divider />
 
-                <br margin-top ='20px'/>
-                
-                { person ?
-                    <TextField           
-                        id="outlined-read-only-input"           
-                        label="Name: " 
-                        onChange={this.handleUserNameChange}         
-                        defaultValue= {person.getName()}           
-                        InputProps={{             
-                        readOnly: false,           
-                        }}           
-                        variant="outlined"         
-                    />
-                    
-                    :null}
+                    <br margin-top='20px' />
 
-                     <Button onClick={() => this.updateUser()}>Speichern</Button>
-                     <Collapse in={this.state.alertOpen}>
-                        <Alert
-                        action={
-                            <IconButton
-                            aria-label="close"
-                            color="inherit"
-                            size="small"
-                            onClick={() => {
-                                this.setAlertOpen(false);
+                    {person ?
+                        <TextField
+                            id="outlined-read-only-input"
+                            label="Name: "
+                            onChange={this.handleUserNameChange}
+                            defaultValue={person.getName()}
+                            InputProps={{
+                                readOnly: false,
                             }}
-                            >
-                            <CloseIcon fontSize="inherit" />
-                            </IconButton>
-                        }
+                            variant="outlined"
+                        />
+
+                        : null}
+
+                    <Button onClick={() => this.updateUser()}>Speichern</Button>
+                    <Collapse in={this.state.alertOpen}>
+                        <Alert
+                            action={
+                                <IconButton
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        this.setAlertOpen(false);
+                                    }}
+                                >
+                                    <CloseIcon fontSize="inherit" />
+                                </IconButton>
+                            }
                         >
-                        Close me!
+                            Close me!
                         </Alert>
                     </Collapse>
-                
-                <br/>   
-                <br margin-top ='20px'/> 
-                
-                Gruppen
-                <Divider/>
 
-                <br margin-top ='20px'/> 
-                <UserParties/>
-                
-            </Grid>
-        </Typography>
-            
+                    <br />
+                    <br margin-top='20px' />
+
+                Gruppen
+                <Divider />
+
+                    <br margin-top='20px' />
+                    <UserParties />
+
+                </Grid>
+            </Typography>
+
         )
-        
+
     }
 
 }
