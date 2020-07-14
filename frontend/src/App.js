@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Overview from './components/pages/Overview';
 import About from './components/pages/About';
@@ -15,43 +15,43 @@ import Theme from "./Theme"
 
 class App extends Component {
 
-  render(){
+  render() {
     return (
-      <ThemeProvider theme = {Theme}>
+      <ThemeProvider theme={Theme}>
         <div>
-        
-            <Router basename={process.env.PUBLIC_URL}>
-              <Header />
-              <>
-                <Redirect from='/' to='/overview' />
-                <Route exact path='/overview'>
-                    <Overview />
-                </Route>
-                <Route path='/myarticle'>
-                    <MyArticle />
-                </Route>
-                <Route path={'/manageparty/:partyid'} component={ManageParty}>
-                  
-                </Route>
-                <Route path={'/manageuser/:userid'} component = {ManageUser}>
-                    
-                </Route>
-                <Route path={`/partyshoppinglist/:listid`} component = {PartyShoppingList}>
-                    
-                </Route>
-                <Route path={'/AddListEntry/:listid'} component = {AddListEntry}>
-                  
-                </Route>
-                <Route path='/standardlistmanagement/:partyid' component = {StandardListManagement}>
-                </Route>
-                <Route path='/addstandardlistentry/:partyid' component = {AddStandardListEntry}>
 
-                </Route>
-                <Route path='/about'>
-                    <About />
-                </Route>
-              </>  
-            </Router>
+          <Router basename={process.env.PUBLIC_URL}>
+            <Header />
+            <>
+              <Redirect from='/' to='/overview' />
+              <Route exact path='/overview'>
+                <Overview />
+              </Route>
+              <Route path='/myarticle'>
+                <MyArticle />
+              </Route>
+              <Route path={'/manageparty/:partyid'} component={ManageParty}>
+
+              </Route>
+              <Route path={'/manageuser/:userid'} component={ManageUser}>
+
+              </Route>
+              <Route path={`/partyshoppinglist/:listid`} component={PartyShoppingList}>
+
+              </Route>
+              <Route path={'/AddListEntry/:listid'} component={AddListEntry}>
+
+              </Route>
+              <Route path='/standardlistmanagement/:partyid' component={StandardListManagement}>
+              </Route>
+              <Route path='/addstandardlistentry/:partyid' component={AddStandardListEntry}>
+
+              </Route>
+              <Route path='/about'>
+                <About />
+              </Route>
+            </>
+          </Router>
         </div>
       </ThemeProvider>
     );
