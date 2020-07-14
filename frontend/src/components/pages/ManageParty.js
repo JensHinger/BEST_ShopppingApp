@@ -3,7 +3,8 @@ import { Typography, Button, Grid, Divider, TextField } from '@material-ui/core'
 import ShoppingAPI from '../../api/ShoppingAPI'
 import CreateGroupDialog from '../dialogs/CreateGroupDialog';
 import ExitGroupDialog from '../dialogs/ExitGroupDialog';
-import RemoveGroupMemberDialog from '../dialogs/RemoveGroupMemberDialog'
+import RemoveGroupMemberDialog from '../dialogs/RemoveGroupMemberDialog';
+import GroupAddIcon from '@material-ui/icons/GroupAdd'
 
 //Hier muss noch das update rein sobald User gelöscht wird muss neu gerendert werden.
 
@@ -16,6 +17,8 @@ class ManageGroup extends Component {
             users: [],
             invitations: [],
             userBO: null,
+            mail : "",
+            emailList: [],
             user: props.match.params.userid
         }
     }
@@ -37,6 +40,11 @@ class ManageGroup extends Component {
                 this.setState({ party: party });
                 this.getAllUsersInParty(party.getID())
             }.bind(this))
+    }
+
+    handleEmailChange = () => {
+        this.setState({emailList : [...this.state.emailList, this.state.mail],
+                       mail: ""})
     }
 
     getAllUsersInParty = (id) => {
@@ -105,6 +113,20 @@ class ManageGroup extends Component {
                     )
                     : null}
                 <Divider />
+
+                <TextField
+                  onChange = {(event) => this.setState({mail : event.target.value}) /*Textfield darf nicht leer sein muss geleert werden sobald email hinzugefügt wurde*/ }
+                  required
+                  margin="dense"
+                  id="userEmail"
+                  label="E-Mail"
+                  type="string"
+                  value = {this.state.mail}
+                  fullWidth/>
+                <Button onClick={() => this.state.mail == "" ? console.log("feld leer") : this.handleEmailChange()}>
+                  <GroupAddIcon/>
+                </Button>
+
                 <br margin-top='20px' />
 
                 <ExitGroupDialog invitation={this.state.invitations.filter(invitation => invitation.getTargetUserId() === this.state.userBO.getID())} />
