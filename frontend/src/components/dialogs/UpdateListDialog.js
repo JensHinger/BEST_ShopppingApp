@@ -10,9 +10,9 @@ import Theme from "../../Theme"
 import { ThemeProvider } from "@material-ui/core"
 import Button from '@material-ui/core/Button'
 import ListBO from '../../api/ListBO';
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
+import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
-class AddListDialog extends Component {
+class UpdateListDialog extends Component {
 
     constructor(props){
         super(props);
@@ -20,7 +20,9 @@ class AddListDialog extends Component {
         this.state = {
 
             open: false,
-            listName: "",
+            listBO: this.props.list,
+            newName: null,
+            list: "",
 
 
         }
@@ -32,53 +34,57 @@ class AddListDialog extends Component {
     }
 
     handleClickOpen = () => {
-        this.setState({ open: true })
+        this.setState({ open: true})
     };
 
     handleClose = () => {
         this.setState({ open: false });
     };
 
-    handleAddList(list) {
-        this.setState({ listName: list })
+    handleListNameChange = (event) => {
+        this.setState({newName: event.target.value})
     };
 
-    addList = () => {
-        const list = new ListBO
-        list.setName(this.state.listName)
-        list.setPartylId(this.props.partyId)
-        ShoppingAPI.getAPI().addList(list)
-            .then(setTimeout(() => { this.props.getListsByParty(this.props.partyId) }, 500))
-        this.handleClose()
+    updateList = () => {
+        var list = this.state.listBO
+        list.setName(this.state.newName)
+        ShoppingAPI.getAPI().updateList(list)
+        .then(this.handleClose(),this.props.replaceNewList(list))
+
     }
 
     render() {
+        const list = this.state.listBO
+
+
         return(
             <div>
                 <ThemeProvider theme={Theme}>
                     <IconButton onClick={() => this.handleClickOpen()}>
-                        <PlaylistAddIcon fontSize='large'  />
+                        <EditIcon />
                     </IconButton>
 
                     <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
 
-                        <DialogTitle id="form-dialog-title"> Liste hinzufügen</DialogTitle>
+                        <DialogTitle id="form-dialog-title"> Liste bearbeiten</DialogTitle>
                         <DialogContent>
-
+                        { list ?
                             <TextField
-                                onChange={(event) => this.handleAddList(event.target.value)}
+                                onChange={this.handleListNameChange}
+                                defaultValue= {list.getName()}
                                 margin="dense"
-                                id="listName"
-                                label="Geben Sie einen namen ein"
+                                id="outlined-read-only-input"
+                                label="Listenname"
                                 type="string"
                                 fullWidth
                             />
-
+                            :null}
+                            
                         </DialogContent>
 
                         <DialogActions>
-                            <Button onClick={() => this.addList()}>
-                                Liste hinzufügen
+                            <Button onClick={() => this.updateList()}>
+                                 Speichern
                     </Button>
                             <Button onClick={() => this.handleClose()}>
                                 Abbrechen
@@ -109,23 +115,7 @@ class AddListDialog extends Component {
 
 }
 
-export default AddListDialog;
-
-
-
-
-
- 
-    
-
-
-
-
-
-
-
-
-
+export default UpdateListDialog;
 
 
 
