@@ -90,7 +90,7 @@ class ManageGroup extends Component{
             <br margin-top = '20px'/>
                 Gruppennamen ändern
             <Divider/>
-            <TextField id ="outlined-basic" label = "Name ändern" variant = "outlined"/>
+            <TextField  id ="outlined-basic" placeholder = {currentParty ? currentParty.getName() : null} variant = "outlined"/>
 
             <br margin-top = '20px'/>
                 Gruppenmitglieder
@@ -105,16 +105,14 @@ class ManageGroup extends Component{
                 :null}
             <Divider/>
             <br margin-top = '20px'/>
-            <ExitGroupDialog/>
-
-            <br margin-top = '20px'/>
-                Gruppe verlassen
-                {user? 
-                    <RemoveGroupMemberDialog invitation = {this.state.invitations.filter(invitation => invitation.getTargetUserId() === userBO.getID())} handleInvitationDelete = {this.handleUserDelete} index = {index}/>
-                :null}
-            <Divider/>
-            <br margin-top = '20px'/>
-            <ExitGroupDialog/>
+                
+                <ExitGroupDialog/>
+                <br margin-top = '20px'/>
+                    {/*<RemoveGroupMemberDialog invitation = {this.state.invitations.filter(invitation => invitation.getTargetUserId() === this.state.user.getID())} /> */}
+                    
+                <Divider/>
+                <br margin-top = '20px'/>
+                
         </Typography>
         )
     }
