@@ -7,13 +7,13 @@ import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import { withStyles } from '@material-ui/core/styles';
 import Navbar from "./Navbar"
 import LogOutDialog from "../dialogs/LogOutDialog"
 import { Link as RouterLink } from 'react-router-dom';
 import ManageUser from "../pages/ManageUser"
 import Button from '@material-ui/core/Button';
+import InvitationNotification from '../subcomponents/InvitationNotifications'
 
 const styles = theme => ({
 
@@ -86,8 +86,6 @@ class Header extends Component{
       </Menu>
     );
 
-    //var user = this.state.currentUser
-
     return (
       <div>
         <AppBar position="static">
@@ -100,17 +98,14 @@ class Header extends Component{
             </Button>
 
             <div className={classes.divider}/>
-            <div>
-        
-              
-              {/*
+  
+              {
                 user ?
-              
-                <Typography>
-                  user: {user.getName()}
-                </Typography>
+                <div>
+                  <InvitationNotification user = {user}/>
+                </div>
                 : null
-              */}
+              }
               <IconButton
                 edge="end"
                 onClick={this.handleProfileMenuOpen}
@@ -118,7 +113,6 @@ class Header extends Component{
               >
                 <AccountCircle />
               </IconButton>
-            </div>
           </Toolbar>
         </AppBar>
         {renderMenu}
