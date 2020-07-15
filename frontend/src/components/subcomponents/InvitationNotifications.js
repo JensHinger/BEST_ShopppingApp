@@ -5,6 +5,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton'
 import { Menu, Grid, MenuItem } from '@material-ui/core';
+import Badge from '@material-ui/core/Badge';
 
 class InvitationNotifications extends Component{
 
@@ -90,7 +91,9 @@ class InvitationNotifications extends Component{
         return(
             <Grid>
                 <IconButton aria-controls="invitation-list" aria-haspopup="true" onClick = {(event) => this.handleOpen(event)}>
-                    <NotificationsIcon/>
+                    <Badge badgeContent={parties.length} color = "error">
+                        <NotificationsIcon/>
+                    </Badge>
                 </IconButton>
                 
                 <Menu
