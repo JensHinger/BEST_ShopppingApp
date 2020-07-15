@@ -20,6 +20,7 @@ class App extends Component {
       <ThemeProvider theme={Theme}>
         <div>
 
+
           <Router basename={process.env.PUBLIC_URL}>
             <Header />
             <>
@@ -52,6 +53,7 @@ class App extends Component {
               </Route>
             </>
           </Router>
+
         </div>
       </ThemeProvider>
     );

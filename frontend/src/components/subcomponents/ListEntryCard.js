@@ -159,11 +159,18 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
         mylistentry.setchecked(this.state.checked ? 1 : 0 )
         console.log("mein LENTRY:", mylistentry)
         ShoppingAPI.getAPI().updateListEntry(mylistentry)
-        //.then(ShoppingAPI.getAPI().getListEntryById(this.state.listentry.getID())
-              //.then((updated_list_entry) => console.log(updated_list_entry)
-
-              //)
-        //)
+        .then(ShoppingAPI.getAPI().getUserById(this.state.listentry.getUserId()) 
+                .then(UserBO =>
+                    this.setState({  
+                    user : UserBO})
+                    ),
+                
+            ShoppingAPI.getAPI().getRetailerById(this.state.listentry.getRetailerId()) 
+                .then(RetailerBO =>
+                    this.setState({  
+                    retailer : RetailerBO})
+                    )
+                )
     }
 
     matchRetailerNameToId = () => {
