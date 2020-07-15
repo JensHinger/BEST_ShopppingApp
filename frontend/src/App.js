@@ -43,6 +43,7 @@ class App extends Component {
                   
                 </Route>
                 <Route path='/standardlistmanagement/:partyid' component = {StandardListManagement}>
+                  
                 </Route>
                 <Route path='/addstandardlistentry/:partyid' component = {AddStandardListEntry}>
 
