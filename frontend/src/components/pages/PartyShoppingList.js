@@ -10,7 +10,8 @@ class PartyShoppingList extends Component{
     constructor(props){
         super(props)
         this.state = {
-            listentries : []
+            listentries : [],
+            list : props.list,
         }
     }
 
@@ -37,6 +38,9 @@ class PartyShoppingList extends Component{
             listentries: this.state.listentries.filter(listEntry => listEntry.getID() !== deletedListEntry.getID())
         })
     }
+
+   
+
 
 
     render(){

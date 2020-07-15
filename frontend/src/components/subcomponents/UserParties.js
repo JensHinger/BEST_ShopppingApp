@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Button, Typography} from '@material-ui/core'
+import {ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Button, Typography, List} from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ShoppingAPI from '../../api/ShoppingAPI'
 import ManageParty from "../pages/ManageUser"
@@ -13,6 +13,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ListIcon from '@material-ui/icons/List';
 import AddListDialog from '../dialogs/AddListDialog';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import UpdateListDialog from '../dialogs/UpdateListDialog';
 
 class UserParties extends Component{
 
@@ -56,6 +58,28 @@ class UserParties extends Component{
         }.bind(this))
        });
     }
+
+    deleteList = (listId) => {
+        //*console.log("versuche eine Liste zu löschen")
+        ShoppingAPI.getAPI().deleteList(listId)
+        .then(this.setState({
+            lists : this.state.lists.filter(list => list.getID() !== listId)}
+        ))
+
+    }
+
+    replaceNewList = (list)=> {
+
+        var Liste = this.state.lists
+
+        var TargetList = Liste.filter( singleList => singleList.getID()== list.getID() )
+        
+        Liste[Liste.indexOf(TargetList)] = list
+
+        this.setState({lists: Liste})
+
+
+    }
     
     
     
@@ -75,7 +99,7 @@ class UserParties extends Component{
                             
                             {party.getName()} 
                             <AddListDialog partyId = {party.getID()} getListsByParty = {this.getListsByParty} ></AddListDialog>
-                            <IconButton color="inherit" component={RouterLink} to={`/standardlistmanagement/${party.getID()}`}>
+                            <IconButton  component={RouterLink} to={`/standardlistmanagement/${party.getID()}`}>
                                 <FavoriteIcon/>
                                 <ListIcon/>
                             </IconButton>
@@ -86,8 +110,14 @@ class UserParties extends Component{
                             </div>
                         </ExpansionPanelSummary>
                             {lists.map((list) =>
-                                <ExpansionPanelDetails>
+                                
+                                <ExpansionPanelDetails key = {list.getID()}>
+                                    
                                         <Button  component={RouterLink} to={`/partyshoppinglist/${list.getID()}`} > {list.getName()} </Button>
+                                        <UpdateListDialog list = {list} replaceNewList = {this.replaceNewList}></UpdateListDialog>
+                                        <IconButton onClick={()=>this.deleteList(list.getID())}>
+                                        <DeleteForeverIcon/>
+                                        </IconButton>
                                 </ExpansionPanelDetails> 
                             )}    
                     </ExpansionPanel> 
