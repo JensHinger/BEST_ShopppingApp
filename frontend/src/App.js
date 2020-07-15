@@ -2,12 +2,13 @@ import React,{Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Overview from './components/pages/Overview';
 import About from './components/pages/About';
-import ManageGroup from "./components/pages/ManageParty";
+import ManageParty from "./components/pages/ManageParty";
 import ManageUser from "./components/pages/ManageUser"
 import MyArticle from './components/pages/MyArticle';
 import PartyShoppingList from "./components/pages/PartyShoppingList";
 import AddListEntry from "./components/subcomponents/AddListEntry";
 import StandardListManagement from "./components/pages/StandardListManagement";
+import AddStandardListEntry from "./components/subcomponents/AddStandardListEntry"
 import Header from "./components/layout/Header";
 import { ThemeProvider } from '@material-ui/core';
 import Theme from "./Theme"
@@ -29,20 +30,22 @@ class App extends Component {
                 <Route path='/myarticle'>
                     <MyArticle />
                 </Route>
-                <Route path='/managegroup'>
-                    <ManageGroup />
-                </Route>
-                <Route path={'/manageuser/:userid'} component={ManageUser}>
-                    
-                </Route>
-                <Route path={`/partyshoppinglist/:listid`} component={PartyShoppingList}>
-                    
-                </Route>
-                <Route path={'/AddListEntry/:listid'} component={AddListEntry}>
+                <Route path={'/manageparty/:partyid'} component={ManageParty}>
                   
                 </Route>
-                
-                <Route path='/standardlistmanagement/:listid' component= {StandardListManagement}>
+                <Route path={'/manageuser/:userid'} component = {ManageUser}>
+                    
+                </Route>
+                <Route path={`/partyshoppinglist/:listid`} component = {PartyShoppingList}>
+                    
+                </Route>
+                <Route path={'/AddListEntry/:listid'} component = {AddListEntry}>
+                  
+                </Route>
+                <Route path='/standardlistmanagement/:partyid' component = {StandardListManagement}>
+                </Route>
+                <Route path='/addstandardlistentry/:partyid' component = {AddStandardListEntry}>
+
                 </Route>
                 <Route path='/about'>
                     <About />

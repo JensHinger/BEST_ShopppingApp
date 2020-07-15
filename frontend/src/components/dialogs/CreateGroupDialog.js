@@ -47,6 +47,7 @@ class CreateGroupDialog extends Component{
 
     //Falls die MailListe leer ist können User nicht hinzugefügt werden der Originale User muss aber immer hinzugefügt werden
     //User ist nicht in der Database
+    // -> this.emailList[0] == "" ? dann...
     //2 Mal gleicher User einladen ist kacke ;-;
 
     mailList.map((mail) =>
@@ -71,12 +72,13 @@ class CreateGroupDialog extends Component{
     this.setState({emailList: []})
   };
 
-  handleNameChange(name){
+  handleNameChange = (name) => {
     this.setState({partyName: name})
   };
 
-  handleEmailChange(){
-    this.setState({emailList : [...this.state.emailList, this.state.mail]})
+  handleEmailChange = () => {
+    this.setState({emailList : [...this.state.emailList, this.state.mail],
+                   mail: ""})
   };
 
   handleEmailDelete(index){
@@ -118,12 +120,14 @@ class CreateGroupDialog extends Component{
                   
                 <TextField
                   onChange = {(event) => this.setState({mail : event.target.value}) /*Textfield darf nicht leer sein muss geleert werden sobald email hinzugefügt wurde*/ }
+                  required
                   margin="dense"
                   id="userEmail"
                   label="E-Mail"
                   type="string"
+                  value = {this.state.mail}
                   fullWidth/>
-                <Button onClick={() => this.handleEmailChange()}>
+                <Button onClick={() => this.state.mail == "" ? console.log("feld leer") : this.handleEmailChange()}>
                   <GroupAddIcon/>
                 </Button>
                 

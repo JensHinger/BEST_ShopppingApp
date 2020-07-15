@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Button, Typography} from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ShoppingAPI from '../../api/ShoppingAPI'
-import ManageGroup from "../pages/ManageUser"
+import ManageParty from "../pages/ManageUser"
 //import ManageGroup from "./components/pages/ManageParty";
 import { Link as RouterLink } from 'react-router-dom';
 import { BrowserRouter as Router, Route, Redirect, } from 'react-router-dom';
@@ -10,9 +10,9 @@ import InvitationBO from '../../api/InvitationBO'
 import PartyShoppingList from "../pages/PartyShoppingList"
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ListIcon from '@material-ui/icons/List';
+import AddListDialog from '../dialogs/AddListDialog';
 
 class UserParties extends Component{
 
@@ -31,11 +31,12 @@ class UserParties extends Component{
     }
 
 
-    getListsByParty(party_id){
+    getListsByParty = (party_id) =>{
         ShoppingAPI.getAPI().getListsByPartyId(party_id)
-        .then(list => 
-            this.setState({lists : list}),
+        .then( function (list)  { 
+            this.setState({lists : list});
             this.setState({expanded: this.state.expanded != party_id ? party_id : false})
+        }.bind(this)
         )           
    }
 
@@ -73,15 +74,13 @@ class UserParties extends Component{
                         >
                             
                             {party.getName()} 
-                            <IconButton >
-                                <PlaylistAddIcon/>
-                            </IconButton>
+                            <AddListDialog partyId = {party.getID()} getListsByParty = {this.getListsByParty} ></AddListDialog>
                             <IconButton color="inherit" component={RouterLink} to={`/standardlistmanagement/${party.getID()}`}>
                                 <FavoriteIcon/>
                                 <ListIcon/>
                             </IconButton>
                             <div style ={{alignSelf: "right"}}>
-                            <IconButton  component={RouterLink} to={`/managegroup/`} > 
+                            <IconButton component={RouterLink} to={`/manageparty/${party.getID()}`} > 
                                 <EditIcon/>
                             </IconButton>
                             </div>

@@ -1,13 +1,14 @@
 import BusinessObject from './BusinessObject'
 
-export default class StandardListEntryBO extends BusinessObject{
+export default class ListEntryBO extends BusinessObject{
 
     constructor() {
         super();
         this.item_id = 0
         this.retailer_id = 0
         this.user_id = 0
-        this.party_id = 0
+        this.list_id = 0
+        this.checked = 0
     }
 
     setItemId(item_id) {
@@ -34,26 +35,34 @@ export default class StandardListEntryBO extends BusinessObject{
         return this.user_id
     }
 
-    setPartyId(party_id){
-        this.party_id = party_id
+    setListId(list_id) {
+        this.list_id = list_id
     }
 
-    getPartyId(){
-        return this.party_id
+    getListId() {
+        return this.list_id
     }
 
-    static fromJSON(standardlistentries) {
+    setchecked(condition) {
+        this.checked = condition
+    }
+
+    getchecked(){
+        return this.checked
+    }
+
+    static fromJSON(listentries) {
         let result = [];
         
-        if (Array.isArray(standardlistentries)) {
-            standardlistentries.forEach((c) => {
-                Object.setPrototypeOf(c, StandardListEntryBO.prototype)
+        if (Array.isArray(listentries)) {
+            listentries.forEach((c) => {
+                Object.setPrototypeOf(c, ListEntryBO.prototype)
                 result.push(c)
             })
         } else {
             // Es handelt sich offenbar um ein singuläres Objekt
-            let c = standardlistentries;
-            Object.setPrototypeOf(c, StandardListEntryBO.prototype)
+            let c = listentries;
+            Object.setPrototypeOf(c, ListEntryBO.prototype)
             result.push(c)
         }
         return result;

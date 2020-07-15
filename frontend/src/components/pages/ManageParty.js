@@ -14,8 +14,17 @@ class ManageGroup extends Component{
         this.state = {
             party : null,
             users : [],
-            invitations : []
+            invitations : [],
+            userBO : null,
+            user: props.match.params.userid
         }
+    }
+
+    getUserById = () => {
+        ShoppingAPI.getAPI().getUserById(this.state.user).then(UserBO =>
+                this.setState({
+                    userBO: UserBO
+                }))
     }
 
     componentDidMount(){
@@ -77,17 +86,15 @@ class ManageGroup extends Component{
         const users = this.state.users
         return(
         <Typography variant='h6' component='h1' align='center'>
-            <br margin-top = '20px'/>
-                Gruppe verwalten
-            <Divider/>
-            <CreateGroupDialog/>
+            
             <br margin-top = '20px'/>
                 Gruppennamen ändern
             <Divider/>
-            <TextField id ="outlined-basic" label = "Name ändern" variant = "outlined"/>
+            <TextField  id ="outlined-basic" placeholder = {currentParty ? currentParty.getName() : null} variant = "outlined"/>
+
             <br margin-top = '20px'/>
                 Gruppenmitglieder
-                {users? 
+                 {users? 
                     users.map((user, index) =>
                     <Grid>
                         {user.getName()}
@@ -98,7 +105,14 @@ class ManageGroup extends Component{
                 :null}
             <Divider/>
             <br margin-top = '20px'/>
-            <ExitGroupDialog/>
+                
+                <ExitGroupDialog/>
+                <br margin-top = '20px'/>
+                    {/*<RemoveGroupMemberDialog invitation = {this.state.invitations.filter(invitation => invitation.getTargetUserId() === this.state.user.getID())} /> */}
+                    
+                <Divider/>
+                <br margin-top = '20px'/>
+                
         </Typography>
         )
     }
