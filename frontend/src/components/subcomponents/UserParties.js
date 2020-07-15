@@ -72,7 +72,7 @@ class UserParties extends Component{
 
         var Liste = this.state.lists
 
-        var TargetList = Liste.filter( singleList => singleList.getID()== list.getID() )
+        var TargetList = Liste.filter(singleList => singleList.getID()== list.getID() )
         
         Liste[Liste.indexOf(TargetList)] = list
 
