@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import React, { Component } from 'react';
+import Header from './components/layout/Header'
+import Report from './components/pages/Report';
+import { ThemeProvider } from '@material-ui/core';
+import Theme from "./Theme"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <ThemeProvider theme={Theme}>
+        <div>
+        <Router basename={process.env.PUBLIC_URL}>
+          <Header/>
+        <>
+        <Redirect from='/' to='/report' />
+              <Route exact path='/report'>
+                <Report />
+              </Route>
+        </>
+        </Router>
+        </div>
+      </ThemeProvider>
+    )
+  }
 }
+export default App
 
-export default App;
