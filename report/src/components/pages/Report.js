@@ -3,6 +3,11 @@ import {ThemeProvider} from "@material-ui/core";
 import Theme from "../../Theme";
 import {Button, TextField, Typography, Divider, Grid, ListItemIcon} from '@material-ui/core';
 
+
+/**
+ * @author Anny
+ */
+
 class Report extends Component {
     constructor (props){
         super(props);
@@ -10,6 +15,10 @@ class Report extends Component {
 
         }
     }
+
+/**
+ * Stellt die Reportseite dar mit den Meistgekauften Artikeln und den meistbesuchten Läden
+ */
 
 render (){
     return(
