@@ -13,29 +13,31 @@ class ManageGroup extends Component {
         super(props);
 
         this.state = {
+            partyId: props.match.params.partyid,
             party: null,
             users: [],
             invitations: [],
             userBO: null,
             mail : "",
             emailList: [],
-            user: props.match.params.userid
+            user: 1 //Hier muss noch der eingeloggte User übergeben werden!
         }
     }
 
-    getUserById = () => {
-        ShoppingAPI.getAPI().getUserById(this.state.user).then(UserBO =>
-            this.setState({
+    getCurrentUserById = () => {
+        ShoppingAPI.getAPI().getUserById(this.state.user)
+        .then(UserBO => this.setState({
                 userBO: UserBO
             }))
     }
 
     componentDidMount() {
         this.getParty()
+        this.getCurrentUserById()
     }
 
     getParty = () => {
-        ShoppingAPI.getAPI().getPartyById(2)
+        ShoppingAPI.getAPI().getPartyById(this.state.partyId)
             .then(function (party) {
                 this.setState({ party: party });
                 this.getAllUsersInParty(party.getID())
@@ -93,6 +95,9 @@ class ManageGroup extends Component {
         //console.log("users:", this.state.users)
         const currentParty = this.state.party
         const users = this.state.users
+        const userBO = this.state.userBO
+        const invitations = this.state.invitations
+
         return (
             <Typography variant='h6' component='h1' align='center'>
 
@@ -128,8 +133,9 @@ class ManageGroup extends Component {
                 </Button>
 
                 <br margin-top='20px' />
-
-                <ExitGroupDialog invitation={this.state.invitations.filter(invitation => invitation.getTargetUserId() === this.state.userBO.getID())} />
+                {userBO && invitations.length > 0?
+                    <ExitGroupDialog invitation={this.state.invitations.filter(invitation => invitation.getTargetUserId() === this.state.userBO.getID())} />
+                :null}
                 <br margin-top='20px' />
 
                 <Divider />
