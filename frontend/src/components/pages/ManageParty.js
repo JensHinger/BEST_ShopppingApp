@@ -4,10 +4,13 @@ import ShoppingAPI from '../../api/ShoppingAPI'
 import CreateGroupDialog from '../dialogs/CreateGroupDialog';
 import ExitGroupDialog from '../dialogs/ExitGroupDialog';
 import RemoveGroupMemberDialog from '../dialogs/RemoveGroupMemberDialog';
-import GroupAddIcon from '@material-ui/icons/GroupAdd'
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import SaveIcon from '@material-ui/icons/Save';
 
 //Hier muss noch das update rein sobald User gelöscht wird muss neu gerendert werden.
-
+/**
+ * @author Michael, René, Jens und Anny
+ */
 class ManageGroup extends Component {
     constructor(props) {
         super(props);
@@ -20,7 +23,8 @@ class ManageGroup extends Component {
             userBO: null,
             mail : "",
             emailList: [],
-            user: 1 //Hier muss noch der eingeloggte User übergeben werden!
+            user: 1, //Hier muss noch der eingeloggte User übergeben werden!
+            newName: "",
         }
     }
 
@@ -49,6 +53,17 @@ class ManageGroup extends Component {
                        mail: ""})
     }
 
+    handlePartyChange = () => {
+        var newParty = this.state.party
+        newParty.setName(this.state.newName)
+        ShoppingAPI.getAPI().updateParty(newParty)
+        .then (party => this.setState({party : party}))
+    }
+
+    renameParty = (event) =>{
+        this.setState({newName : event.target.value})
+    }
+    
     getAllUsersInParty = (id) => {
         ShoppingAPI.getAPI().getAcceptedInvitationsByPartyId(id)
             .then(function (invitations) {
@@ -86,7 +101,6 @@ class ManageGroup extends Component {
         console.log("users nach update:", this.state.users)
         console.log("invitations nach update", this.state.invitations)
 
-
     }
 
     render() {
@@ -102,12 +116,25 @@ class ManageGroup extends Component {
             <Typography variant='h6' component='h1' align='center'>
 
                 <br margin-top='20px' />
-                Gruppennamen ändern
+
+                Gruppennamen ändern 
                 <Divider />
-                <TextField id="outlined-basic" placeholder={currentParty ? currentParty.getName() : null} variant="outlined" />
-                <Button />
+
                 <br margin-top='20px' />
+               
+                <Grid>
+                <TextField onChange={event => this.renameParty(event)} id="outlined-basic" placeholder={currentParty ? currentParty.getName() : null} variant="outlined" />
+                <Button onClick={this.handlePartyChange}>
+                <SaveIcon variant ="contained" color = "primary" fontSize ="large"/> 
+                </Button>
+                </Grid>
+              
+                <br margin-top='20px' />
+
                 Gruppenmitglieder
+                <Divider/>
+                <br margin-top='20px' />
+                
                 {users ?
                     users.map((user, index) =>
                         <Grid>
@@ -117,6 +144,10 @@ class ManageGroup extends Component {
                         </Grid>
                     )
                     : null}
+
+                <br margin-top='20px' />
+
+                Neues Gruppenmitglied hinzufügen
                 <Divider />
 
                 <TextField
@@ -129,17 +160,16 @@ class ManageGroup extends Component {
                   value = {this.state.mail}
                   fullWidth/>
                 <Button onClick={() => this.state.mail == "" ? console.log("feld leer") : this.handleEmailChange()}>
-                  <GroupAddIcon/>
+                  <GroupAddIcon color = "primary" fontSize = "large"/>
                 </Button>
 
                 <br margin-top='20px' />
                 {userBO && invitations.length > 0?
-                    <ExitGroupDialog invitation={this.state.invitations.filter(invitation => invitation.getTargetUserId() === this.state.userBO.getID())} />
+                    <ExitGroupDialog invitation={this.state.invitations.filter(invitation => invitation.getTargetUserId() === this.state.userBO.getID())}/>
                 :null}
                 <br margin-top='20px' />
 
-                <Divider />
-                <br margin-top='20px' />
+               
 
             </Typography>
         )
