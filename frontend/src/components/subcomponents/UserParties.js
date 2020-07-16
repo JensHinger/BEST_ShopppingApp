@@ -42,9 +42,8 @@ class UserParties extends Component{
         )           
    }
 
-
     getPartiesByUser = () => {
-        ShoppingAPI.getAPI().getAcceptedInvitationsBySourceUserId(1)
+        ShoppingAPI.getAPI().getAcceptedInvitationsByTargetUserId(1)
         .then(invitations => this.getPartyByInvitations(invitations))
     }
     
