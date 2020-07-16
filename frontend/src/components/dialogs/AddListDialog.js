@@ -12,6 +12,11 @@ import Button from '@material-ui/core/Button'
 import ListBO from '../../api/ListBO';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import IconButton from '@material-ui/core/IconButton';
+
+/**
+ * @author  Dominic, Anny und Jens
+ */
+
 class AddListDialog extends Component {
 
     constructor(props){
@@ -22,23 +27,26 @@ class AddListDialog extends Component {
             open: false,
             listName: "",
 
-
         }
 
-
-
-
-
     }
-
+/**
+ * Auszuführende Anweisung beim Öffnen des Dialogs
+ * Prüft ob es geöffnet ist
+ */
     handleClickOpen = () => {
         this.setState({ open: true })
     };
-
+/**
+ * Auszuführende Anweisung beim Schließen des Dialogs
+ * Prüft ob es geschlossen ist 
+ */
     handleClose = () => {
         this.setState({ open: false });
     };
-
+/**
+ * 
+ */
     handleAddList(list) {
         this.setState({ listName: list })
     };
@@ -87,23 +95,8 @@ class AddListDialog extends Component {
                     </Dialog>
                 </ThemeProvider>
 
-
-
-
-
-
-
-
-
             </div>
         );
-
-
-
-
-
-
-
 
     }
 

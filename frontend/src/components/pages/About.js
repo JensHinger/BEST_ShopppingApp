@@ -16,7 +16,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 /**
- * Zeigt die About Page mit den Verantwortlichen
+ * @author Anny 
+ * Zeigt die About Page mit den Verantwortlichen, die Autoren und ihre Bereiche an; inklusive Verlinkung in die GitHub repositories
  */
 function About() {
 
