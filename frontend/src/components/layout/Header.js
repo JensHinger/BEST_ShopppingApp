@@ -9,7 +9,6 @@ import Menu from '@material-ui/core/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { withStyles } from '@material-ui/core/styles';
-import Navbar from "./Navbar"
 import LogOutDialog from "../dialogs/LogOutDialog"
 import { Link as RouterLink } from 'react-router-dom';
 import ManageUser from "../pages/ManageUser"
@@ -92,7 +91,6 @@ class Header extends Component{
       <div>
         <AppBar position="static">
           <Toolbar>
-            <Navbar />
             <Button component={RouterLink} to = {'/overview'}>
               <Typography  className={classes.title} variant="h6" >
                 BE!ST
