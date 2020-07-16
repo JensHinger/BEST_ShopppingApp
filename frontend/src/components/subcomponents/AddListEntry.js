@@ -288,7 +288,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                     </Grid>
                     </div>
                     <div>
-                    <Grid container justify="center">
+                    {/**<Grid container justify="center"> 
                     <Grid xs>
                         <br margin-top ='20px'/>
                         <Checkbox 
@@ -296,7 +296,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                         />
                         Standardartikel
                     </Grid>
-                    </Grid>
+                    </Grid>*/}
                     </div>
                     <div>
                     <br margin-top = '20px'/>
@@ -309,10 +309,10 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                         <Button onClick ={this.createNewItem} variant = "contained" color = "primary"> Eintrag hinzufügen </Button>
                        
                         <br margin-top = '20px'/>
-                        <Button component = {RouterLink} to = {``} variant = "contained" color = "secondary"> zurück zu meinen Einträgen </Button>
+                        <Button component = {RouterLink} to = {`/partyshoppinglist/${this.state.listid}`} variant = "contained" color = "secondary"> zurück zu meinen Einträgen </Button>
                        
                         <br margin-top = '20px'/>
-                        <Button  component = {RouterLink} to = {``} variant = "contained" color = "secondary"> abbrechen </Button>
+                        <Button  component = {RouterLink} to = {`/partyshoppinglist/${this.state.listid}`} variant = "contained" color = "secondary"> abbrechen </Button>
                         
 
                         
