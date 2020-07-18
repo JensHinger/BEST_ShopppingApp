@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import ShoppingAPI from '../../api/ShoppingAPI'
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import CheckIcon from '@material-ui/icons/Check';
-import DeleteIcon from '@material-ui/icons/Delete';
+import ClearIcon from '@material-ui/icons/Clear';
 import IconButton from '@material-ui/core/IconButton'
 import { Menu, Grid, MenuItem } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 class InvitationNotifications extends Component{
 
@@ -48,9 +49,9 @@ class InvitationNotifications extends Component{
         updatedParties.splice(index, 1)
 
         ShoppingAPI.getAPI().updateInvitation(invite)
-        .then(() => this.setState({invitations : updatedInvitations,
-                                   parties : updatedParties
-        }))
+        .then(() => {return (this.setState({invitations : updatedInvitations,
+                                   parties : updatedParties}
+        ))})
         //updatedInvitations.splice(index, 1), this.setState({invitations : updatedInvitations})
     }
 
@@ -86,8 +87,8 @@ class InvitationNotifications extends Component{
         const parties = this.state.parties
         const invitations = this.state.invitations
         const isMenuOpen = Boolean(this.state.AnchorEl)
-        console.log("parties:", parties)
-        console.log("invitations:", invitations)
+        //console.log("parties:", parties)
+        //console.log("invitations:", invitations)
         return(
             <Grid>
                 <IconButton aria-controls="invitation-list" aria-haspopup="true" onClick = {(event) => this.handleOpen(event)}>
@@ -113,7 +114,7 @@ class InvitationNotifications extends Component{
                                         <CheckIcon/>
                                     </IconButton>
                                     <IconButton onClick = {() => this.handleDecline(invite, index)}>
-                                        <DeleteIcon/>
+                                        <ClearIcon/>
                                     </IconButton>
                                 </Grid>
                             

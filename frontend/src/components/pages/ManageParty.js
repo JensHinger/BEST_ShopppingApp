@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { Typography, Button, Grid, Divider, TextField } from '@material-ui/core';
 import ShoppingAPI from '../../api/ShoppingAPI'
-import CreateGroupDialog from '../dialogs/CreateGroupDialog';
 import ExitGroupDialog from '../dialogs/ExitGroupDialog';
 import RemoveGroupMemberDialog from '../dialogs/RemoveGroupMemberDialog';
-import GroupAddIcon from '@material-ui/icons/GroupAdd'
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import SaveIcon from '@material-ui/icons/Save';
+import InvitationBO from '../../api/InvitationBO';
 
 //Hier muss noch das update rein sobald User gelöscht wird muss neu gerendert werden.
-
+/**
+ * @author Michael, René, Jens und Anny
+ */
 class ManageGroup extends Component {
     constructor(props) {
         super(props);
@@ -19,8 +22,8 @@ class ManageGroup extends Component {
             invitations: [],
             userBO: null,
             mail : "",
-            emailList: [],
-            user: 1 //Hier muss noch der eingeloggte User übergeben werden!
+            user: 1, //Hier muss noch der eingeloggte User übergeben werden!
+            newName: "",
         }
     }
 
@@ -44,11 +47,16 @@ class ManageGroup extends Component {
             }.bind(this))
     }
 
-    handleEmailChange = () => {
-        this.setState({emailList : [...this.state.emailList, this.state.mail],
-                       mail: ""})
+    handlePartyChange = () => {
+        var newParty = this.state.party
+        newParty.setName(this.state.newName)
+        ShoppingAPI.getAPI().updateParty(newParty)
     }
 
+    renameParty = (event) =>{
+        this.setState({newName : event.target.value})
+    }
+    
     getAllUsersInParty = (id) => {
         ShoppingAPI.getAPI().getAcceptedInvitationsByPartyId(id)
             .then(function (invitations) {
@@ -63,30 +71,29 @@ class ManageGroup extends Component {
             }.bind(this))
     }
 
-    handleUserDelete = (index) => {
-        //let array = this.state.users
-        //let inv_array = this.state.invitations
-        //array.splice(index, 1)
-        //console.log("ausgewählter User:", this.state.users[index].getID())
-        //let inv_del = this.state.invitations.filter((invitation) => invitation.getTargetUserId() === this.state.users[index].getID())
-        //console.log("zu löschender invite:", inv_del[0])
-        //let inv_pos = this.state.invitations.findIndex(inv_del)
-        //inv_array.splice(inv_pos - 1 ,1)
-        //console.log("index der invitation:", inv_pos)
-        //this.setState({users : array})
-        //console.log("neue invites:", inv_array)
-        //this.setState({invitations: inv_array})
-        //console.log("invitations nach dem löschen:", this.state.invitations)
-        //console.log("zu löschender User", this.state.users[index])
-        //console.log("users nach gelöschtem User:", this.state.users)
-
+    handleUserDelete = () => {
+ 
         this.setState({ users: [] })
         this.setState({ invitations: [] })
-        this.getAllUsersInParty(2)
+        this.getAllUsersInParty(this.state.partyId)
         console.log("users nach update:", this.state.users)
         console.log("invitations nach update", this.state.invitations)
 
+        // Hier noch ein router auf die Overview page
 
+    }
+
+    addMemberToGroup = () => {
+
+        ShoppingAPI.getAPI().getUserByEmail(this.state.mail)
+        .then(function(user) {
+            const new_invitation = new InvitationBO
+            new_invitation.setTargetUserId(user.getID())
+            new_invitation.setSourceUserId(this.state.user)
+            new_invitation.setPartyiId(this.state.partyId)
+
+            ShoppingAPI.getAPI().addInvitation(new_invitation).then(this.setState({mail : ""}))
+        }.bind(this))
     }
 
     render() {
@@ -102,12 +109,25 @@ class ManageGroup extends Component {
             <Typography variant='h6' component='h1' align='center'>
 
                 <br margin-top='20px' />
-                Gruppennamen ändern
+
+                Gruppennamen ändern 
                 <Divider />
-                <TextField id="outlined-basic" placeholder={currentParty ? currentParty.getName() : null} variant="outlined" />
-                <Button />
+
                 <br margin-top='20px' />
+               
+                <Grid>
+                    <TextField onChange={event => this.renameParty(event)} id="outlined-basic" placeholder={currentParty ? currentParty.getName() : null} variant="outlined" />
+                    <Button onClick={this.handlePartyChange}>
+                        <SaveIcon variant ="contained" color = "primary" fontSize ="large"/> 
+                    </Button>
+                </Grid>
+              
+                <br margin-top='20px' />
+
                 Gruppenmitglieder
+                <Divider/>
+                <br margin-top='20px' />
+                
                 {users ?
                     users.map((user, index) =>
                         <Grid>
@@ -116,30 +136,33 @@ class ManageGroup extends Component {
                             <RemoveGroupMemberDialog invitation={this.state.invitations.filter(invitation => invitation.getTargetUserId() === user.getID())} handleInvitationDelete={this.handleUserDelete} index={index} />
                         </Grid>
                     )
-                    : null}
+                : null}
+
+                <br margin-top='20px' />
+
+                Neues Gruppenmitglied hinzufügen
                 <Divider />
 
                 <TextField
-                  onChange = {(event) => this.setState({mail : event.target.value}) /*Textfield darf nicht leer sein muss geleert werden sobald email hinzugefügt wurde*/ }
+                  onChange = {(event) => this.setState({mail : event.target.value})}
                   required
                   margin="dense"
                   id="userEmail"
                   label="E-Mail"
                   type="string"
-                  value = {this.state.mail}
-                  fullWidth/>
-                <Button onClick={() => this.state.mail == "" ? console.log("feld leer") : this.handleEmailChange()}>
-                  <GroupAddIcon/>
+                  value = {this.state.mail}/>
+                <br margin-top='20px' />
+                <Button onClick={this.addMemberToGroup}>
+                  <GroupAddIcon color = "primary" fontSize = "large"/>
                 </Button>
 
                 <br margin-top='20px' />
-                {userBO && invitations.length > 0?
-                    <ExitGroupDialog invitation={this.state.invitations.filter(invitation => invitation.getTargetUserId() === this.state.userBO.getID())} />
-                :null}
+                    {userBO && invitations.length > 0?
+                        <ExitGroupDialog invitation={this.state.invitations.filter(invitation => invitation.getTargetUserId() === this.state.userBO.getID())}/>
+                    :null}
                 <br margin-top='20px' />
 
-                <Divider />
-                <br margin-top='20px' />
+               
 
             </Typography>
         )
