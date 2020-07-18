@@ -9,33 +9,37 @@ import { Link as RouterLink } from 'react-router-dom'
 import AddRetailerDialog from '../dialogs/AddRetailerDialog';
 
 
-class ArticleAmountUnit extends Component {
+ class AddListEntry extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
 
-            open: false,
-            article: "",
-            amount: 0,
-            unit: 0,
-            listid: this.props.match.params.listid,
-            retailer: [],
-            users: [],
-            pickedUser: null,
-            pickedRetailer: null,
-            item: null,
-            userAutoCompleteKey: 0,
-            retailerAutoCompleteKey: 1,
-            unitTextFieldKey: 2,
+        open: false, 
+        article: "",
+        amount: 0,
+        unit: 0,
+        listid: this.props.match.params.listid,
+        retailer: [],
+        items: [],
+        users: [],
+        pickedUser: null,
+        pickedRetailer: null,
+        pickedItem: null,
+        retailerAutoCompleteKey: 0,
+        userAutoCompleteKey: 1,
+        unitTextFieldKey: 2,
+        itemAutoCompleteKey: 3,
 
         }
+        
 
 
 
-    }
-    componentDidMount() {
+  }
+    componentDidMount(){
+        this.getAllItems()
         this.getAllRetailer()
         this.getListEntryPossibleUsersInvitations()
     }
@@ -44,6 +48,11 @@ class ArticleAmountUnit extends Component {
     getAllRetailer() {
         ShoppingAPI.getAPI().getAllRetailer()
             .then(retailer => this.setState({ retailer: retailer }))
+    }
+
+    getAllItems = () => {
+        ShoppingAPI.getAPI().getAllItems()
+        .then(items => this.setState({items: items}))
     }
 
     getListEntryPossibleUsersInvitations = () => {
@@ -62,20 +71,14 @@ class ArticleAmountUnit extends Component {
     }
 
 
-    createNewItem = () => {
-        var Item = new ItemBO()
-        Item.setName(this.state.article)
-        Item.setAmount(this.state.amount)
-        Item.setUnit(this.state.unit)
-        ShoppingAPI.getAPI().addItem(Item)
-            .then(function (item) { this.setState({ item: item }); this.createNewListEntry() }.bind(this))
-    }
-
-    createNewListEntry = () => {
-        var ListEntry = new ListEntryBO()
+    
+    createNewListEntry=()=>{
+        var ListEntry = new ListEntryBO
         //console.log(this.state.item)
-        ListEntry.setItemId(this.state.item.getID())
+        ListEntry.setItemId(this.state.items[this.getListEntryPossibleItemNames().indexOf(this.state.pickedItem)].getID())
         ListEntry.setListId(this.state.listid)
+        ListEntry.setAmount(this.state.amount)
+        ListEntry.setUnit(this.state.unit)
         ListEntry.setRetailerId(this.state.retailer[this.getListEntryPossibleRetailerNames().indexOf(this.state.pickedRetailer)].getID())
         ListEntry.setUserId(this.state.users[this.getListEntryPossibleUserNames().indexOf(this.state.pickedUser)].getID())
         ListEntry.setName("Wir sind die besten!")
@@ -102,6 +105,7 @@ class ArticleAmountUnit extends Component {
             retailerAutoCompleteKey: this.state.retailerAutoCompleteKey + 1,
             userAutoCompleteKey: this.state.userAutoCompleteKey + 1,
             unitTextFieldKey: this.state.unitTextFieldKey + 1,
+            itemAutoCompleteKey: this.state.itemAutoCompleteKey + 1,
         })
     }
 
@@ -116,6 +120,13 @@ class ArticleAmountUnit extends Component {
         )
         console.log("namen aller Retailer:", ret_names)
         return (ret_names)
+    }
+
+    getListEntryPossibleItemNames = () => {
+        var item_names = this.state.items.map((item) => item.getName()
+        )
+        console.log("namen aller Items:", item_names)
+        return (item_names)
     }
 
 
@@ -185,6 +196,7 @@ class ArticleAmountUnit extends Component {
         ];
 
         const retailer = this.state.retailer
+        const item = this.state.items
         const user = this.state.users
         //console.log(retailer)
         //console.log(user)
@@ -246,12 +258,17 @@ class ArticleAmountUnit extends Component {
                     <div>
                         <Grid container justify="center" spacing={2}>
                             <Grid xs>
-                                <br margin-top='20px' />
-                                <TextField
-                                    label="Artikel"
-                                    helperText="Geben Sie einen Artikel ein"
-                                    value={this.state.article}
-                                    onChange={(event) => this.handleArticleChange(event.target.value)} />
+                                <br margin-top='20px' margin-left='20px'/>
+                                {item ?
+                                <Autocomplete
+                                    key={this.state.itemAutoCompleteKey}
+                                    id="combo-box-demo"
+                                    onInputChange={(event, value) => this.setState({ pickedItem: value })}
+                                    options={item}
+                                    getOptionLabel={(option) => option.getName()}
+                                    style={{ width: 300 }}
+                                    renderInput={(params) => <TextField {...params} label="Artikel" />} />
+                                : null}
                             </Grid>
 
                             <Grid xs>
@@ -259,8 +276,10 @@ class ArticleAmountUnit extends Component {
                                 <TextField
                                     label="Menge"
                                     helperText="Geben Sie eine Menge an"
-                                    value={this.state.amount}
-                                    onChange={(event) => this.handleAmountChange(event.target.value)} />
+                                    value = {this.state.amount}
+                                    onChange={(event)=> this.handleAmountChange(event. target. value)}/>
+
+                                
                             </Grid>
 
 
@@ -305,7 +324,7 @@ class ArticleAmountUnit extends Component {
 
 
                             <br margin-top='20px' />
-                            <Button onClick={this.createNewItem} variant="contained" color="primary"> Eintrag hinzufügen </Button>
+                            <Button onClick={this.createNewListEntry} variant="contained" color="primary"> Eintrag hinzufügen </Button>
 
                             <br margin-top='20px' />
                             <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> zurück zu meinen Einträgen </Button>
@@ -328,5 +347,5 @@ class ArticleAmountUnit extends Component {
     }
 }
 
-export default ArticleAmountUnit
+export default AddListEntry
 
