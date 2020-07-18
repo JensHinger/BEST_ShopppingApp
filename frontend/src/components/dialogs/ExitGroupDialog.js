@@ -12,8 +12,6 @@ class ExitGroupDialog extends Component {
       open: false,
       invitation : this.props.invitation
     }
-
-
   }
 
   handleClickOpen = () => {
@@ -25,7 +23,7 @@ class ExitGroupDialog extends Component {
   }
 
   handleInvitationDelete = () => {
-    ShoppingAPI.getAPI().deleteInvitation(this.invitation.getID())
+    ShoppingAPI.getAPI().deleteInvitation(this.state.invitation[0].getID())
       .then(this.handleClose())
   }
   render() {

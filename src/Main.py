@@ -40,8 +40,6 @@ invitation = api.inherit('Invitation', bo, {
 })
 
 item = api.inherit('Item', bo, {
-    'unit': fields.Integer(attribute='_unit', description='Die Einheit eines gewählten Produktes'),
-    'amount': fields.Integer(attribute='_amount', description='Die Menge eines gewählten Produktes'),
 })
 
 list = api.inherit('List', bo, {
@@ -53,6 +51,8 @@ list_entry = api.inherit('ListEntry', bo, {
     'retailer_id': fields.Integer(attribute='_retailer_id', description='Die Einheit eines gewählten Produktes'),
     'user_id': fields.Integer(attribute='_user_id', description='Die Einheit eines gewählten Produktes'),
     'list_id': fields.Integer(attribute='_list_id', description='Die Einheit eines gewählten Produktes'),
+    'amount': fields.Integer(attribute='_amount', description='Die Menge eines gewählten Produktes'),
+    'unit': fields.Integer(attribute='_unit', description='Die Einheit eines gewählten Produktes'),
     'checked': fields.Integer(attribute='_checked', description='Sagt aus ob der Eintrag abgehakt wurde'),
 })
 
@@ -64,6 +64,8 @@ standard_list_entry = api.inherit('StandardListEntry', bo, {
     'retailer_id': fields.Integer(attribute='_retailer_id', description='Die Einheit eines gewählten Produktes'),
     'user_id': fields.Integer(attribute='_user_id', description='Die Einheit eines gewählten Produktes'),
     'party_id': fields.Integer(attribute='_party_id', description='Die Einheit eines gewählten Produktes'),
+    'amount': fields.Integer(attribute='_amount', description='Die Menge eines gewählten Produktes'),
+    'unit': fields.Integer(attribute='_unit', description='Die Einheit eines gewählten Produktes'),
 })
 
 user = api.inherit('User', bo, {
@@ -218,7 +220,7 @@ class ItemListOperations(Resource):
 
         if proposal is not None:
             print(proposal.get_name())
-            result = adm.create_item(proposal.get_name(), proposal.get_amount(), proposal.get_unit())
+            result = adm.create_item(proposal.get_name())
             return result, 200
         else:
             return "", 500
@@ -236,6 +238,7 @@ class ItemOperations(Resource):
         adm = ShoppingAdministration()
         item = adm.get_item_by_id(id)
         return item
+
 
     @shopping.expect(Item)
     @secured
@@ -377,7 +380,8 @@ class ListEntryListOperations(Resource):
         print("proposal", proposal)
         if proposal is not None:
             lentry = adm.create_listentry(proposal.get_name(), proposal.get_item_id(), proposal.get_retailer_id(),
-                                          proposal.get_user_id(), proposal.get_list_id(), proposal.get_checked())
+                                          proposal.get_user_id(), proposal.get_list_id(), proposal.get_amount(),
+                                          proposal.get_unit(), proposal.get_checked())
             return lentry, 200
         else:
             return "", 500
@@ -595,7 +599,7 @@ class StandardListEntryListOperations(Resource):
         if proposal is not None:
             slentry = adm.create_standard_list_entry(proposal.get_name(), proposal.get_item_id(),
                                                      proposal.get_retailer_id(), proposal.get_user_id(),
-                                                     proposal.get_party_id())
+                                                     proposal.get_party_id(), proposal.get_amount(), proposal.get_unit())
             return slentry, 200
         else:
             return "", 500
@@ -612,14 +616,8 @@ class StandardListEntryOperations(Resource):
         entry = adm.get_standard_list_entry_by_id(id)
         return entry
 
-    @shopping.marshal_with(standard_list_entry)
-    @secured
-    def get(self, id):
-        """Auslesen des spezifizierten Users"""
-        adm = ShoppingAdministration()
-        u = adm.get_standard_list_entry_by_id(id)
-        return u
 
+    @shopping.expect(standard_list_entry)
     @shopping.marshal_with(standard_list_entry)
     @secured
     def put(self, id):

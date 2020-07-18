@@ -29,7 +29,7 @@ class CreateGroupDialog extends Component{
   }
 
   handleGroupCreation = () => {
-    const new_party = new PartyBO
+    const new_party = new PartyBO()
     new_party.setName(this.state.partyName)
     ShoppingAPI.getAPI().addParty(new_party)
     .then(party => this.handleInvitationCreation(party.getID()))  
@@ -37,7 +37,7 @@ class CreateGroupDialog extends Component{
 
   handleInvitationCreation = (partyId) => {
     const mailList = this.state.emailList
-    const new_invitation = new InvitationBO
+    const new_invitation = new InvitationBO()
     
     new_invitation.setSourceUserId(this.state.currentUser)
     new_invitation.setTargetUserId(this.state.currentUser)
@@ -127,7 +127,7 @@ class CreateGroupDialog extends Component{
                   type="string"
                   value = {this.state.mail}
                   fullWidth/>
-                <Button onClick={() => this.state.mail == "" ? console.log("feld leer") : this.handleEmailChange()}>
+                <Button onClick={() => this.state.mail === "" ? console.log("feld leer") : this.handleEmailChange()}>
                   <GroupAddIcon/>
                 </Button>
                 

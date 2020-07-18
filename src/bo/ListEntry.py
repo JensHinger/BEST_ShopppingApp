@@ -10,6 +10,8 @@ class ListEntry(BusinessObject):
         self._user_id = 0
         self._list_id = 0
         self._checked = 0
+        self._amount = 0
+        self._unit = 0
 
     def get_item_id(self):
         """Auslesen des Produkts in dem Listeneintrag"""
@@ -43,6 +45,22 @@ class ListEntry(BusinessObject):
         """Setzen der Übergeordneten Liste des Listenelements"""
         self._list_id = list_id
 
+    def get_amount(self):
+        """Auslesen der gewünschten Kaufmenge"""
+        return self._amount
+
+    def set_amount(self, amount):
+        """Setzen der gewünschten Kaufmenge"""
+        self._amount = amount
+
+    def get_unit(self):
+        """Auslesen der Einheit des gewünschten Artikels"""
+        return self._unit
+
+    def set_unit(self, unit):
+        """Setzen der Einheit des gewünschten Artikels"""
+        self._unit = unit
+
     def get_checked(self):
         return self._checked
 
@@ -59,6 +77,8 @@ class ListEntry(BusinessObject):
         obj.set_list_id(dictionary["list_id"])
         obj.set_retailer_id(dictionary["retailer_id"])
         obj.set_user_id(dictionary["user_id"])
+        obj.set_amount(dictionary["amount"])
+        obj.set_unit(dictionary["unit"])
         obj.set_checked(dictionary["checked"])
         return obj
 
@@ -66,4 +86,4 @@ class ListEntry(BusinessObject):
         """Erzeugen eines Strings welcher das Objekt beschreibt"""
         return "Listentry id: {}, name: {}, item_id: {}, retailer_id:{}, user_id: {}, list_id: {}, checked: {} "\
             .format(self.get_id(),self.get_name(), self.get_item_id(),
-                    self.get_retailer_id(), self.get_user_id(), self.get_list_id(), self.get_checked())
+                    self.get_retailer_id(), self.get_user_id(), self.get_list_id(), self.get_amount(), self.get_unit(), self.get_checked())

@@ -107,7 +107,7 @@ class ShoppingAdministration(object):
         with ListEntryMapper() as mapper:
             return mapper.find_by_id(id)
 
-    def create_listentry(self, name, item_id, retailer_id, user_id, list_id, condition):
+    def create_listentry(self, name, item_id, retailer_id, user_id, list_id, amount, unit, condition):
         """Einen Listeneintrag erstellen."""
         listentry = ListEntry()
         listentry.set_name(name)
@@ -115,6 +115,8 @@ class ShoppingAdministration(object):
         listentry.set_retailer_id(retailer_id)
         listentry.set_user_id(user_id)
         listentry.set_list_id(list_id)
+        listentry.set_amount(amount)
+        listentry.set_unit(unit)
         listentry.set_checked(condition)
 
         with ListEntryMapper() as mapper:
@@ -173,12 +175,11 @@ class ShoppingAdministration(object):
         with ItemMapper() as mapper:
             return mapper.find_by_id(id)
 
-    def create_item(self, name, amount, unit):
+    def create_item(self, name):
         """Ein Item anlegen."""
         item = Item()
         item.set_name(name)
-        item.set_amount(amount)
-        item.set_unit(unit)
+
 
         with ItemMapper() as mapper:
            return mapper.insert(item)
@@ -361,7 +362,7 @@ class ShoppingAdministration(object):
         with StandardListEntryMapper() as mapper:
             return mapper.find_user_by_id(user_id)
 
-    def create_standard_list_entry(self, name, item_id, retailer_id, user_id, party_id):
+    def create_standard_list_entry(self, name, item_id, retailer_id, user_id, party_id, amount, unit):
         """Ein Standartlisteneintrag erstellen."""
         standardlistentry = StandardListEntry()
         standardlistentry.set_name(name)
@@ -369,6 +370,8 @@ class ShoppingAdministration(object):
         standardlistentry.set_retailer_id(retailer_id)
         standardlistentry.set_user_id(user_id)
         standardlistentry.set_party_id(party_id)
+        standardlistentry.set_amount(amount)
+        standardlistentry.set_unit(unit)
 
         with StandardListEntryMapper() as mapper:
             mapper.insert(standardlistentry)

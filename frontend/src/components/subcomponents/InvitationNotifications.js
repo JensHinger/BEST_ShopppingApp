@@ -6,7 +6,6 @@ import ClearIcon from '@material-ui/icons/Clear';
 import IconButton from '@material-ui/core/IconButton'
 import { Menu, Grid, MenuItem } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 class InvitationNotifications extends Component{
 
@@ -104,8 +103,8 @@ class InvitationNotifications extends Component{
                 open={isMenuOpen}
                 onClose={() => this.handleClose()}>
 
-                    {invitations && parties.length == invitations.length ?
-                        parties.length == 0 ? "Du hast keine Einladungen" :
+                    {invitations && parties.length === invitations.length ?
+                        parties.length === 0 ? "Du hast keine Einladungen" :
                         invitations.map((invite, index) =>
                         <MenuItem key={invite.getID()}>
                             {this.getPartyName(invite)}

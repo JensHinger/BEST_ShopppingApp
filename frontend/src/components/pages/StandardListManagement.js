@@ -1,5 +1,4 @@
 import React,{Component} from 'react';
-import StandardListEntryBO from '../../api/StandardListEntryBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import StandardListEntryCard from'../subcomponents/StandardListEntryCard';
 import {Link as RouterLink} from 'react-router-dom'
@@ -24,7 +23,7 @@ class StandardListManagement extends Component {
     
     updateStandardListEntryHandler = (updatedStandardListEntry) => {
         console.log("entry zum updaten:", updatedStandardListEntry)
-        var myindex = this.state.stListEntries.findIndex(element => element == updatedStandardListEntry)
+        var myindex = this.state.stListEntries.findIndex(element => element === updatedStandardListEntry)
         console.log("position des Elements: ", myindex)
         var stCopy = this.state.stListEntries
         console.log("die Copy vom State: ", this.state.stListEntries)

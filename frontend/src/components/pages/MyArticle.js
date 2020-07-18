@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ShoppingAPI from '../../api/ShoppingAPI';
-import ItemBO from '../../api/ItemBO';
 
 class ItemList extends Component {
 

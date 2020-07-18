@@ -1,5 +1,0 @@
-[{"id":1, "name":"Russia", "creation_date":"2020-02-22 08:01:00", "item_id":14, "retailer_id":3, "user_id":10, "list_id":5},
- {"id":2, "name":"Mozambique", "creation_date":"2020-02-13 13:44:07", "item_id":22, "retailer_id":1, "user_id":10, "list_id":5},
- {"id":3, "name":"Palestinian Territory", "creation_date":"2020-02-27 16:59:14", "item_id":5, "retailer_id":3, "user_id":10, "list_id":1},
- {"id":4, "name":"South Africa", "creation_date":"2019-09-15 18:56:10", "item_id":58, "retailer_id":7, "user_id":10, "list_id":5},
- {"id":5, "name":"France", "creation_date":"2019-10-10 15:17:51", "item_id":68, "retailer_id":2, "user_id":10, "list_id":5}]

@@ -8,6 +8,8 @@ export default class StandardListEntryBO extends BusinessObject{
         this.retailer_id = 0
         this.user_id = 0
         this.party_id = 0
+        this.amount = 0
+        this.unit = 0
     }
 
     setItemId(item_id) {
@@ -40,6 +42,22 @@ export default class StandardListEntryBO extends BusinessObject{
 
     getPartyId(){
         return this.party_id
+    }
+
+    setAmount(amount){
+        this.amount = amount
+    }
+
+    getAmount(){
+        return this.amount
+    }
+
+    setUnit(unit){
+        this.unit = unit
+    }
+
+    getUnit(){
+        return this.unit
     }
 
     static fromJSON(standardlistentries) {

@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ShoppingAPI from '../../api/ShoppingAPI'
 import IconButton from '@material-ui/core/IconButton';
@@ -11,7 +9,6 @@ import Collapse from '@material-ui/core/Collapse';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Checkbox from '@material-ui/core/Checkbox';
-import ListEntryBO from '../../api/ListEntryBO'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
@@ -172,14 +169,6 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
                     )
                 )
     }
-
-    matchRetailerNameToId = () => {
-        const my_retailer_name = this.state.sel_retailer
-        const ret_name_arr = this.getListEntryPossibleRetailerNames()
-        const target_index = ret_name_arr.indexOf(this.state.sel_retailer)
-        //console.log(this.state.all_retailers[target_index].getName())
-    }
-    
 
     deleteLEntry = () => {
         console.log("versuche einen Eintrag zu löschen")

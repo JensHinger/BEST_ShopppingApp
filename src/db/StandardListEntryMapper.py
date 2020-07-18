@@ -13,7 +13,7 @@ class StandardListEntryMapper(Mapper):
 
         if len(tuples) == 1:
 
-            for (id, name, creation_date, item_id, retailer_id, user_id, party_id) in tuples:
+            for (id, name, creation_date, item_id, retailer_id, user_id, party_id, amount, unit) in tuples:
                 standardlistentry = StandardListEntry()
                 standardlistentry.set_id(id)
                 standardlistentry.set_name(name)
@@ -22,11 +22,13 @@ class StandardListEntryMapper(Mapper):
                 standardlistentry.set_retailer_id(retailer_id)
                 standardlistentry.set_user_id(user_id)
                 standardlistentry.set_party_id(party_id)
+                standardlistentry.set_amount(amount)
+                standardlistentry.set_unit(unit)
                 result = standardlistentry
 
         else:
 
-            for (id, name, creation_date, item_id, retailer_id, user_id, party_id) in tuples:
+            for (id, name, creation_date, item_id, retailer_id, user_id, party_id, amount, unit) in tuples:
                 standardlistentry = StandardListEntry()
                 standardlistentry.set_id(id)
                 standardlistentry.set_name(name)
@@ -35,6 +37,8 @@ class StandardListEntryMapper(Mapper):
                 standardlistentry.set_retailer_id(retailer_id)
                 standardlistentry.set_user_id(user_id)
                 standardlistentry.set_party_id(party_id)
+                standardlistentry.set_amount(amount)
+                standardlistentry.set_unit(unit)
                 result.append(standardlistentry)
 
         return result
@@ -60,8 +64,8 @@ class StandardListEntryMapper(Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, creation_date, item_id, retailer_id, user_id, party_sle_id FROM standardlistentry" \
-                  " WHERE id LIKE ('{}')".format(id)
+        command = "SELECT id, name, creation_date, item_id, retailer_id, user_id, party_sle_id, amount, unit " \
+                  "FROM standardlistentry WHERE id LIKE ('{}')".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -81,8 +85,8 @@ class StandardListEntryMapper(Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, creation_date, item_id, retailer_id, user_id, party_sle_id FROM standardlistentry" \
-                  " WHERE party_sle_id LIKE ('{}')".format(party_id)
+        command = "SELECT id, name, creation_date, item_id, retailer_id, user_id, party_sle_id, amount, unit " \
+                  "FROM standardlistentry WHERE party_sle_id LIKE ('{}')".format(party_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -102,8 +106,8 @@ class StandardListEntryMapper(Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, creation_date, item_id, retailer_id, user_id, party_sle_id FROM standardlistentry" \
-                  " WHERE user_id LIKE ('{}')".format(user_id)
+        command = "SELECT id, name, creation_date, item_id, retailer_id, user_id, party_sle_id, amount, unit " \
+                  "FROM standardlistentry WHERE user_id LIKE ('{}')".format(user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -129,10 +133,11 @@ class StandardListEntryMapper(Mapper):
             standardlistentry.set_id(maxid[0] + 1)
 
         command = "INSERT INTO standardlistentry " \
-                  "(id, name, creation_date, item_id, retailer_id, user_id, party_sle_id) " \
-                  "VALUES ('{}','{}','{}','{}','{}','{}','{}')".format(standardlistentry.get_id(),
+                  "(id, name, creation_date, item_id, retailer_id, user_id, party_sle_id, amount, unit) " \
+                  "VALUES ('{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(standardlistentry.get_id(),
                   standardlistentry.get_name(), standardlistentry.get_creation_date(), standardlistentry.get_item_id(),
-                  standardlistentry.get_retailer_id(), standardlistentry.get_user_id(), standardlistentry.get_party_id())
+                  standardlistentry.get_retailer_id(), standardlistentry.get_user_id(), standardlistentry.get_party_id(),
+                  standardlistentry.get_amount(), standardlistentry.get_unit())
         cursor.execute(command)
 
         self._cnx.commit()
@@ -142,10 +147,11 @@ class StandardListEntryMapper(Mapper):
 
         cursor = self._cnx.cursor()
         command = "UPDATE standardlistentry SET name = ('{}'), creation_date = ('{}'), item_id = ('{}'), " \
-                  "retailer_id = ('{}'), user_id = ('{}'), party_sle_id = ('{}') WHERE id LIKE ('{}')" \
-            .format(standardlistentry.get_name(), standardlistentry.get_creation_date(), standardlistentry.get_item_id()
-                ,standardlistentry.get_retailer_id(), standardlistentry.get_user_id(),
-                    standardlistentry.get_party_id(), standardlistentry.get_id())
+                  "retailer_id = ('{}'), user_id = ('{}'), party_sle_id = ('{}'), amount = ('{}'), unit = ('{}') " \
+                  " WHERE id LIKE ('{}')".format(standardlistentry.get_name(), standardlistentry.get_creation_date(),
+                  standardlistentry.get_item_id(), standardlistentry.get_retailer_id(), standardlistentry.get_user_id(),
+                  standardlistentry.get_party_id(), standardlistentry.get_amount(), standardlistentry.get_unit(),
+                  standardlistentry.get_id())
         cursor.execute(command)
 
         self._cnx.commit()

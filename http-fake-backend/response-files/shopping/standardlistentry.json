@@ -1,5 +1,0 @@
-[{"id":1, "name":"This", "creation_date":"2019-11-28 09:36:18", "item_id":20, "retailer_id":2, "user_id":10, "party_sle_id":1},
- {"id":2, "name":"Is", "creation_date":"2019-12-25 10:32:10", "item_id":45, "retailer_id":4, "user_id":5, "party_sle_id":1},
- {"id":3, "name":"The", "creation_date":"2019-08-11 20:04:14", "item_id":70, "retailer_id":8, "user_id":4, "party_sle_id":1},
- {"id":4, "name":"Mofo", "creation_date":"2020-03-07 12:04:48", "item_id":5, "retailer_id":2, "user_id":3, "party_sle_id":2},
- {"id":5, "name":"Tea", "creation_date":"2019-06-07 19:14:23", "item_id":6, "retailer_id":6, "user_id":7, "party_sle_id":3}]
