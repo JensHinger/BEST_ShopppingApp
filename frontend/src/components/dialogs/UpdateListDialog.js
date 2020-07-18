@@ -4,17 +4,16 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Theme from "../../Theme"
 import { ThemeProvider } from "@material-ui/core"
 import Button from '@material-ui/core/Button'
-import ListBO from '../../api/ListBO';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
+
 class UpdateListDialog extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -23,18 +22,11 @@ class UpdateListDialog extends Component {
             listBO: this.props.list,
             newName: null,
             list: "",
-
-
         }
-
-
-
-
-
     }
 
     handleClickOpen = () => {
-        this.setState({ open: true})
+        this.setState({ open: true })
     };
 
     handleClose = () => {
@@ -42,14 +34,14 @@ class UpdateListDialog extends Component {
     };
 
     handleListNameChange = (event) => {
-        this.setState({newName: event.target.value})
+        this.setState({ newName: event.target.value })
     };
 
     updateList = () => {
         var list = this.state.listBO
         list.setName(this.state.newName)
         ShoppingAPI.getAPI().updateList(list)
-        .then(this.handleClose(),this.props.replaceNewList(list))
+            .then(this.handleClose(), this.props.replaceNewList(list))
 
     }
 
@@ -57,7 +49,7 @@ class UpdateListDialog extends Component {
         const list = this.state.listBO
 
 
-        return(
+        return (
             <div>
                 <ThemeProvider theme={Theme}>
                     <IconButton onClick={() => this.handleClickOpen()}>
@@ -68,23 +60,23 @@ class UpdateListDialog extends Component {
 
                         <DialogTitle id="form-dialog-title"> Liste bearbeiten</DialogTitle>
                         <DialogContent>
-                        { list ?
-                            <TextField
-                                onChange={this.handleListNameChange}
-                                defaultValue= {list.getName()}
-                                margin="dense"
-                                id="outlined-read-only-input"
-                                label="Listenname"
-                                type="string"
-                                fullWidth
-                            />
-                            :null}
-                            
+                            {list ?
+                                <TextField
+                                    onChange={this.handleListNameChange}
+                                    defaultValue={list.getName()}
+                                    margin="dense"
+                                    id="outlined-read-only-input"
+                                    label="Listenname"
+                                    type="string"
+                                    fullWidth
+                                />
+                                : null}
+
                         </DialogContent>
 
                         <DialogActions>
                             <Button onClick={() => this.updateList()}>
-                                 Speichern
+                                Speichern
                     </Button>
                             <Button onClick={() => this.handleClose()}>
                                 Abbrechen
@@ -93,26 +85,9 @@ class UpdateListDialog extends Component {
                     </Dialog>
                 </ThemeProvider>
 
-
-
-
-
-
-
-
-
             </div>
         );
-
-
-
-
-
-
-
-
     }
-
 }
 
 export default UpdateListDialog;

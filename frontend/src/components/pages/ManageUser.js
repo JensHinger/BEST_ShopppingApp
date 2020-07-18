@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import { Typography, Grid, Button } from '@material-ui/core';
 import ShoppingAPI from '../../api/ShoppingAPI'
-import { Link as RouterLink } from 'react-router-dom'
 import { Divider } from '@material-ui/core'
 import { TextField, Collapse, IconButton } from '@material-ui/core'
 import UserParties from '../subcomponents/UserParties'
-import UserBO from '../../api/UserBO';
 import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
-import Header from '../layout/Header';
-import PropTypes from 'prop-types'
 
 class ManageUser extends Component {
     constructor(props) {
