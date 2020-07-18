@@ -9,6 +9,8 @@ class StandardListEntry(BusinessObject):
         self._retailer_id = 0
         self._user_id = 0
         self._party_id = 0
+        self._amount = 0
+        self._unit = 0
 
     def get_item_id(self):
         """Auslesen des Produkts in dem Listeneintrag"""
@@ -40,6 +42,22 @@ class StandardListEntry(BusinessObject):
     def set_party_id(self, party_id):
         self._party_id = party_id
 
+    def get_amount(self):
+        """Auslesen der gewünschten Kaufmenge"""
+        return self._amount
+
+    def set_amount(self, amount):
+        """Setzen der gewünschten Kaufmenge"""
+        self._amount = amount
+
+    def get_unit(self):
+        """Auslesen der Einheit des gewünschten Artikels"""
+        return self._unit
+
+    def set_unit(self, unit):
+        """Setzen der Einheit des gewünschten Artikels"""
+        self._unit = unit
+
     @staticmethod
     def from_dict(dictionary=dict()):
         """Umwandeln eines Python dict() in einen Standardlistentry()."""
@@ -50,10 +68,13 @@ class StandardListEntry(BusinessObject):
         obj.set_party_id(dictionary["party_id"])
         obj.set_retailer_id(dictionary["retailer_id"])
         obj.set_user_id(dictionary["user_id"])
+        obj.set_amount(dictionary["amount"])
+        obj.set_unit(dictionary["unit"])
         return obj
 
     def __str__(self):
         """Erzeugen eines Strings welcher das Objekt beschreibt"""
-        return "StandardListentry id: {}, name: {}, item_id: {}, retailer_id:{}, user_id: {}, party_id: {} ".format(
+        return "StandardListentry id: {}, name: {}, item_id: {}, retailer_id:{}, user_id: {}, party_id: {}, amount: {}, unit: {} ".format(
             self.get_id(),
-            self.get_name(), self.get_item_id(), self.get_retailer_id(), self.get_user_id(), self.get_party_id(), )
+            self.get_name(), self.get_item_id(), self.get_retailer_id(), self.get_user_id(), self.get_party_id(),
+            self.get_amount(), self.set_unit() )

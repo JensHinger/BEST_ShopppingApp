@@ -1,5 +1,4 @@
 import React,{Component} from 'react';
-import StandardListEntryBO from '../../api/StandardListEntryBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import StandardListEntryCard from'../subcomponents/StandardListEntryCard';
 import {Link as RouterLink} from 'react-router-dom'
@@ -24,15 +23,16 @@ class StandardListManagement extends Component {
     
     updateStandardListEntryHandler = (updatedStandardListEntry) => {
         console.log("entry zum updaten:", updatedStandardListEntry)
-        var myindex = this.state.stListEntries.find(element => element == updatedStandardListEntry)
+        var myindex = this.state.stListEntries.findIndex(element => element === updatedStandardListEntry)
         console.log("position des Elements: ", myindex)
         var stCopy = this.state.stListEntries
+        console.log("die Copy vom State: ", this.state.stListEntries)
         console.log("state vor dem Splice:", this.state.stListEntries)
         stCopy.splice(myindex, 1, updatedStandardListEntry)
         this.setState({
             stListEntries : stCopy
         })
-        console.log("standardlistentries nach dem hinzufügen: ". this.state.stListEntries)
+        console.log("standardlistentries nach dem hinzufügen: ", this.state.stListEntries)
     }
 
 
@@ -60,7 +60,7 @@ class StandardListManagement extends Component {
                 <Button component = {RouterLink} to={`/addstandardlistentry/${this.props.match.params.partyid}`} >Eintrag hinzufügen</Button>
                 {
                     this.state.stListEntries ? 
-                    this.state.stListEntries.map(stListEntry => <StandardListEntryCard onStandardListEntryUpdated = {this.updateStandardListEntryHandler} onStandardListEntryDeleted = {this.deleteStandardListEntryHandler} partyId = {this.state.partyId} standardListEntry = {stListEntry} key={stListEntry.getID()}/>)
+                    this.state.stListEntries.map(stListEntry => <StandardListEntryCard  onStandardListEntryDeleted = {this.deleteStandardListEntryHandler} partyId = {this.state.partyId} standardListEntry = {stListEntry} key={stListEntry.getID()}/>)
                     : null 
                 }
             </div>

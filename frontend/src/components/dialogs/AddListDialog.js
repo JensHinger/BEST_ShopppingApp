@@ -4,7 +4,6 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Theme from "../../Theme"
 import { ThemeProvider } from "@material-ui/core"
@@ -12,6 +11,11 @@ import Button from '@material-ui/core/Button'
 import ListBO from '../../api/ListBO';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import IconButton from '@material-ui/core/IconButton';
+
+/**
+ * @author  Dominic, Anny und Jens
+ */
+
 class AddListDialog extends Component {
 
     constructor(props){
@@ -22,29 +26,32 @@ class AddListDialog extends Component {
             open: false,
             listName: "",
 
-
         }
 
-
-
-
-
     }
-
+/**
+ * Auszuführende Anweisung beim Öffnen des Dialogs
+ * Prüft ob es geöffnet ist
+ */
     handleClickOpen = () => {
         this.setState({ open: true })
     };
-
+/**
+ * Auszuführende Anweisung beim Schließen des Dialogs
+ * Prüft ob es geschlossen ist 
+ */
     handleClose = () => {
         this.setState({ open: false });
     };
-
+/**
+ * 
+ */
     handleAddList(list) {
         this.setState({ listName: list })
     };
 
     addList = () => {
-        const list = new ListBO
+        const list = new ListBO()
         list.setName(this.state.listName)
         list.setPartylId(this.props.partyId)
         ShoppingAPI.getAPI().addList(list)
@@ -87,23 +94,8 @@ class AddListDialog extends Component {
                     </Dialog>
                 </ThemeProvider>
 
-
-
-
-
-
-
-
-
             </div>
         );
-
-
-
-
-
-
-
 
     }
 

@@ -29,7 +29,7 @@ class CreateGroupDialog extends Component{
   }
 
   handleGroupCreation = () => {
-    const new_party = new PartyBO
+    const new_party = new PartyBO()
     new_party.setName(this.state.partyName)
     ShoppingAPI.getAPI().addParty(new_party)
     .then(party => this.handleInvitationCreation(party.getID()))  
@@ -37,16 +37,16 @@ class CreateGroupDialog extends Component{
 
   handleInvitationCreation = (partyId) => {
     const mailList = this.state.emailList
-    const new_invitation = new InvitationBO
+    const new_invitation = new InvitationBO()
     
     new_invitation.setSourceUserId(this.state.currentUser)
     new_invitation.setTargetUserId(this.state.currentUser)
     new_invitation.setPartyiId(partyId)
-    console.log(new_invitation)
 
     ShoppingAPI.getAPI().addInvitation(new_invitation)
 
     //Falls die MailListe leer ist können User nicht hinzugefügt werden der Originale User muss aber immer hinzugefügt werden
+    //User ist nicht in der Database
     // -> this.emailList[0] == "" ? dann...
     //2 Mal gleicher User einladen ist kacke ;-;
 
@@ -102,10 +102,10 @@ class CreateGroupDialog extends Component{
               <DialogTitle id="form-dialog-title">Gruppe erstellen</DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  Geben sie einen Gruppennamen ein !!
+                  Geben sie einen Gruppennamen ein !! 
                 </DialogContentText>
                 <TextField
-                  onChange = {(event) => this.handleNameChange(event.target.value)}
+                  onChange = {(event) => this.handleNameChange(event.target.value) /*Name der Gruppe darf nicht leer sein*/}
                   margin="dense"
                   id="partyName"
                   label="Gruppenname"
@@ -127,7 +127,7 @@ class CreateGroupDialog extends Component{
                   type="string"
                   value = {this.state.mail}
                   fullWidth/>
-                <Button onClick={() => this.state.mail == "" ? console.log("feld leer") : this.handleEmailChange()}>
+                <Button onClick={() => this.state.mail === "" ? console.log("feld leer") : this.handleEmailChange()}>
                   <GroupAddIcon/>
                 </Button>
                 

@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ShoppingAPI from '../../api/ShoppingAPI'
 import IconButton from '@material-ui/core/IconButton';
@@ -11,7 +9,6 @@ import Collapse from '@material-ui/core/Collapse';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Checkbox from '@material-ui/core/Checkbox';
-import ListEntryBO from '../../api/ListEntryBO'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
@@ -159,20 +156,19 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
         mylistentry.setchecked(this.state.checked ? 1 : 0 )
         console.log("mein LENTRY:", mylistentry)
         ShoppingAPI.getAPI().updateListEntry(mylistentry)
-        //.then(ShoppingAPI.getAPI().getListEntryById(this.state.listentry.getID())
-              //.then((updated_list_entry) => console.log(updated_list_entry)
-
-              //)
-        //)
+        .then(ShoppingAPI.getAPI().getUserById(this.state.listentry.getUserId()) 
+                .then(UserBO =>
+                    this.setState({  
+                    user : UserBO})
+                    ),
+                
+            ShoppingAPI.getAPI().getRetailerById(this.state.listentry.getRetailerId()) 
+                .then(RetailerBO =>
+                    this.setState({  
+                    retailer : RetailerBO})
+                    )
+                )
     }
-
-    matchRetailerNameToId = () => {
-        const my_retailer_name = this.state.sel_retailer
-        const ret_name_arr = this.getListEntryPossibleRetailerNames()
-        const target_index = ret_name_arr.indexOf(this.state.sel_retailer)
-        //console.log(this.state.all_retailers[target_index].getName())
-    }
-    
 
     deleteLEntry = () => {
         console.log("versuche einen Eintrag zu löschen")

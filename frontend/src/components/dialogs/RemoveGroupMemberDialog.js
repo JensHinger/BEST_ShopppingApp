@@ -5,7 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { ThemeProvider, Input } from "@material-ui/core"
+import { ThemeProvider} from "@material-ui/core"
 import Theme from "../../Theme"
 import RemoveIcon from '@material-ui/icons/Remove';
 import ShoppingAPI from '../../api/ShoppingAPI';
