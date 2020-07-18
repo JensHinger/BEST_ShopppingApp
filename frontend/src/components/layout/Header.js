@@ -10,7 +10,6 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import { withStyles } from '@material-ui/core/styles';
 import LogOutDialog from "../dialogs/LogOutDialog"
 import { Link as RouterLink } from 'react-router-dom';
-import ManageUser from "../pages/ManageUser"
 import Button from '@material-ui/core/Button';
 import InvitationNotification from '../subcomponents/InvitationNotifications'
 

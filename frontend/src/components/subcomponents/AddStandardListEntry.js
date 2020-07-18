@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
-import { makeStyles } from '@material-ui/core/styles';
-import {Button, TextField, Typography, Divider, Grid, ListItemIcon} from '@material-ui/core';
+import {Button, TextField, Typography, Divider, Grid} from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import ShoppingAPI from '../../api/ShoppingAPI';
-import Checkbox from '@material-ui/core/Checkbox';
-import ListEntryBO from '../../api/ListEntryBO'
 import ItemBO from '../../api/ItemBO';
 import {Link as RouterLink} from 'react-router-dom'
 import AddRetailerDialog from '../dialogs/AddRetailerDialog';
@@ -65,7 +62,7 @@ import StandardListEntryBO from '../../api/StandardListEntryBO';
     
 
     createNewItem = () => {
-        var Item = new ItemBO
+        var Item = new ItemBO()
         Item.setName(this.state.article)
         Item.setAmount(this.state.amount)
         Item.setUnit(this.state.unit)
@@ -76,7 +73,7 @@ import StandardListEntryBO from '../../api/StandardListEntryBO';
     
     
     createNewStandardListEntry = () => {
-        var standardListEntry = new StandardListEntryBO
+        var standardListEntry = new StandardListEntryBO()
         //console.log(this.state.item)
         standardListEntry.setItemId(this.state.item.getID())
         standardListEntry.setPartyId(Number(this.state.partyId))
