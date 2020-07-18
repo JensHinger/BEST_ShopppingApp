@@ -77,7 +77,6 @@ export default class ShoppingAPI {
     //User related
     #getUserByIdURL = (id) => `${this.#shoppingServerBaseURL}/user/${id}` 
     #getUserByEmailURL = (email) => `${this.#shoppingServerBaseURL}/user-by-email/${email}`
-    #getUserByGoogleIdURL = (googleId) => `${this.#shoppingServerBaseURL}/user-by-google-id/${googleId}`
     #updateUserURL = (id) => `${this.#shoppingServerBaseURL}/user/${id}`
     #deleteUserURL = (id) => `${this.#shoppingServerBaseURL}/user/${id}`
 
@@ -647,15 +646,6 @@ export default class ShoppingAPI {
 
     getUserByEmail(email){
         return this.#fetchAdvanced(this.#getUserByEmailURL(email)).then((responseJSON) => {
-            let responseUserBO = UserBO.fromJSON(responseJSON)[0];
-                return new Promise(function(resolve){
-                    resolve(responseUserBO)
-                })
-        })
-    }
-
-    getUserByGoogleId(googleId) {
-        return this.#fetchAdvanced(this.#getUserByGoogleIdURL(googleId)).then((responseJSON) => {
             let responseUserBO = UserBO.fromJSON(responseJSON)[0];
                 return new Promise(function(resolve){
                     resolve(responseUserBO)

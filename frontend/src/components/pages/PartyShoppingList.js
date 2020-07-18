@@ -1,16 +1,18 @@
 import React, {Component} from 'react'
-import { List, Typography } from '@material-ui/core'
 import ShoppingAPI from '../../api/ShoppingAPI'
 import {Link as RouterLink} from 'react-router-dom'
 import ListEntryCard from '../subcomponents/ListEntryCard'
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+
 
 class PartyShoppingList extends Component{
 
     constructor(props){
         super(props)
         this.state = {
-            listentries : []
+            listentries : null,
+            list : props.list,
         }
     }
 
@@ -38,6 +40,9 @@ class PartyShoppingList extends Component{
         })
     }
 
+   
+
+
 
     render(){
 
@@ -50,8 +55,10 @@ class PartyShoppingList extends Component{
             <Button component={RouterLink} to={`/AddListEntry/${this.props.match.params.listid}`} >Eintrag hinzufügen</Button>
             {
                 listentries ?
+                listentries.length == 0 ? 
+                 <Typography variant="h4"> {"Du hast keine Listeneinträge"} </Typography>:
                 listentries.map(listentry => <ListEntryCard onListEntryDeleted = {this.deleteListEntryHandler} listid = {this.props.match.params} listentry = {listentry} key = {listentry.getID()}/>)
-                : null 
+                : null
             }            
         </div>
         )

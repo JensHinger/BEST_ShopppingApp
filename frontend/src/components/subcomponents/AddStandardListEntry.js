@@ -52,7 +52,7 @@ import StandardListEntryBO from '../../api/StandardListEntryBO';
     getStandardListEntryPossibleUsersInvitations = () => {
         ShoppingAPI.getAPI().getPartyById(this.state.partyId)
              .then((party) => ShoppingAPI.getAPI().getAcceptedInvitationsByPartyId(party.getID())
-             .then((invitations) => invitations.map((inv) => this.getStandardListEntryPossibleUsers(inv.getTargetUserId(),
+             .then((invitations) => invitations.map((inv) => this.getStandardListEntryPossibleUsers(inv.getTargetUserId()
              ))))}
     
     getStandardListEntryPossibleUsers = (target_user_id) => {

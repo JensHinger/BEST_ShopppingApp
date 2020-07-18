@@ -132,11 +132,20 @@ class StandardListEntryCard extends Component {
         myStandardListEntry.setUserId(this.state.party_users[this.getStandardListEntryPossibleUserNames().indexOf(this.state.sel_user)].getID())
         console.log("Listentry zum updaten:", myStandardListEntry)
         ShoppingAPI.getAPI().updateStandardListEntry(myStandardListEntry)
-        .then(ShoppingAPI.getAPI().getStandardListEntrybyId(this.state.standardListEntry.getID())
-              .then((updated_list_entry) => console.log(updated_list_entry)
-
-              )
+        .then(this.setState({standardListEntry: myStandardListEntry}),
+                            ShoppingAPI.getAPI().getUserById(this.state.standardListEntry.getUserId()) 
+                            .then(UserBO =>
+                                this.setState({  
+                                user : UserBO})
+                                ),
+                            
+                            ShoppingAPI.getAPI().getRetailerById(this.state.standardListEntry.getRetailerId()) 
+                            .then(RetailerBO =>
+                                this.setState({  
+                                retailer : RetailerBO})
+                                )
         )
+          
     }
 
     matchRetailerNameToId = () => {

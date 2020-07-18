@@ -28,6 +28,9 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
         pickedUser: null,
         pickedRetailer: null,
         item: null,
+        userAutoCompleteKey: 0,
+        retailerAutoCompleteKey: 1,
+        unitTextFieldKey: 2,
 
     }
 
@@ -78,8 +81,29 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
         ListEntry.setUserId(this.state.users[this.getListEntryPossibleUserNames().indexOf(this.state.pickedUser)].getID())
         ListEntry.setName("Wir sind die besten!")
         console.log("der neue Entry:", ListEntry)
-        ShoppingAPI.getAPI().addListEntry(ListEntry)
+        ShoppingAPI.getAPI().addListEntry(ListEntry).then(
+            this.emptyState()
+        )
 
+    }
+
+    emptyState = () => {
+        this.setState({
+            article: "",
+            amount: 0,
+            unit: 0,
+            listid: this.props.match.params.listid,
+            pickedUser: "",
+            pickedRetailer: "",
+            item: null,
+        })
+        console.log("state nachdem er geleert wurde", this.state)
+        //generating random keys to force the autocomplete boxes to re-render, thus making them empty 
+        this.setState({
+            retailerAutoCompleteKey: this.state.retailerAutoCompleteKey + 1 ,
+            userAutoCompleteKey: this.state.userAutoCompleteKey + 1,
+            unitTextFieldKey: this.state.unitTextFieldKey + 1 ,
+        })
     }
  
     getListEntryPossibleUserNames = () => {
@@ -183,6 +207,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                     <Grid container justify ="center">
                     {user?
                         <Autocomplete
+                        key = {this.state.userAutoCompleteKey}
                         id="combo-box-demo"
                         onInputChange={(event, value)=> this.handleUserChange(value)}
                         options={user}
@@ -199,6 +224,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                     <Grid container justify ="center">
                     {retailer?
                         <Autocomplete
+                        key={this.state.retailerAutoCompleteKey}
                         id="combo-box-demo"
                         onInputChange={(event, value)=> this.setState({pickedRetailer: value})}
                         options={retailer}
@@ -225,6 +251,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                         <TextField
                         label="Artikel"
                         helperText="Geben Sie einen Artikel ein"
+                        value={this.state.article}
                         onChange = {(event) => this.handleArticleChange(event.target.value)}/>
                     </Grid>
 
@@ -233,6 +260,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                         <TextField
                         label="Menge"
                         helperText="Geben Sie eine Menge an"
+                        value={this.state.amount}
                         onChange = {(event) => this.handleAmountChange(event.target.value)}/>
                     </Grid>
 
@@ -241,10 +269,10 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                     <Grid xs>
                         <br margin-top = '20px'/>
                         <TextField
+                        key={this.state.unitTextFieldKey}
                         id="standard-select-currency"
                         select
                         label="Select"
-                        
                         onChange = {(event) => this.handleUnitChange(event.target.value)}
                         helperText="Please select your Unit"
                         >
@@ -260,7 +288,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                     </Grid>
                     </div>
                     <div>
-                    <Grid container justify="center">
+                    {/**<Grid container justify="center"> 
                     <Grid xs>
                         <br margin-top ='20px'/>
                         <Checkbox 
@@ -268,7 +296,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                         />
                         Standardartikel
                     </Grid>
-                    </Grid>
+                    </Grid>*/}
                     </div>
                     <div>
                     <br margin-top = '20px'/>
@@ -278,10 +306,15 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                         
                         
                         <br margin-top = '20px'/>
-                        <Button onClick ={this.createNewItem} variant = "contained" color = "primary"> fertig </Button>
+                        <Button onClick ={this.createNewItem} variant = "contained" color = "primary"> Eintrag hinzufügen </Button>
                        
                         <br margin-top = '20px'/>
-                        <Button  variant = "contained" color = "secondary"> abbrechen </Button>
+                        <Button component = {RouterLink} to = {`/partyshoppinglist/${this.state.listid}`} variant = "contained" color = "secondary"> zurück zu meinen Einträgen </Button>
+                       
+                        <br margin-top = '20px'/>
+                        <Button  component = {RouterLink} to = {`/partyshoppinglist/${this.state.listid}`} variant = "contained" color = "secondary"> abbrechen </Button>
+                        
+
                         
                        
                         
