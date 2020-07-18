@@ -10,6 +10,8 @@ import ListIcon from '@material-ui/icons/List';
 import AddListDialog from '../dialogs/AddListDialog';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import UpdateListDialog from '../dialogs/UpdateListDialog';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 class UserParties extends Component {
 
@@ -17,14 +19,33 @@ class UserParties extends Component {
         super(props)
 
         this.state = {
-            parties: [],
-            lists: [],
-            expanded: true
+
+            user: null,
+            parties : [],
+            lists : [],
+            expanded: true 
+
         }
     }
 
     componentWillMount() {
-        this.getPartiesByUser()
+        //console.log("Cookie:", document.cookie)
+        this.getCurrUser()
+    }
+
+
+
+    getCurrUser = () => {
+        console.log("eingeloggter User:", firebase.auth().currentUser)
+        console.log("usertoken:", )
+        ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
+        .then((returnedUser) => {return (this.setState({user: returnedUser}),
+                                         this.getPartiesByUser()
+        
+        )}
+        
+        
+        )
     }
 
 
@@ -38,8 +59,11 @@ class UserParties extends Component {
     }
 
     getPartiesByUser = () => {
-        ShoppingAPI.getAPI().getAcceptedInvitationsByTargetUserId(1)
-            .then(invitations => this.getPartyByInvitations(invitations))
+
+        console.log("wir holen uns den User")
+        ShoppingAPI.getAPI().getAcceptedInvitationsByTargetUserId(this.state.user.getID())
+        .then(invitations => this.getPartyByInvitations(invitations))
+
     }
 
     getPartyByInvitations = (invitations) => {
@@ -85,6 +109,7 @@ class UserParties extends Component {
         const userParties = this.state.parties
         const lists = this.state.lists
         return (
+
             <div>
                 {userParties.map((party) =>
                     <ExpansionPanel expanded={this.state.expanded === party.getID()} onChange={() => this.getListsByParty(party.getID())} key={party.getID()}>

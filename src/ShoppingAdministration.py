@@ -379,7 +379,7 @@ class ShoppingAdministration(object):
     def update_standard_list_entry(self, standardlistentry):
         """Einen Standartlisteneintrag updaten."""
         with StandardListEntryMapper() as mapper:
-            mapper.update(standardlistentry)
+            return mapper.update(standardlistentry)
 
     def delete_standard_list_entry(self, standardlistentry):
         """Einen Standartlisteneintrag löschen."""

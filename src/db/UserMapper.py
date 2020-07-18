@@ -83,11 +83,15 @@ class UserMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        try:
-            result = self.build_bo(tuples)
-        except IndexError:
-            """Falls kein User mit der angegebenen email gefunden werden konnte,
-            wird hier None als Rückgabewert deklariert"""
+        """Haben wir einen Tuple gefunden ? -> ja BO bauen -> nein nix zurück geben. """
+        if len(tuples) != 0:
+            try:
+                result = self.build_bo(tuples)
+            except IndexError:
+                """Falls kein User mit der angegebenen email gefunden werden konnte,
+                wird hier None als Rückgabewert deklariert"""
+                result = None
+        else:
             result = None
 
         self._cnx.commit()
