@@ -13,24 +13,20 @@ class ItemMapper(Mapper):
 
         if len(tuples) == 1:
 
-            for (id, name, creation_date, unit, amount) in tuples:
+            for (id, name, creation_date) in tuples:
                 item = Item()
                 item.set_id(id)
                 item.set_name(name)
                 item.set_creation_date(creation_date)
-                item.set_amount(amount)
-                item.set_unit(unit)
                 result = item
 
         else:
 
-            for (id, name, creation_date, unit, amount) in tuples:
+            for (id, name, creation_date) in tuples:
                 item = Item()
                 item.set_id(id)
                 item.set_name(name)
                 item.set_creation_date(creation_date)
-                item.set_amount(amount)
-                item.set_unit(unit)
                 result.append(item)
 
         return result
@@ -56,7 +52,7 @@ class ItemMapper(Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, name, creation_date, unit, amount FROM item WHERE id LIKE ('{}')".format(id)
+        command = "SELECT id, name, creation_date FROM item WHERE id LIKE ('{}')".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -81,8 +77,8 @@ class ItemMapper(Mapper):
         for (maxid) in tuples:
             item.set_id(maxid[0] + 1)
 
-        command = "INSERT INTO item (id, name, creation_date, amount, unit) VALUES ('{}','{}','{}','{}','{}')" \
-            .format(item.get_id(), item.get_name(), item.get_creation_date(), item.get_amount(), item.get_unit())
+        command = "INSERT INTO item (id, name, creation_date) VALUES ('{}','{}','{}')" \
+            .format(item.get_id(), item.get_name(), item.get_creation_date())
         cursor.execute(command)
 
         self._cnx.commit()
@@ -93,9 +89,9 @@ class ItemMapper(Mapper):
     def update(self, item):
 
         cursor = self._cnx.cursor()
-        command = "UPDATE item SET name = ('{}'), creation_date = ('{}'), amount = ('{}'), unit = ('{}') " \
+        command = "UPDATE item SET name = ('{}'), creation_date = ('{}')" \
                   "WHERE id LIKE ('{}')"\
-            .format(item.get_name(), item.get_creation_date(), item.get_amount(), item.get_unit(), item.get_id())
+            .format(item.get_name(), item.get_creation_date(), item.get_id())
         cursor.execute(command)
 
         self._cnx.commit()
