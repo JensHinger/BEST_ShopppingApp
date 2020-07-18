@@ -151,6 +151,8 @@ class StandardListEntryMapper(Mapper):
         self._cnx.commit()
         cursor.close()
 
+        return
+
     def delete(self, listentry):
 
         cursor = self._cnx.cursor()

@@ -13,6 +13,7 @@ from bo.List import List
 
 from ShoppingAdministration import ShoppingAdministration
 
+from SecurityDecorator import secured
 
 app = Flask(__name__)
 
@@ -80,6 +81,7 @@ class InvitationListOperations(Resource):
 
     @shopping.marshal_with(invitation)
     @shopping.expect(invitation)
+    @secured
     def post(self):
         adm = ShoppingAdministration()
         proposal = Invitation.from_dict(api.payload)
@@ -96,6 +98,7 @@ class InvitationListOperations(Resource):
 class InvitationOperations(Resource):
 
     @shopping.marshal_with(invitation)
+    @secured
     def get(self, id):
         """Auslesen von Invitaion Objekten welche die mit dieser ID verbunden sind."""
         adm = ShoppingAdministration()
@@ -103,6 +106,7 @@ class InvitationOperations(Resource):
         return entry
 
     @shopping.expect(invitation)
+    @secured
     def put(self, id):
         """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
         adm = ShoppingAdministration()
@@ -115,6 +119,7 @@ class InvitationOperations(Resource):
         else:
             return "", 500
 
+    @secured
     def delete(self, id):
         """Löschen der spezifizierten party"""
         adm = ShoppingAdministration()
@@ -130,6 +135,7 @@ class InvitationOperations(Resource):
 @shopping.param("id", "Die ID des Source Users")
 class PendingInvitationBySourceUser(Resource):
     @shopping.marshal_with(invitation)
+    @secured
     def get(self, id):
         """Auslesen von pending Invitation Objekten welche die mit dieser Source User ID verbunden sind."""
         adm = ShoppingAdministration()
@@ -141,6 +147,7 @@ class PendingInvitationBySourceUser(Resource):
 class PendingInvitationByTargetUser(Resource):
 
     @shopping.marshal_with(invitation)
+    @secured
     def get(self, id):
         """Auslesen von pending Invitation Objekten welche die mit dieser Target User ID verbunden sind."""
         adm = ShoppingAdministration()
@@ -152,6 +159,7 @@ class PendingInvitationByTargetUser(Resource):
 class AcceptedInvitationBySourceUser(Resource):
 
     @shopping.marshal_with(invitation)
+    @secured
     def get(self, id):
         """Auslesen von pending Invitation Objekten welche die mit dieser Source User ID verbunden sind."""
         adm = ShoppingAdministration()
@@ -163,6 +171,7 @@ class AcceptedInvitationBySourceUser(Resource):
 class AcceptedInvitationByTargetUser(Resource):
 
     @shopping.marshal_with(invitation)
+    @secured
     def get(self, id):
         """Auslesen von pending Invitation Objekten welche die mit dieser Target User ID verbunden sind."""
         adm = ShoppingAdministration()
@@ -174,6 +183,7 @@ class AcceptedInvitationByTargetUser(Resource):
 class PendingInvitationsByParty(Resource):
 
     @shopping.marshal_with(invitation)
+    @secured
     def get(self, id):
         """Auslesen von pending Invitation Objekten welche die mit dieser Party ID verbunden sind."""
         adm = ShoppingAdministration()
@@ -186,6 +196,7 @@ class PendingInvitationsByParty(Resource):
 class AcceptedInvitationsByParty(Resource):
 
     @shopping.marshal_with(invitation)
+    @secured
     def get(self, id):
         """Auslesen von pending Invitation Objekten welche die mit dieser Party ID verbunden sind."""
         adm = ShoppingAdministration()
@@ -199,6 +210,7 @@ class AcceptedInvitationsByParty(Resource):
 class ItemListOperations(Resource):
     @shopping.marshal_with(item)
     @shopping.expect(item)
+    @secured
     def post(self):
         """Anlegen eines neuen Items: Die vom Client vorgegebenen Daten werden dabei als Vorschlag aufgenommen."""
         adm = ShoppingAdministration()
@@ -218,6 +230,7 @@ class ItemListOperations(Resource):
 class ItemOperations(Resource):
 
     @shopping.marshal_with(item)
+    @secured
     def get(self, id):
         """Auslesen eines spezifizierten Party Objekts aus der DB """
         adm = ShoppingAdministration()
@@ -225,6 +238,7 @@ class ItemOperations(Resource):
         return item
 
     @shopping.expect(Item)
+    @secured
     def put(self, id):
         """Update des spezifizierten Items. Es ist die id relevant welche per Link übergeben wird."""
         adm = ShoppingAdministration()
@@ -237,6 +251,7 @@ class ItemOperations(Resource):
         else:
             return "", 500
 
+    @secured
     def delete(self, id):
         """Löschen des spezifizierten Item"""
         adm = ShoppingAdministration()
@@ -256,6 +271,7 @@ class ListListOperations(Resource):
 
     @shopping.marshal_with(list)
     @shopping.expect(list)
+    @secured
     def post(self):
         adm = ShoppingAdministration()
         proposal = List.from_dict(api.payload)
@@ -271,6 +287,7 @@ class ListListOperations(Resource):
 class ListOperations(Resource):
 
     @shopping.marshal_with(list)
+    @secured
     def get(self, id):
         """Auslesen von pending Invitation Objekten welche die mit dieser Party ID verbunden sind."""
         adm = ShoppingAdministration()
@@ -279,6 +296,7 @@ class ListOperations(Resource):
 
     @shopping.marshal_with(list)
     @shopping.expect(list)
+    @secured
     def put(self, id):
         """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
         adm = ShoppingAdministration()
@@ -291,6 +309,7 @@ class ListOperations(Resource):
         else:
             return "", 500
 
+    @secured
     def delete(self, id):
         """Löschen der spezifizierten party"""
         adm = ShoppingAdministration()
@@ -307,6 +326,7 @@ class ListOperations(Resource):
 class ListByPartyOperations(Resource):
 
     @shopping.marshal_with(list)
+    @secured
     def get(self, id):
         """Auslesen von pending Invitation Objekten welche die mit dieser Party ID verbunden sind."""
         adm = ShoppingAdministration()
@@ -319,6 +339,7 @@ class ListByPartyOperations(Resource):
 @shopping.param("id", "Die ID der Shopping List ")
 class ListEntryByListOperations(Resource):
     @shopping.marshal_with(list_entry)
+    @secured
     def get(self, id):
         """Auslesen von Listentry Objekten welche die mit dieser  List ID verbunden sind."""
         adm = ShoppingAdministration()
@@ -330,6 +351,7 @@ class ListEntryByListOperations(Resource):
 @shopping.param("id", "Die id des Users")
 class ListEntryByUserOperations(Resource):
     @shopping.marshal_with(list_entry)
+    @secured
     def get(self, id):
         adm = ShoppingAdministration()
         entry = adm.get_listentry_by_user_id(id)
@@ -341,6 +363,7 @@ class ListEntryByUserOperations(Resource):
 class ListEntryListOperations(Resource):
     @shopping.marshal_with(list_entry)
     @shopping.expect(list_entry)
+    @secured
     def post(self):
         """Die vom Client gesendeten Daten werden als Vorschlag aufgefasst (siehe Thies),
         PROBLEM! Hier bekomme ich doch nicht die IDs zurück sondern die eingegebenen Strings?!
@@ -364,12 +387,14 @@ class ListEntryListOperations(Resource):
 class ListEntryOperations(Resource):
 
     @shopping.marshal_with(list_entry)
+    @secured
     def get(self, id):
         adm = ShoppingAdministration()
         entry = adm.get_listentry_by_id(id)
         return entry
 
     @shopping.marshal_with(list_entry)
+    @secured
     def get(self, id):
         """Auslesen eines spezifizierten Party Objekts aus der DB """
         adm = ShoppingAdministration()
@@ -377,6 +402,7 @@ class ListEntryOperations(Resource):
         return lentry
 
     @shopping.expect(list_entry)
+    @secured
     def put(self, id):
         """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
         adm = ShoppingAdministration()
@@ -390,6 +416,7 @@ class ListEntryOperations(Resource):
         else:
             return "", 500
 
+    @secured
     def delete(self, id):
         """Löschen des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
         adm = ShoppingAdministration()
@@ -405,6 +432,7 @@ class ListEntryOperations(Resource):
 @shopping.param('id', 'Die ID des Account-Objekts')
 class PartyOperations(Resource):
     @shopping.marshal_with(party)
+    @secured
     def get(self, id):
         """Auslesen eines spezifizierten Party Objekts aus der DB """
         adm = ShoppingAdministration()
@@ -412,6 +440,7 @@ class PartyOperations(Resource):
         return p
 
     @shopping.expect(party)
+    @secured
     def put(self, id):
         """Update der spezifizierten party. Es ist die id relevant welche per Link übergeben wird."""
         adm = ShoppingAdministration()
@@ -424,6 +453,7 @@ class PartyOperations(Resource):
         else:
             return "", 500
 
+    @secured
     def delete(self, id):
         """Löschen der spezifizierten party"""
         adm = ShoppingAdministration()
@@ -439,6 +469,7 @@ class PartyOperations(Resource):
 class PartyListOperations(Resource):
     @shopping.marshal_with(party)
     @shopping.expect(party)
+    @secured
     def post(self):
         """Anlegen einer neuen Party: Die vom Client vorgegebenen Daten werden dabei als Vorschlag aufgenommen."""
         adm = ShoppingAdministration()
@@ -457,6 +488,7 @@ class PartyListOperations(Resource):
 @shopping.route("/retailer/<int:id>")
 class RetailerOperations (Resource):
     @shopping.marshal_with(retailer)
+    @secured
     def get(self, id):
         """Auslesen des Spezifizierten Retailers aus der DB."""
         adm = ShoppingAdministration()
@@ -467,6 +499,8 @@ class RetailerOperations (Resource):
         else:
             return "", 500
 
+    @shopping.marshal_with(retailer)
+    @secured
     def put(self, id):
         """Updaten des Spezifizierten Retailers aus der DB."""
         adm = ShoppingAdministration()
@@ -479,6 +513,7 @@ class RetailerOperations (Resource):
         else:
             return "", 500
 
+    @secured
     def delete(self, id):
         """Löschen des Spezifizierten Retailers aus der DB."""
         adm = ShoppingAdministration()
@@ -494,6 +529,7 @@ class RetailerOperations (Resource):
 class RetailerListOperations(Resource):
 
     @shopping.marshal_with(retailer)
+    @secured
     def get(self):
         """Auslesen des aller Retailer aus der DB."""
         adm = ShoppingAdministration()
@@ -506,6 +542,7 @@ class RetailerListOperations(Resource):
 
     @shopping.marshal_with(retailer)
     @shopping.expect(retailer)
+    @secured
     def post(self):
         adm = ShoppingAdministration()
         proposal = Retailer.from_dict(api.payload)
@@ -523,6 +560,7 @@ class RetailerListOperations(Resource):
 @shopping.param("id", "Die ID der Party ")
 class StandardListEntryByPartyOperations(Resource):
     @shopping.marshal_with(standard_list_entry)
+    @secured
     def get(self, id):
         """Auslesen eines StandardListentry Objekts welches die mit dieser  Party ID verbunden sind."""
         adm = ShoppingAdministration()
@@ -534,6 +572,7 @@ class StandardListEntryByPartyOperations(Resource):
 @shopping.param("id", "Die id des Users")
 class StandardListEntryByUserOperations(Resource):
     @shopping.marshal_with(standard_list_entry)
+    @secured
     def get(self, id):
         adm = ShoppingAdministration()
         entry = adm.get_standard_listentry_by_user_id(id)
@@ -545,6 +584,7 @@ class StandardListEntryByUserOperations(Resource):
 class StandardListEntryListOperations(Resource):
     @shopping.marshal_with(standard_list_entry)
     @shopping.expect(standard_list_entry)
+    @secured
     def post(self):
         """Die vom Client gesendeten Daten werden als Vorschlag aufgefasst (siehe Thies)
         """
@@ -566,19 +606,22 @@ class StandardListEntryListOperations(Resource):
 class StandardListEntryOperations(Resource):
 
     @shopping.marshal_with(standard_list_entry)
+    @secured
     def get(self,id):
         adm = ShoppingAdministration()
         entry = adm.get_standard_list_entry_by_id(id)
         return entry
 
     @shopping.marshal_with(standard_list_entry)
-
+    @secured
     def get(self, id):
         """Auslesen des spezifizierten Users"""
         adm = ShoppingAdministration()
         u = adm.get_standard_list_entry_by_id(id)
         return u
 
+    @shopping.marshal_with(standard_list_entry)
+    @secured
     def put(self, id):
         """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
         adm = ShoppingAdministration()
@@ -591,6 +634,7 @@ class StandardListEntryOperations(Resource):
         else:
             return "", 500
 
+    @secured
     def delete(self, id):
         """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
         adm = ShoppingAdministration()
@@ -609,6 +653,7 @@ class StandardListEntryOperations(Resource):
 @shopping.param('id', 'Die ID des User-Objekts')
 class UserOperations(Resource):
     @shopping.marshal_with(user)
+    @secured
     def get(self, id):
         """Auslesen des spezifizierten Users"""
         print("id:", id)
@@ -617,6 +662,8 @@ class UserOperations(Resource):
         print("objekt", u)
         return u
 
+    @shopping.marshal_with(user)
+    @secured
     def put(self, id):
         """Update des Spezifizierten Users."""
         adm = ShoppingAdministration()
@@ -629,6 +676,7 @@ class UserOperations(Resource):
         else:
             return "", 500
 
+    @secured
     def delete(self, id):
         """Löschen des Spezifizierten Retailers aus der DB."""
         adm = ShoppingAdministration()
@@ -640,10 +688,26 @@ class UserOperations(Resource):
         else:
             return "", 500
 
+@shopping.route("/user-by-google-id/<string:googleid>")
+class UserByGoogleIdOperations(Resource):
+
+    @shopping.marshal_with(user)
+    @secured
+    def get(self, googleid):
+        print("google id:", googleid)
+        """Auslesen dess durch die google-mail spezifizierten Users"""
+        adm = ShoppingAdministration()
+        u = adm.get_user_by_google_id(googleid)
+        if u is not None:
+            return u, 200
+        else:
+            return None, 500
+
 
 @shopping.route("/user-by-email/<string:email>")
 class UserByEmailOperations(Resource):
     @shopping.marshal_with(user)
+    @secured
     def get(self, email):
         """Auslesen des durch die email spezifizierten Users."""
         adm = ShoppingAdministration()
