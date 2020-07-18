@@ -571,14 +571,6 @@ class StandardListEntryOperations(Resource):
         entry = adm.get_standard_list_entry_by_id(id)
         return entry
 
-    @shopping.marshal_with(standard_list_entry)
-
-    def get(self, id):
-        """Auslesen des spezifizierten Users"""
-        adm = ShoppingAdministration()
-        u = adm.get_standard_list_entry_by_id(id)
-        return u
-
     def put(self, id):
         """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
         adm = ShoppingAdministration()
