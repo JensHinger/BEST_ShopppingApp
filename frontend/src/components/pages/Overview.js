@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Typography, Grid, Card, CardMedia, Button} from '@material-ui/core';
+import { Typography, Grid, Card, CardMedia} from '@material-ui/core';
 import CreateGroupDialog from '../dialogs/CreateGroupDialog'
 import UserParties from '../subcomponents/UserParties'
 

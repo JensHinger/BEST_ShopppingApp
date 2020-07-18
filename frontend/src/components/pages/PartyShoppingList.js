@@ -55,7 +55,7 @@ class PartyShoppingList extends Component{
             <Button component={RouterLink} to={`/AddListEntry/${this.props.match.params.listid}`} >Eintrag hinzufügen</Button>
             {
                 listentries ?
-                listentries.length == 0 ? 
+                listentries.length === 0 ? 
                  <Typography variant="h4"> {"Du hast keine Listeneinträge"} </Typography>:
                 listentries.map(listentry => <ListEntryCard onListEntryDeleted = {this.deleteListEntryHandler} listid = {this.props.match.params} listentry = {listentry} key = {listentry.getID()}/>)
                 : null

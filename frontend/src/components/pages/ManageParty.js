@@ -87,7 +87,7 @@ class ManageGroup extends Component {
 
         ShoppingAPI.getAPI().getUserByEmail(this.state.mail)
         .then(function(user) {
-            const new_invitation = new InvitationBO
+            const new_invitation = new InvitationBO()
             new_invitation.setTargetUserId(user.getID())
             new_invitation.setSourceUserId(this.state.user)
             new_invitation.setPartyiId(this.state.partyId)
