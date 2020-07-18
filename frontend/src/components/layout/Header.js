@@ -14,6 +14,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import ManageUser from "../pages/ManageUser"
 import Button from '@material-ui/core/Button';
 import InvitationNotification from '../subcomponents/InvitationNotifications'
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 const styles = theme => ({
 
@@ -38,7 +40,7 @@ class Header extends Component{
   }
 
   getCurrentUser = () => {
-    ShoppingAPI.getAPI().getUserById(1)
+    ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
     .then(UserBO =>
       this.setState({
           currentUser: UserBO

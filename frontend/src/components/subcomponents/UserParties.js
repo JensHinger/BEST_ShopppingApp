@@ -15,6 +15,8 @@ import ListIcon from '@material-ui/icons/List';
 import AddListDialog from '../dialogs/AddListDialog';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import UpdateListDialog from '../dialogs/UpdateListDialog';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 class UserParties extends Component{
 
@@ -22,6 +24,7 @@ class UserParties extends Component{
         super(props)
 
         this.state = {
+            user: null,
             parties : [],
             lists : [],
             expanded: true 
@@ -29,9 +32,23 @@ class UserParties extends Component{
     }
 
     componentWillMount() {
-        this.getPartiesByUser()
+        //console.log("Cookie:", document.cookie)
+        this.getCurrUser()
     }
 
+
+    getCurrUser = () => {
+        console.log("eingeloggter User:", firebase.auth().currentUser)
+        console.log("usertoken:", )
+        ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
+        .then((returnedUser) => {return (this.setState({user: returnedUser}),
+                                         this.getPartiesByUser()
+        
+        )}
+        
+        
+        )
+    }
 
     getListsByParty = (party_id) =>{
         ShoppingAPI.getAPI().getListsByPartyId(party_id)
@@ -44,7 +61,8 @@ class UserParties extends Component{
 
 
     getPartiesByUser = () => {
-        ShoppingAPI.getAPI().getAcceptedInvitationsBySourceUserId(1)
+        console.log("wir holen uns den User")
+        ShoppingAPI.getAPI().getAcceptedInvitationsByTargetUserId(this.state.user.getID())
         .then(invitations => this.getPartyByInvitations(invitations))
     }
     
@@ -89,6 +107,7 @@ class UserParties extends Component{
     render(){
         const userParties = this.state.parties
         const lists = this.state.lists
+        console.log("user:", this.state.user)
         return(
             <div>
                 {userParties.map((party) =>
