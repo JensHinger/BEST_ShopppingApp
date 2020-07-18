@@ -9,6 +9,8 @@ export default class ListEntryBO extends BusinessObject{
         this.user_id = 0
         this.list_id = 0
         this.checked = 0
+        this.amount = 0
+        this.unit = 0
     }
 
     setItemId(item_id) {
@@ -41,6 +43,22 @@ export default class ListEntryBO extends BusinessObject{
 
     getListId() {
         return this.list_id
+    }
+
+    setAmount(amount){
+        this.amount = amount
+    }
+
+    getAmount(){
+        return this.amount
+    }
+
+    setUnit(unit){
+        this.unit = unit
+    }
+
+    getUnit(){
+        return this.unit
     }
 
     setchecked(condition) {
