@@ -31,6 +31,7 @@ export default class ShoppingAPI {
     #deleteInvitationURL = (id) => `${this.#shoppingServerBaseURL}/invitation/${id}`
 
     //Item related
+    #getAllItemsURL = () => `${this.#shoppingServerBaseURL}/item`
     #getItemByIdURL = (id) => `${this.#shoppingServerBaseURL}/item/${id}`
     #addItemURL = () => `${this.#shoppingServerBaseURL}/item`
     #updateItemURL = (id) => `${this.#shoppingServerBaseURL}/item/${id}`
@@ -218,6 +219,14 @@ export default class ShoppingAPI {
 
 
     //Item related
+    getAllItems(){
+        return this.#fetchAdvanced(this.#getAllItemsURL()).then((responseJSON) => {
+            let responseItemBO = ItemBO.fromJSON(responseJSON);
+                return new Promise(function(resolve){
+                    resolve(responseItemBO)
+                })
+        })
+    }
     
     getItemById(id){
         return this.#fetchAdvanced(this.#getItemByIdURL(id)).then((responseJSON) => {

@@ -26,7 +26,13 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
         users: [],
         pickedUser: null,
         pickedRetailer: null,
-        pickedItem: null,}
+        pickedItem: null,
+        retailerAutoCompleteKey: 0,
+        userAutoCompleteKey: 1,
+        unitTextFieldKey: 2,
+        itemAutoCompleteKey: 3,
+
+        }
         
 
 
@@ -69,7 +75,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
     createNewListEntry=()=>{
         var ListEntry = new ListEntryBO
         //console.log(this.state.item)
-        ListEntry.setItemId(this.state.item.getID())
+        ListEntry.setItemId(this.state.items[this.getListEntryPossibleItemNames().indexOf(this.state.pickedItem)].getID())
         ListEntry.setListId(this.state.listid)
         ListEntry.setAmount(this.state.amount)
         ListEntry.setUnit(this.state.unit)
@@ -99,6 +105,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
             retailerAutoCompleteKey: this.state.retailerAutoCompleteKey + 1,
             userAutoCompleteKey: this.state.userAutoCompleteKey + 1,
             unitTextFieldKey: this.state.unitTextFieldKey + 1,
+            itemAutoCompleteKey: this.state.itemAutoCompleteKey + 1,
         })
     }
 
@@ -113,6 +120,13 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
         )
         console.log("namen aller Retailer:", ret_names)
         return (ret_names)
+    }
+
+    getListEntryPossibleItemNames = () => {
+        var item_names = this.state.items.map((item) => item.getName()
+        )
+        console.log("namen aller Items:", item_names)
+        return (item_names)
     }
 
 
@@ -244,12 +258,17 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                     <div>
                         <Grid container justify="center" spacing={2}>
                             <Grid xs>
-                                <br margin-top='20px' />
-                                <TextField
-                                    label="Artikel"
-                                    helperText="Geben Sie einen Artikel ein"
-                                    value={this.state.article}
-                                    onChange={(event) => this.handleArticleChange(event.target.value)} />
+                                <br margin-top='20px' margin-left='20px'/>
+                                {item ?
+                                <Autocomplete
+                                    key={this.state.itemAutoCompleteKey}
+                                    id="combo-box-demo"
+                                    onInputChange={(event, value) => this.setState({ pickedItem: value })}
+                                    options={item}
+                                    getOptionLabel={(option) => option.getName()}
+                                    style={{ width: 300 }}
+                                    renderInput={(params) => <TextField {...params} label="Artikel" />} />
+                                : null}
                             </Grid>
 
                             <Grid xs>
@@ -257,8 +276,10 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                                 <TextField
                                     label="Menge"
                                     helperText="Geben Sie eine Menge an"
-                                    value={this.state.amount}
-                                    onChange={(event) => this.handleAmountChange(event.target.value)} />
+                                    value = {this.state.amount}
+                                    onChange={(event)=> this.handleAmountChange(event. target. value)}/>
+
+                                
                             </Grid>
 
 
@@ -303,7 +324,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
 
 
                             <br margin-top='20px' />
-                            <Button onClick={this.createNewItem} variant="contained" color="primary"> Eintrag hinzufügen </Button>
+                            <Button onClick={this.createNewListEntry} variant="contained" color="primary"> Eintrag hinzufügen </Button>
 
                             <br margin-top='20px' />
                             <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> zurück zu meinen Einträgen </Button>
