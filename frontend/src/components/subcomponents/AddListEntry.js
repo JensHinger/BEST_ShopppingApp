@@ -256,9 +256,11 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                     </div>
 
                     <div>
-                        <Grid container justify="center" spacing={2}>
-                            <Grid xs>
-                                <br margin-top='20px' margin-left='20px'/>
+                        <Grid container justify= "center" >
+
+                            <Grid xs ={4}>
+                                <br margin-top='20px'/>
+                                <Grid container justify="center">
                                 {item ?
                                 <Autocomplete
                                     key={this.state.itemAutoCompleteKey}
@@ -266,12 +268,13 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                                     onInputChange={(event, value) => this.setState({ pickedItem: value })}
                                     options={item}
                                     getOptionLabel={(option) => option.getName()}
-                                    style={{ width: 300 }}
+                                    style={{ width: 200 }}
                                     renderInput={(params) => <TextField {...params} label="Artikel" />} />
                                 : null}
+                                </Grid>
                             </Grid>
 
-                            <Grid xs>
+                            <Grid xs={4}>
                                 <br margin-top='20px' />
                                 <TextField
                                     label="Menge"
@@ -284,7 +287,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
 
 
 
-                            <Grid xs>
+                            <Grid xs={4}>
                                 <br margin-top='20px' />
                                 <TextField
                                     key={this.state.unitTextFieldKey}
