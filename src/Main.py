@@ -225,6 +225,17 @@ class ItemListOperations(Resource):
         else:
             return "", 500
 
+    @shopping.marshal_with(item)
+    def get(self):
+        """Auslesen des aller ItemBos aus der DB."""
+        adm = ShoppingAdministration()
+        item = adm.get_all_items()
+
+        if item is not None:
+            return item
+        else:
+            return "", 500
+
 
 @shopping.route("/item/<int:id>")
 @shopping.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
