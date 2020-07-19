@@ -81,7 +81,7 @@ class Header extends Component{
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-         {user? <MenuItem onClick={this.handleMenuClose}  component={RouterLink} to={`/manageuser/${user.getID()}`} /*onUserUpdated = {this.handleUserUpdate}*/>My account </MenuItem> :null}
+         {user? <MenuItem onClick={this.handleMenuClose}  component={RouterLink} to={`/manageuser/`} /*onUserUpdated = {this.handleUserUpdate}*/>My account </MenuItem> :null}
         <MenuItem onClick={this.handleMenuClose}><LogOutDialog></LogOutDialog></MenuItem> 
       </Menu>
     );

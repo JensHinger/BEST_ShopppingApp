@@ -6,6 +6,8 @@ import RemoveGroupMemberDialog from '../dialogs/RemoveGroupMemberDialog';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import SaveIcon from '@material-ui/icons/Save';
 import InvitationBO from '../../api/InvitationBO';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 //Hier muss noch das update rein sobald User gelöscht wird muss neu gerendert werden.
 /**
@@ -22,13 +24,13 @@ class ManageGroup extends Component {
             invitations: [],
             userBO: null,
             mail : "",
-            user: 1, //Hier muss noch der eingeloggte User übergeben werden!
+            user: null, //Hier muss noch der eingeloggte User übergeben werden!
             newName: "",
         }
     }
 
     getCurrentUserById = () => {
-        ShoppingAPI.getAPI().getUserById(this.state.user)
+        ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
         .then(UserBO => this.setState({
                 userBO: UserBO
             }))
@@ -36,7 +38,7 @@ class ManageGroup extends Component {
 
     componentDidMount() {
         this.getParty()
-        this.getCurrentUserById()
+        this.getCurrentUserByGoogleId()
     }
 
     getParty = () => {
