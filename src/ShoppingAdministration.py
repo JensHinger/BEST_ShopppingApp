@@ -151,6 +151,11 @@ class ShoppingAdministration(object):
         retailer = Retailer()
         retailer.set_name(name)
 
+        retailers = self.get_all_items()
+        for sRetailer in retailers:
+            if sRetailer.get_name().lower() == name.lower():
+                return None
+
         with RetailerMapper() as mapper:
             return mapper.insert(retailer)
 
@@ -182,7 +187,6 @@ class ShoppingAdministration(object):
 
         items = self.get_all_items()
         for sItem in items:
-            print("Item Name: ", sItem.get_name(), "New Item : ", name)
             if sItem.get_name().lower() == name.lower():
                 return None
 
