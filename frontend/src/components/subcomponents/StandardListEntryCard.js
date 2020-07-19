@@ -10,7 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-
+import ItemBO from '../../api/ItemBO'
 class StandardListEntryCard extends Component {
     constructor(props){
         super(props)
@@ -27,8 +27,8 @@ class StandardListEntryCard extends Component {
             party_user_names: [],
             sel_retailer: null, 
             sel_user: null,
-            sel_item_amount: null,
-            sel_item_unit: null,
+            sel_amount: null,
+            sel_unit: null,
             sel_item_name: null,
             units : ['St', 'kg', 'g', 'L', 'ml', 'm', 'cm', 'Pckg'] 
         }
@@ -102,31 +102,24 @@ class StandardListEntryCard extends Component {
 
     updateItem = () => {
         
-        const myitem = this.state.item; 
-        console.log(this.state.sel_item_amount)
+        var myitem = new ItemBO
         myitem.setName(this.state.sel_item_name ? this.state.sel_item_name : this.state.item.getName())
-        myitem.setAmount(this.state.sel_item_amount ? this.state.sel_item_amount : this.state.item.getAmount())
-        myitem.setUnit(this.state.units.indexOf(this.state.sel_item_unit))
         console.log("item zum updaten:", myitem)
-        ShoppingAPI.getAPI().updateItem(myitem)
-        .then(ShoppingAPI.getAPI().getItemById(this.state.item.getID())
-              .then(
-                  (updateditem) => this.setState({item: updateditem}),
-                  //console.log("itemstate:", )
-                  this.updateStandardListEntry()
-              )
-              
-            )
+        ShoppingAPI.getAPI().addItem(myitem)
+        .then((newItem) => {return (this.setState({item: newItem}),
+            this.updateStandardListEntry(newItem))})
     }
 
-    updateStandardListEntry(){
+    updateStandardListEntry(item){
         const myStandardListEntry = this.state.standardListEntry
         console.log("myStandardListEntry", myStandardListEntry)
-        //myStandardListEntry.setItemId(this.state.item.getID())
+        myStandardListEntry.setItemId(item.getID())
         //find retailer Id corresponding to retailer ID
         myStandardListEntry.setRetailerId(this.state.all_retailers[this.getStandardListEntryPossibleRetailerNames().indexOf(this.state.sel_retailer)].getID())
         // find user Id corresponding to User Id
         myStandardListEntry.setUserId(this.state.party_users[this.getStandardListEntryPossibleUserNames().indexOf(this.state.sel_user)].getID())
+        myStandardListEntry.setAmount(this.state.sel_amount ? this.state.sel_amount : this.state.standardListEntry.getAmount())
+        myStandardListEntry.setUnit(this.state.units.indexOf(this.state.sel_unit))
         console.log("Listentry zum updaten:", myStandardListEntry)
         ShoppingAPI.getAPI().updateStandardListEntry(myStandardListEntry)
         .then(this.setState({standardListEntry: myStandardListEntry}),
@@ -155,10 +148,8 @@ class StandardListEntryCard extends Component {
 
     render(){
         const units = ['St', 'kg', 'g', 'L', 'ml', 'm', 'cm', 'Pckg']   
-        //console.log("sel_retailer:", this.state.sel_retailer)
+        console.log("standardListEntry:", this.state.standardListEntry)
         //console.log("state.sel_user",this.state.sel_user)
-        //console.log("this.state.sel_item_amount", this.state.sel_item_amount)
-        //console.log("this.state.sel_item_unit", this.state.sel_item_unit)
         //console.log("this.state.sel_item_name", this.state.sel_item_name)
         //console.log("item:", this.state.item)
 
@@ -172,7 +163,7 @@ class StandardListEntryCard extends Component {
                 <Card>
                     
                     <CardContent  >
-                        {this.state.item.getName()} {this.state.item.getAmount()}  {units[this.state.item.getUnit()]} 
+                        {this.state.item.getName()} {this.state.standardListEntry.getAmount()}  {units[this.state.standardListEntry.getUnit()]} 
                         {this.state.user.getName()} {this.state.retailer.getName()} 
                         <IconButton  disabled = {this.state.checked ? true : false} justify ="right" onClick = {() => {this.expandHandler()}} 
                         >
@@ -183,12 +174,12 @@ class StandardListEntryCard extends Component {
                         <Card>
                             <CardContent>
                                 <TextField onChange = {(e) => {this.setState({sel_item_name: e.target.value })}} required id="standard-required" label="Name" defaultValue = {this.state.item.getName()} />
-                                <TextField onChange = {(e)=> {this.setState({sel_item_amount: e.target.value })}} required id="standard-required" label="Menge" defaultValue = {this.state.item.getAmount()} />
+                                <TextField onChange = {(e)=> {this.setState({sel_amount: e.target.value })}} required id="standard-required" label="Menge" defaultValue = {this.state.standardListEntry.getAmount()} />
                                 <Autocomplete
                                 id="combo-box-demo"
                                 options={units}
-                                defaultValue = {units[this.state.item.getUnit()]}
-                                onInputChange = {(event, value) => this.setState({sel_item_unit: value})}
+                                defaultValue = {units[this.state.standardListEntry.getUnit()]}
+                                onInputChange = {(event, value) => this.setState({sel_unit: value})}
                                 style={{ width: 300 }}
                                 renderInput={(params) =><TextField {...params} label="Einheit" />}/>
 
