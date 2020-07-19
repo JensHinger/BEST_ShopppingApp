@@ -8,7 +8,9 @@ import ItemBO from '../../api/ItemBO';
 import { Link as RouterLink } from 'react-router-dom'
 import AddRetailerDialog from '../dialogs/AddRetailerDialog';
 
-
+/**
+ * @author Dominic, Anny und Jens
+ */
  class AddListEntry extends Component {
 
     constructor(props) {
