@@ -180,9 +180,14 @@ class ShoppingAdministration(object):
         item = Item()
         item.set_name(name)
 
+        items = self.get_all_items()
+        for sItem in items:
+            print("Item Name: ", sItem.get_name(), "New Item : ", name)
+            if sItem.get_name().lower() == name.lower():
+                return None
 
         with ItemMapper() as mapper:
-           return mapper.insert(item)
+            return mapper.insert(item)
 
     def update_item(self, item):
         """Ein Item updaten."""
