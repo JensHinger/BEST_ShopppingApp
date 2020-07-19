@@ -188,7 +188,7 @@ class ShoppingAdministration(object):
         items = self.get_all_items()
         for sItem in items:
             if sItem.get_name().lower() == name.lower():
-                return None
+                return sItem
 
         with ItemMapper() as mapper:
             return mapper.insert(item)
