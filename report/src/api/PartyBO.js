@@ -2,10 +2,6 @@ import BusinessObject from './BusinessObject'
 
 export default class PartyBO extends BusinessObject{
 
-    constructor() {
-        super();
-    }
-
     static fromJSON(parties) {
         let result = [];
 

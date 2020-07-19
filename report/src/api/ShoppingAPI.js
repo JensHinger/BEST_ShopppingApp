@@ -31,6 +31,7 @@ export default class ShoppingAPI {
     #deleteInvitationURL = (id) => `${this.#shoppingServerBaseURL}/invitation/${id}`
 
     //Item related
+    #getAllItemsURL = () => `${this.#shoppingServerBaseURL}/item`
     #getItemByIdURL = (id) => `${this.#shoppingServerBaseURL}/item/${id}`
     #addItemURL = () => `${this.#shoppingServerBaseURL}/item`
     #updateItemURL = (id) => `${this.#shoppingServerBaseURL}/item/${id}`
@@ -77,6 +78,7 @@ export default class ShoppingAPI {
     //User related
     #getUserByIdURL = (id) => `${this.#shoppingServerBaseURL}/user/${id}` 
     #getUserByEmailURL = (email) => `${this.#shoppingServerBaseURL}/user-by-email/${email}`
+    #getUserByGoogleIdURL = (googleId) => `${this.#shoppingServerBaseURL}/user-by-google-id/${googleId}`
     #updateUserURL = (id) => `${this.#shoppingServerBaseURL}/user/${id}`
     #deleteUserURL = (id) => `${this.#shoppingServerBaseURL}/user/${id}`
 
@@ -218,6 +220,14 @@ export default class ShoppingAPI {
 
 
     //Item related
+    getAllItems(){
+        return this.#fetchAdvanced(this.#getAllItemsURL()).then((responseJSON) => {
+            let responseItemBO = ItemBO.fromJSON(responseJSON);
+                return new Promise(function(resolve){
+                    resolve(responseItemBO)
+                })
+        })
+    }
     
     getItemById(id){
         return this.#fetchAdvanced(this.#getItemByIdURL(id)).then((responseJSON) => {
@@ -646,6 +656,15 @@ export default class ShoppingAPI {
 
     getUserByEmail(email){
         return this.#fetchAdvanced(this.#getUserByEmailURL(email)).then((responseJSON) => {
+            let responseUserBO = UserBO.fromJSON(responseJSON)[0];
+                return new Promise(function(resolve){
+                    resolve(responseUserBO)
+                })
+        })
+    }
+
+    getUserByGoogleId(googleId) {
+        return this.#fetchAdvanced(this.#getUserByGoogleIdURL(googleId)).then((responseJSON) => {
             let responseUserBO = UserBO.fromJSON(responseJSON)[0];
                 return new Promise(function(resolve){
                     resolve(responseUserBO)
