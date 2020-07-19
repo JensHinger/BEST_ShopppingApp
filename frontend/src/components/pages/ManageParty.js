@@ -29,7 +29,7 @@ class ManageGroup extends Component {
         }
     }
 
-    getCurrentUserById = () => {
+    getCurrentUserByGoogleId = () => {
         ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
         .then(UserBO => this.setState({
                 userBO: UserBO
