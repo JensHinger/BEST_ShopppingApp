@@ -115,7 +115,7 @@ class App extends Component {
               <Route path={'/manageparty/:partyid'} component={ManageParty}>
 
               </Route>
-              <Route path={'/manageuser/:userid'} component={ManageUser}>
+              <Route path={'/manageuser/'} component={ManageUser}>
 
               </Route>
               <Route path={`/partyshoppinglist/:listid`} component={PartyShoppingList}>

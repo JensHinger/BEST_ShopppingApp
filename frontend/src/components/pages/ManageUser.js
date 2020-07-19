@@ -6,6 +6,8 @@ import { TextField, Collapse, IconButton } from '@material-ui/core'
 import UserParties from '../subcomponents/UserParties'
 import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 class ManageUser extends Component {
     constructor(props) {
@@ -13,7 +15,6 @@ class ManageUser extends Component {
 
         this.state = {
             userBO: null,
-            user: props.match.params.userid,
             newName: null,
             alertOpen: false
 
@@ -21,12 +22,13 @@ class ManageUser extends Component {
     }
 
     componentDidMount() {
-        this.getUserById()
+        this.getUserByGoogleId()
     }
 
-    getUserById = () => {
+    getUserByGoogleId = () => {
         // Hier muss bei getPartiesByUser noch this.props.user.getID() bei dem Übergabewert ergänzt werden
-        ShoppingAPI.getAPI().getUserById(this.state.user).then(UserBO =>
+        ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
+        .then(UserBO =>
             this.setState({
                 userBO: UserBO
             }))
@@ -56,9 +58,6 @@ class ManageUser extends Component {
 
     setAlertOpen = (opened) => {
         this.setState({ alertOpen: opened })
-
-
-
     }
 
     render() {
