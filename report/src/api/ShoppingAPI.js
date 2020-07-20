@@ -6,6 +6,8 @@ import ListEntryBO from './ListEntryBO'
 import StandardListEntryBO from './StandardListEntryBO'
 import RetailerBO from './RetailerBO'
 import InvitationBO from './InvitationBO'
+import ReportItemBO from './ReportItemBO'
+import ReportRetailerBO from './ReportRetailerBO'
 
 export default class ShoppingAPI {
 
@@ -48,7 +50,6 @@ export default class ShoppingAPI {
     #getListEntryByIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
     #getListEntriesByListIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-list/${id}`
     #getListEntriesByUserIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-user/${id}`
-    #getCheckedListEntriesByUserIdURL = (id) => `${this.#shoppingServerBaseURL}/checked-listentry-by-user/${id}`
     #addListEntryURL = () => `${this.#shoppingServerBaseURL}/listentry`
     #updateListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
     #deleteListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
@@ -82,6 +83,10 @@ export default class ShoppingAPI {
     #getUserByGoogleIdURL = (googleId) => `${this.#shoppingServerBaseURL}/user-by-google-id/${googleId}`
     #updateUserURL = (id) => `${this.#shoppingServerBaseURL}/user/${id}`
     #deleteUserURL = (id) => `${this.#shoppingServerBaseURL}/user/${id}`
+
+    //Report related
+    #getCountedRetailerURL = (id) => `${this.#shoppingServerBaseURL}/counted-retailer/${id}`
+    #getCountedItemsURL = (id) => `${this.#shoppingServerBaseURL}/counted-items/${id}`
 
     static getAPI() {
         if (this.#api == null) {
@@ -387,14 +392,6 @@ export default class ShoppingAPI {
         })
     }
 
-    getCheckedListEntriesByUserId(id){
-        return this.#fetchAdvanced(this.#getCheckedListEntriesByUserIdURL(id)).then((responseJSON) => {
-            let responseListEntryBOs = ListEntryBO.fromJSON(responseJSON);
-                return new Promise(function(resolve){
-                    resolve(responseListEntryBOs)
-                })
-        })
-    }
     //#addListEntryURL = () => `${this.#shoppingServerBaseURL}/listentry`
     addListEntry(listEntryBO) {
         return this.#fetchAdvanced(this.#addListEntryURL(), {
@@ -712,4 +709,25 @@ export default class ShoppingAPI {
             })
         })
     }
+
+    //Report related
+
+    getCountedRetailer(userid) {
+        return this.#fetchAdvanced(this.#getCountedRetailerURL(userid)).then((responseJSON) => {
+            let responseReportRetailerBO = ReportRetailerBO.fromJSON(responseJSON);
+                return new Promise(function(resolve){
+                    resolve(responseReportRetailerBO)
+                })
+        })
+    }
+
+    getCountedItem(userid) {
+        return this.#fetchAdvanced(this.#getCountedItemsURL(userid)).then((responseJSON) => {
+            let responseReportItemBO = ReportItemBO.fromJSON(responseJSON);
+                return new Promise(function(resolve){
+                    resolve(responseReportItemBO)
+                })
+        })
+    }
+
 }
