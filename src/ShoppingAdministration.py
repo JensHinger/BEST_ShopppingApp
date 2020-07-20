@@ -1,3 +1,5 @@
+import collections
+
 from src.bo.List import List
 from src.bo.ListEntry import ListEntry
 from src.bo.Item import Item
@@ -6,6 +8,8 @@ from src.bo.Party import Party
 from src.bo.User import User
 from src.bo.StandardListEntry import StandardListEntry
 from src.bo.Retailer import Retailer
+from src.bo.ReportItem import ReportItem
+from src.bo.ReportRetailer import ReportRetailer
 
 from src.db.ListMapper import ListMapper
 from src.db.ListEntryMapper import ListEntryMapper
@@ -101,6 +105,72 @@ class ShoppingAdministration(object):
     def get_listentry_by_user_id(self, user_id):
         with ListEntryMapper() as mapper:
             return mapper.find_by_user_id(user_id)
+
+    def get_counted_retailer(self, user_id):
+        retailer_id_list = []
+        retailer_list = []
+        temp_retailer_list = []
+
+        with ListEntryMapper() as mapper:
+            listentries = mapper.find_checked_by_user_id(user_id)
+
+        for listentry in listentries:
+            retailer_id_list.append(listentry.get_retailer_id())
+
+        counted_retailer = collections.Counter(retailer_id_list)
+
+        for key in list(counted_retailer):
+            if temp_retailer_list.__len__() < 3:
+                temp_retailer_list.append(key)
+            else:
+                for obj in temp_retailer_list:
+                    if counted_retailer[key] > counted_retailer[obj]:
+                        temp_retailer_list[temp_retailer_list.index(obj)] = key
+                        break
+
+        for id in temp_retailer_list:
+            retailer = self.get_retailer_by_id(id)
+            new_ReportRetailer = ReportRetailer()
+            new_ReportRetailer.set_id(retailer.get_id())
+            new_ReportRetailer.set_name(retailer.get_name())
+            new_ReportRetailer.set_creation_date(retailer.get_creation_date())
+            new_ReportRetailer.set_commonness(counted_retailer[id])
+            retailer_list.append(new_ReportRetailer)
+
+        return retailer_list
+
+    def get_counted_item(self, user_id):
+        item_id_list = []
+        item_list = []
+        temp_item_list = []
+
+        with ListEntryMapper() as mapper:
+            listentries = mapper.find_checked_by_user_id(user_id)
+
+        for listentry in listentries:
+            item_id_list.append(listentry.get_item_id())
+
+        counted_items = collections.Counter(item_id_list)
+
+        for key in list(counted_items):
+            if temp_item_list.__len__() < 3:
+                temp_item_list.append(key)
+            else:
+                for obj in temp_item_list:
+                    if counted_items[key] > counted_items[obj]:
+                        temp_item_list[temp_item_list.index(obj)] = key
+                        break
+
+        for id in temp_item_list:
+            item = self.get_item_by_id(id)
+            new_ReportItem = ReportItem()
+            new_ReportItem.set_id(item.get_id())
+            new_ReportItem.set_name(item.get_name())
+            new_ReportItem.set_creation_date(item.get_creation_date())
+            new_ReportItem.set_commonness(counted_items[id])
+            item_list.append(new_ReportItem)
+
+        return item_list
 
     def get_listentry_by_id(self, id):
         """Einen Listeneintrag auslesen."""

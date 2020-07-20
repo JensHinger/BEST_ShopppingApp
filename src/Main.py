@@ -76,6 +76,14 @@ user = api.inherit('User', bo, {
 retailer = api.inherit('retailer', bo, {
 })
 
+report_retailer = api.inherit('ReportRetailer', bo, {
+    'commonness': fields.Integer(attribute='_commonness', description='Die Anzahl des Ladens welcher besucht wurde')
+})
+
+report_item = api.inherit('ReportItem', bo, {
+    'commonness': fields.Integer(attribute='_commonness', description='Die Anzahl des Items welches gekauft wurde')
+})
+
 """Invitation related"""
 
 @shopping.route("/invitation")
@@ -722,6 +730,31 @@ class UserByEmailOperations(Resource):
         adm = ShoppingAdministration()
         u = adm.get_user_by_email(email)
         return u
+
+"""Report related."""
+@shopping.route("/counted-retailer/<int:userid>")
+class CountedRetailerOperations(Resource):
+
+    @shopping.marshal_with(report_retailer)
+    def get(self, userid):
+        adm = ShoppingAdministration()
+        ret = adm.get_counted_retailer(userid)
+        if ret is not None:
+            return ret, 200
+        else:
+            return None, 500
+
+@shopping.route("/counted-item/<int:userid>")
+class CountedItemOperations(Resource):
+
+    @shopping.marshal_with(report_item)
+    def get(self, userid):
+        adm = ShoppingAdministration()
+        item = adm.get_counted_item(userid)
+        if item is not None:
+            return item, 200
+        else:
+            return None, 500
 
 
 """Um Flask in einer lokalen Entwicklungsumgebung zu starten"""
