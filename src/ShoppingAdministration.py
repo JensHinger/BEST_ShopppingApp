@@ -8,6 +8,8 @@ from src.bo.Party import Party
 from src.bo.User import User
 from src.bo.StandardListEntry import StandardListEntry
 from src.bo.Retailer import Retailer
+from src.bo.ReportItem import ReportItem
+from src.bo.ReportRetailer import ReportRetailer
 
 from src.db.ListMapper import ListMapper
 from src.db.ListEntryMapper import ListEntryMapper
@@ -127,7 +129,13 @@ class ShoppingAdministration(object):
                         break
 
         for id in temp_retailer_list:
-            retailer_list.append(self.get_retailer_by_id(id))
+            retailer = self.get_retailer_by_id(id)
+            new_ReportRetailer = ReportRetailer()
+            new_ReportRetailer.set_id(retailer.get_id())
+            new_ReportRetailer.set_name(retailer.get_name())
+            new_ReportRetailer.set_creation_date(retailer.get_creation_date())
+            new_ReportRetailer.set_commonness(counted_retailer[id])
+            retailer_list.append(new_ReportRetailer)
 
         return retailer_list
 
@@ -154,7 +162,13 @@ class ShoppingAdministration(object):
                         break
 
         for id in temp_item_list:
-            item_list.append(self.get_item_by_id(id))
+            item = self.get_item_by_id(id)
+            new_ReportItem = ReportItem()
+            new_ReportItem.set_id(item.get_id())
+            new_ReportItem.set_name(item.get_name())
+            new_ReportItem.set_creation_date(item.get_creation_date())
+            new_ReportItem.set_commonness(counted_items[id])
+            item_list.append(new_ReportItem)
 
         return item_list
 

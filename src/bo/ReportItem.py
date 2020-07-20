@@ -1,7 +1,7 @@
 from bo.BusinessObject import BusinessObject
 
 
-class Item(BusinessObject):
+class ReportItem(BusinessObject):
 
     def __init__(self):
         super().__init__()
@@ -16,7 +16,7 @@ class Item(BusinessObject):
     @staticmethod
     def from_dict(dictionary=dict()):
         """Umwandeln eines Python dict() in einen listentry()."""
-        obj = Item()
+        obj = ReportItem()
         obj.set_name(dictionary["name"])
         obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
         return obj
