@@ -371,11 +371,10 @@ class ListEntryByUserOperations(Resource):
         entry = adm.get_listentry_by_user_id(id)
         return entry
 
-@shopping.route("/listentry-by-user/<int:id>")
+@shopping.route("/checked-listentry-by-user/<int:id>")
 @shopping.param("id", "Die id des Users")
 class CheckedListEntryByUserOperations(Resource):
-    @shopping.marshal_with(list_entry)
-    @secured
+
     def get(self, id):
         adm = ShoppingAdministration()
         entry = adm.get_checked_listentry_by_user_id(id)

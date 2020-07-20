@@ -1,3 +1,5 @@
+import collections
+
 from src.bo.List import List
 from src.bo.ListEntry import ListEntry
 from src.bo.Item import Item
@@ -102,9 +104,59 @@ class ShoppingAdministration(object):
         with ListEntryMapper() as mapper:
             return mapper.find_by_user_id(user_id)
 
-    def get_checked_listentry_by_user_id(self, user_id):
+    def get_counted_retailer(self, user_id):
+        retailer_id_list = []
+        retailer_list = []
+        temp_retailer_list = []
+
         with ListEntryMapper() as mapper:
-            return mapper.find_checked_by_user_id(user_id)
+            listentries = mapper.find_checked_by_user_id(user_id)
+
+        for listentry in listentries:
+            retailer_id_list.append(listentry.get_retailer_id())
+
+        counted_retailer = collections.Counter(retailer_id_list)
+
+        for key in list(counted_retailer):
+            if temp_retailer_list.__len__() < 3:
+                temp_retailer_list.append(key)
+            else:
+                for obj in temp_retailer_list:
+                    if counted_retailer[key] > counted_retailer[obj]:
+                        temp_retailer_list[temp_retailer_list.index(obj)] = key
+                        break
+
+        for id in temp_retailer_list:
+            retailer_list.append(self.get_retailer_by_id(id))
+
+        return retailer_list
+
+    def get_counted_item(self, user_id):
+        item_id_list = []
+        item_list = []
+        temp_item_list = []
+
+        with ListEntryMapper() as mapper:
+            listentries = mapper.find_checked_by_user_id(user_id)
+
+        for listentry in listentries:
+            item_id_list.append(listentry.get_item_id())
+
+        counted_items = collections.Counter(item_id_list)
+
+        for key in list(counted_items):
+            if temp_item_list.__len__() < 3:
+                temp_item_list.append(key)
+            else:
+                for obj in temp_item_list:
+                    if counted_items[key] > counted_items[obj]:
+                        temp_item_list[temp_item_list.index(obj)] = key
+                        break
+
+        for id in temp_item_list:
+            item_list.append(self.get_item_by_id(id))
+
+        return item_list
 
     def get_listentry_by_id(self, id):
         """Einen Listeneintrag auslesen."""

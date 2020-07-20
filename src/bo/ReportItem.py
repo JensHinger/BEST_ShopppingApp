@@ -5,6 +5,13 @@ class Item(BusinessObject):
 
     def __init__(self):
         super().__init__()
+        self._commonness = 0
+
+    def get_commonness(self):
+        return self._commonness
+
+    def set_commonness(self, value):
+        self._commonness = value
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -16,4 +23,4 @@ class Item(BusinessObject):
 
     def __str__(self):
         """Erzeugen eines Strings welcher das Objekt beschreibt"""
-        return "Item id: {}, name: {}".format(self.get_id(), self.get_name())
+        return "Item id: {}, name: {}, commonness: {}".format(self.get_id(), self.get_name(), self.get_commonness())

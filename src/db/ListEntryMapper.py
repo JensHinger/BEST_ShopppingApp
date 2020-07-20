@@ -128,7 +128,7 @@ class ListEntryMapper(Mapper):
 
         cursor = self._cnx.cursor()
         command = "SELECT id, name, creation_date, item_id, retailer_id, user_id, list_id, amount, unit, checked " \
-                  "FROM listentry WHERE user_id LIKE ('{}') AND WHERE checked LIKE ('{}')".format(user_id, 1)
+                  "FROM listentry WHERE user_id LIKE ('{}') AND checked LIKE ('{}')".format(user_id, 1)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
