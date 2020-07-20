@@ -4,9 +4,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import ListEntryBO from '../../api/ListEntryBO'
-import ItemBO from '../../api/ItemBO';
 import { Link as RouterLink } from 'react-router-dom'
 import AddRetailerDialog from '../dialogs/AddRetailerDialog';
+import ItemBO from '../../api/ItemBO';
 
 /**
  * @author Dominic, Anny und Jens
@@ -20,8 +20,8 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
 
         open: false, 
         article: "",
-        amount: 0,
-        unit: 0,
+        amount: null,
+        unit: null,
         listid: this.props.match.params.listid,
         retailer: [],
         items: [],
@@ -33,6 +33,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
         userAutoCompleteKey: 1,
         unitTextFieldKey: 2,
         itemAutoCompleteKey: 3,
+        amountTextFieldKey: 4,
 
         }
         
@@ -73,14 +74,22 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
     }
 
 
-    
-    createNewListEntry=()=>{
+    createItem = () => {
+        var myitem = new ItemBO
+        myitem.setName(this.state.pickedItem)
+        console.log("item zum updaten:", myitem)
+        ShoppingAPI.getAPI().addItem(myitem)
+        .then((newItem) => {return (this.setState({items : [...this.state.items, newItem]}),
+            this.createNewListEntry(newItem))})
+    }
+
+    createNewListEntry = (oneItem) => {
         var ListEntry = new ListEntryBO
-        //console.log(this.state.item)
-        ListEntry.setItemId(this.state.items[this.getListEntryPossibleItemNames().indexOf(this.state.pickedItem)].getID())
+        console.log("item: ", oneItem)
+        ListEntry.setItemId(oneItem.getID())
         ListEntry.setListId(this.state.listid)
-        ListEntry.setAmount(this.state.amount)
-        ListEntry.setUnit(this.state.unit)
+        ListEntry.setAmount(parseInt(this.state.amount))
+        ListEntry.setUnit(parseInt(this.state.unit))
         ListEntry.setRetailerId(this.state.retailer[this.getListEntryPossibleRetailerNames().indexOf(this.state.pickedRetailer)].getID())
         ListEntry.setUserId(this.state.users[this.getListEntryPossibleUserNames().indexOf(this.state.pickedUser)].getID())
         ListEntry.setName("Wir sind die besten!")
@@ -94,8 +103,8 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
     emptyState = () => {
         this.setState({
             article: "",
-            amount: 0,
-            unit: 0,
+            amount: null,
+            unit: null,
             listid: this.props.match.params.listid,
             pickedUser: "",
             pickedRetailer: "",
@@ -108,6 +117,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
             userAutoCompleteKey: this.state.userAutoCompleteKey + 1,
             unitTextFieldKey: this.state.unitTextFieldKey + 1,
             itemAutoCompleteKey: this.state.itemAutoCompleteKey + 1,
+            amountTextFieldKey: this.state.amountTextFieldKey + 1, 
         })
     }
 
@@ -265,13 +275,15 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                                 <Grid container justify="center">
                                 {item ?
                                 <Autocomplete
+                                    
+                                    freeSolo
                                     key={this.state.itemAutoCompleteKey}
                                     id="combo-box-demo"
                                     onInputChange={(event, value) => this.setState({ pickedItem: value })}
                                     options={item}
                                     getOptionLabel={(option) => option.getName()}
                                     style={{ width: 200 }}
-                                    renderInput={(params) => <TextField {...params} label="Artikel" />} />
+                                    renderInput={(params) => <TextField  {...params} label="Artikel" />} />
                                 : null}
                                 </Grid>
                             </Grid>
@@ -279,10 +291,11 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
                             <Grid xs={4}>
                                 <br margin-top='20px' />
                                 <TextField
+                                    key={this.state.amountTextFieldKey}
                                     label="Menge"
                                     helperText="Geben Sie eine Menge an"
                                     value = {this.state.amount}
-                                    onChange={(event)=> this.handleAmountChange(event. target. value)}/>
+                                    onChange={(event)=> this.handleAmountChange(event.target.value)}/>
 
                                 
                             </Grid>
@@ -329,7 +342,8 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
 
 
                             <br margin-top='20px' />
-                            <Button onClick={this.createNewListEntry} variant="contained" color="primary"> Eintrag hinzufügen </Button>
+                            <Button onClick={() => this.state.amount ?
+                                                   console.log("true") : console.log("da stimmt was nicht!")} variant="contained" color="primary"> Eintrag hinzufügen </Button>
 
                             <br margin-top='20px' />
                             <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> zurück zu meinen Einträgen </Button>
