@@ -124,6 +124,26 @@ class ListEntryMapper(Mapper):
 
         return result
 
+    def find_checked_by_user_id(self, user_id):
+
+        cursor = self._cnx.cursor()
+        command = "SELECT id, name, creation_date, item_id, retailer_id, user_id, list_id, amount, unit, checked " \
+                  "FROM listentry WHERE user_id LIKE ('{}') AND WHERE checked LIKE ('{}')".format(user_id, 1)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            result = self.build_bo(tuples)
+        except IndexError:
+            """Falls kein ListEntry mit der angegebenen id gefunden werden konnte,
+                            wird hier None als Rückgabewert deklariert"""
+            result = None
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
     def insert(self, listentry):
 
         cursor = self._cnx.cursor()

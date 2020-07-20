@@ -102,6 +102,10 @@ class ShoppingAdministration(object):
         with ListEntryMapper() as mapper:
             return mapper.find_by_user_id(user_id)
 
+    def get_checked_listentry_by_user_id(self, user_id):
+        with ListEntryMapper() as mapper:
+            return mapper.find_checked_by_user_id(user_id)
+
     def get_listentry_by_id(self, id):
         """Einen Listeneintrag auslesen."""
         with ListEntryMapper() as mapper:
