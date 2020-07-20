@@ -18,17 +18,20 @@ import StandardListEntryBO from '../../api/StandardListEntryBO';
 
         open: false, 
         article: "",
-        amount: 0,
-        unit: 0,
+        amount: null,
+        unit: null,
         partyId: this.props.match.params.partyid,
         retailer: [],
+        items: [],
         party_users: [],
         pickedUser: null,
         pickedRetailer: null,
-        item: null,
+        pickedItem: null,
         userAutoCompleteKey: 0,
-        retailerAutoCompleteKey: 1,
-        unitTextFieldKey: 2,
+        retailerAutoCompleteKey: 5,
+        unitTextFieldKey: 12,
+        amountTextFieldKey: 33,
+        itemAutoCompleteKey: 44
 
 
     }
@@ -36,6 +39,7 @@ import StandardListEntryBO from '../../api/StandardListEntryBO';
 
   }
     componentDidMount(){
+        this.getAllItems()
         this.getAllRetailer()
         this.getStandardListEntryPossibleUsersInvitations()
     }
@@ -45,6 +49,11 @@ import StandardListEntryBO from '../../api/StandardListEntryBO';
         ShoppingAPI.getAPI().getAllRetailer()
         .then(retailer => this.setState({retailer: retailer}))
     } 
+
+    getAllItems = () => {
+        ShoppingAPI.getAPI().getAllItems()
+        .then(items => this.setState({items: items}))
+    }
 
     getStandardListEntryPossibleUsersInvitations = () => {
         ShoppingAPI.getAPI().getPartyById(this.state.partyId)
@@ -63,22 +72,22 @@ import StandardListEntryBO from '../../api/StandardListEntryBO';
 
     createNewItem = () => {
         var Item = new ItemBO()
-        Item.setName(this.state.article)
-        Item.setAmount(this.state.amount)
-        Item.setUnit(this.state.unit)
+        Item.setName(this.state.pickedItem)
         ShoppingAPI.getAPI().addItem(Item)
-        .then(function (item) {this.setState({item: item}); this.createNewStandardListEntry()}.bind(this))
-
+        .then((newItem) => {return(this.setState({items: [...this.state.items, newItem]}), 
+                                   this.createNewStandardListEntry(newItem))})
     }
     
     
-    createNewStandardListEntry = () => {
+    createNewStandardListEntry = (oneItem) => {
         var standardListEntry = new StandardListEntryBO()
-        //console.log(this.state.item)
-        standardListEntry.setItemId(this.state.item.getID())
+        console.log("item:", oneItem)
+        standardListEntry.setItemId(oneItem.getID())
         standardListEntry.setPartyId(Number(this.state.partyId))
         standardListEntry.setRetailerId(this.state.retailer[this.getStandardListEntryPossibleRetailerNames().indexOf(this.state.pickedRetailer)].getID())
         standardListEntry.setUserId(this.state.party_users[this.getStandardListEntryPossibleUserNames().indexOf(this.state.pickedUser)].getID())
+        standardListEntry.setAmount(this.state.amount)
+        standardListEntry.setUnit(this.state.unit)
         standardListEntry.setName("Wir sind die besten!")
         console.log("der neue Entry:", standardListEntry)
         ShoppingAPI.getAPI().addStandardListEntry(standardListEntry).then(
@@ -90,20 +99,23 @@ import StandardListEntryBO from '../../api/StandardListEntryBO';
     emptyState = () => {
         this.setState({
             article: "",
-            amount: 0,
-            unit: 0,
+            amount: null,
+            unit: null,
             partyId: this.props.match.params.partyid,
             pickedUser: "",
             pickedRetailer: "",
-            item: null,
+            pickedItem: null,
         })
         console.log("state nachdem er geleert wurde", this.state)
         //generating random keys to force the autocomplete boxes to re-render, thus making them empty 
         this.setState({
-            retailerAutoCompleteKey: this.state.retailerAutoCompleteKey + 1 ,
+            retailerAutoCompleteKey: this.state.retailerAutoCompleteKey + 1,
             userAutoCompleteKey: this.state.userAutoCompleteKey + 1,
-            unitTextFieldKey: this.state.unitTextFieldKey + 1 ,
+            unitTextFieldKey: this.state.unitTextFieldKey + 1,
+            amountTextFieldKey: this.state.amountTextFieldKey + 1,
+            itemAutoCompleteKey: this.state.itemAutoCompleteKey + 1,
         })
+        console.log("key erhöht!", this.state)
     }
     getStandardListEntryPossibleRetailerNames = () => {
         var ret_names = this.state.retailer.map((retailer) => retailer.getName()
@@ -245,17 +257,25 @@ import StandardListEntryBO from '../../api/StandardListEntryBO';
                     <Grid container justify = "center" spacing = {2}>
                     <Grid xs>
                         <br margin-top = '20px'/>
-                        <TextField
-                        label="Artikel"
-                        helperText="Geben Sie einen Artikel ein"
-                        onChange = {(event) => this.handleArticleChange(event.target.value)}
-                        value = {this.state.article}/>
+                        {this.state.items ?
+                                <Autocomplete
+                                    
+                                    freeSolo
+                                    key={this.state.itemAutoCompleteKey}
+                                    id="combo-box-demo"
+                                    onInputChange={(event, value) => this.setState({ pickedItem: value })}
+                                    options={this.state.items}
+                                    getOptionLabel={(option) => option.getName()}
+                                    style={{ width: 200 }}
+                                    renderInput={(params) => <TextField  {...params} label="Artikel" />} />
+                                : null}
                         
                     </Grid>
 
                     <Grid xs>
                         <br margin-top = '20px'/>
                         <TextField
+                        key={this.state.amountTextFieldKey}
                         label="Menge"
                         helperText="Geben Sie eine Menge an"
                         onChange = {(event) => this.handleAmountChange(event.target.value)}
@@ -291,7 +311,9 @@ import StandardListEntryBO from '../../api/StandardListEntryBO';
                         
                         
                         <br margin-top = '20px'/>
-                        <Button onClick ={this.createNewItem} variant = "contained" color = "primary"> Neuen Standard Eintrag Hinzufügen </Button>
+                        <Button onClick ={() => this.state.amount && this.state.pickedItem && this.state.pickedRetailer 
+                                                && this.state.pickedUser && (this.state.unit == 0 |this.state.unit) ?
+                                                this.createNewItem() : console.log("da stimmt was nicht")} variant = "contained" color = "primary"> Neuen Standard Eintrag Hinzufügen </Button>
                         
                         <br margin-top = '20px'/>
                         <Button component = {RouterLink} to = {`/standardlistmanagement/${this.state.partyId}`} variant = "contained" color = "secondary"> zurück zu meinen Einträgen </Button>
