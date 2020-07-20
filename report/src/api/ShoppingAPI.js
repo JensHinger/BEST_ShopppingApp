@@ -48,6 +48,7 @@ export default class ShoppingAPI {
     #getListEntryByIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
     #getListEntriesByListIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-list/${id}`
     #getListEntriesByUserIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-user/${id}`
+    #getCheckedListEntriesByUserIdURL = (id) => `${this.#shoppingServerBaseURL}/checked-listentry-by-user/${id}`
     #addListEntryURL = () => `${this.#shoppingServerBaseURL}/listentry`
     #updateListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
     #deleteListEntryURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
@@ -379,6 +380,15 @@ export default class ShoppingAPI {
     //#getListEntriesByUserIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry-by-user/${id}`
     getListEntriesByUserId(id){
         return this.#fetchAdvanced(this.#getListEntriesByUserIdURL(id)).then((responseJSON) => {
+            let responseListEntryBOs = ListEntryBO.fromJSON(responseJSON);
+                return new Promise(function(resolve){
+                    resolve(responseListEntryBOs)
+                })
+        })
+    }
+
+    getCheckedListEntriesByUserId(id){
+        return this.#fetchAdvanced(this.#getCheckedListEntriesByUserIdURL(id)).then((responseJSON) => {
             let responseListEntryBOs = ListEntryBO.fromJSON(responseJSON);
                 return new Promise(function(resolve){
                     resolve(responseListEntryBOs)
