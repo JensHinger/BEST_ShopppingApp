@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import Theme from "../../Theme"
 import {ThemeProvider} from "@material-ui/core"
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 class LogOutDialog extends Component{
 
@@ -20,7 +22,10 @@ class LogOutDialog extends Component{
        this.setState({open: true});}
 
     handleClose = () => {
-        this.setState({open: false});}
+        firebase.auth().signOut()
+        .then(this.setState({open: false}))
+      
+      }
 
     render (){
 

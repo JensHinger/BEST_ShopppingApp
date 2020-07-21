@@ -112,7 +112,7 @@ class UserParties extends Component {
 
             <div>
                 {userParties.map((party) =>
-                    <ExpansionPanel expanded={this.state.expanded === party.getID()} onChange={() => this.getListsByParty(party.getID())} key={party.getID()}>
+                    <ExpansionPanel style={{width : "50%", margin : "auto"}} expanded={this.state.expanded === party.getID()} onChange={() => this.getListsByParty(party.getID())} key={party.getID()}>
                         <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                         >
