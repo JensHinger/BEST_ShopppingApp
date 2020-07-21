@@ -8,7 +8,6 @@ import ListIcon from '@material-ui/icons/List';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 
-
 class AddStandardListEntryToList extends Component {
     constructor(props) {
         super(props)
@@ -43,23 +42,28 @@ class AddStandardListEntryToList extends Component {
         return(
 
             <div style={{width : "50%", margin : "auto"}}>
-                <Grid container direction={'row'}>
+                <Grid container justify ="center" direction={'row'}>
+                    <Grid>
                     <IconButton variant="outlined" component={RouterLink} to={`/partyshoppinglist/${this.state.listId}`}>
                         <ArrowLeftIcon/>
                         <ListIcon/>
                     </IconButton>
-                    
+                    </Grid>
+                    <Grid>
                     {   party ?
                         <Typography variant="h6">Lieblingseinträge der Gruppe {party.getName()} </Typography>
                         :null
                     }
-                    
+                    </Grid>
+               
+                    <Grid>
+                    <hr/>
+                    { relevantStandardListEntries ?
+                        relevantStandardListEntries.map((standardListEntry) => 
+                        <DisplayStandardListEntry key={standardListEntry.getID()} listId={this.state.listId} standardListEntry={standardListEntry} /> ) : null
+                    }
+                    </Grid>
                 </Grid>
-                <hr/>
-                { relevantStandardListEntries ?
-                    relevantStandardListEntries.map((standardListEntry) => 
-                    <DisplayStandardListEntry key={standardListEntry.getID()} listId={this.state.listId} standardListEntry={standardListEntry} /> ) : null
-                }
             </div>
 
 
