@@ -744,7 +744,7 @@ class CountedRetailerOperations(Resource):
         else:
             return None, 500
 
-@shopping.route("/counted-item/<int:userid>")
+@shopping.route("/counted-items/<int:userid>")
 class CountedItemOperations(Resource):
 
     @shopping.marshal_with(report_item)
