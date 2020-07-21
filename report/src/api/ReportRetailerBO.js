@@ -11,7 +11,7 @@ export default class ReportRetailerBO extends BusinessObject{
         this.commonness = commonness
     }
 
-    getPartyiId() {
+    getCommonness() {
         return this.commonness
     }
 
