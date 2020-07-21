@@ -88,8 +88,7 @@ class ShoppingAdministration(object):
         """Eine Liste löschen."""
         listentries = self.get_listentry_by_list_id(list.get_id())
         for listentry in listentries:
-            listentry.set_list_id(1)
-            self.update_listentry(listentry)
+            self.delete_listentry(listentry.get_id())
 
         with ListMapper() as mapper:
             mapper.delete(list)
@@ -391,8 +390,7 @@ class ShoppingAdministration(object):
         for list in lists:
             listentries = self.get_listentry_by_list_id(list.get_id())
             for listentry in listentries:
-                listentry.set_list_id(1)
-                self.update_listentry(listentry)
+                self.delete_listentry(listentry.get_id())
             self.delete_list(list.get_id())
 
         with PartyMapper() as mapper:
