@@ -52,7 +52,8 @@ class PartyShoppingList extends Component{
         
         return(
         <div >
-            <Button component={RouterLink} to={`/AddListEntry/${this.props.match.params.listid}`} >Eintrag hinzufügen</Button>
+            <Button variant ="outlined" component={RouterLink} to={`/AddListEntry/${this.props.match.params.listid}`} >Einträge hinzufügen</Button>
+            <Button variant="outlined" component={RouterLink} to={`/addstandardlistentrytolist/${this.props.match.params.listid}`}>Einen Lieblings Eintrag hinzufügen</Button>
             {
                 listentries ?
                 listentries.length === 0 ? 

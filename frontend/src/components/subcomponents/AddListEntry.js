@@ -342,20 +342,26 @@ import ItemBO from '../../api/ItemBO';
 
 
                             <br margin-top='20px' />
-                            <Button onClick={() => this.state.amount ?
-                                                   console.log("true") : console.log("da stimmt was nicht!")} variant="contained" color="primary"> Eintrag hinzufügen </Button>
-
-                            <br margin-top='20px' />
-                            <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> zurück zu meinen Einträgen </Button>
-
-                            <br margin-top='20px' />
-                            <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> abbrechen </Button>
-
+                            <Button onClick={() => this.state.amount && this.state.pickedItem && this.state.pickedRetailer && this.state.pickedUser && (this.state.unit == 0 |this.state.unit) ?
+                                                   this.createItem() : console.log("da stimmt was nicht!")} variant="contained" color="primary"> Eintrag hinzufügen </Button>
+                            
+                            
+                            
 
 
 
 
                         </Grid>
+
+                    </div>
+                    <div>   <Grid 
+                            justify="center">
+                            <br margin-top='20px' />
+                            <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> zurück zu meinen Einträgen </Button>
+
+                            <br margin-top='20px' />
+                            <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> abbrechen </Button>
+                            </Grid>
                     </div>
 
 

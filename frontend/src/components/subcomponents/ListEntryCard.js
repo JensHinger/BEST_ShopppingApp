@@ -179,9 +179,8 @@ import ItemBO from '../../api/ItemBO'
         //console.log("state.sel_user",this.state.sel_user)
         //console.log("this.state.sel_item_name", this.state.sel_item_name)
         //console.log("item:", this.state.item)
-
+        const { classes } = this.props; 
         return(
-
             <div>
                 
 
@@ -190,13 +189,17 @@ import ItemBO from '../../api/ItemBO'
                 <Card>
                     
                     <CardContent disabled = {true} style={{ textDecoration : this.state.checked ? 'line-through' : null}} >
+                    <pre>
                     <Checkbox checked={this.state.checked} onClick ={() => {this.scoreThroughHandler()}}/>
-                    {this.state.item.getName()} {this.state.listentry.getAmount()}  {units[this.state.listentry.getUnit()]} 
+                    
+                    {this.state.item.getName()}  {this.state.listentry.getAmount()}   {units [this.state.listentry.getUnit()]}  
                     {this.state.user.getName()} {this.state.retailer.getName()} 
+                   
                         <IconButton  disabled = {this.state.checked ? true : false} justify ="right" onClick = {() => {this.expandHandler()}} 
                         >
                             <ExpandMoreIcon/>
                         </IconButton>
+                    </pre>
                     </CardContent>
                     <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
                         <Card>
@@ -242,4 +245,5 @@ import ItemBO from '../../api/ItemBO'
         ) 
     }
  }
+
 export default ListEntryCard

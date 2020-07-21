@@ -13,6 +13,7 @@ import Header from "./components/layout/Header";
 import { ThemeProvider } from '@material-ui/core';
 import Theme from "./Theme"
 import firebase from 'firebase/app';
+import AddStandardListEntryToList from './components/pages/AddStandardListEntryToList'
 import 'firebase/auth';
 import SignIn from './components/pages/SignIn';
 
@@ -127,8 +128,9 @@ class App extends Component {
               <Route path='/standardlistmanagement/:partyid' component={StandardListManagement}>
               </Route>
               <Route path='/addstandardlistentry/:partyid' component={AddStandardListEntry}>
-
+			  
               </Route>
+			  <Route path='/addstandardlistentrytolist/:listid' component={AddStandardListEntryToList}/>
               <Route path='/about'>
                 <About />
               </Route>
