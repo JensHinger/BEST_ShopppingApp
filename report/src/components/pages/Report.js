@@ -46,7 +46,7 @@ render (){
     return(
         <ThemeProvider theme={Theme}>
             <Typography variant='h6' component='h1' align='center'>
-                <Grid>
+                <Grid container justify="center">
                     <div>
                         <br margin-top= '20px'/>
                         Report
