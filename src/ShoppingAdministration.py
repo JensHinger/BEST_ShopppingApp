@@ -86,6 +86,10 @@ class ShoppingAdministration(object):
 
     def delete_list(self, list):
         """Eine Liste löschen."""
+        listentries = self.get_listentry_by_list_id(list.get_id())
+        for listentry in listentries:
+            self.delete_listentry(listentry.get_id())
+
         with ListMapper() as mapper:
             mapper.delete(list)
 
@@ -236,6 +240,7 @@ class ShoppingAdministration(object):
     def delete_retailer(self, retailer):
         with RetailerMapper() as mapper:
             mapper.delete(retailer)
+
     """
     Ab hier geht es um Items.
     """
@@ -286,6 +291,11 @@ class ShoppingAdministration(object):
         """Invitations nach id auslesen."""
         with InvitationMapper() as mapper:
             return mapper.find_by_id(id)
+
+    def get_all_invitations_by_party(self, partyi_id):
+        """Alle Invitations welche den FK == partyi_id"""
+        with InvitationMapper() as mapper:
+            return mapper.find_all_invitations_by_party(partyi_id)
 
     def get_all_pend_user_in_party(self, partyi_id):
         """Alle User mit pend invites für eine Party auslesen."""
@@ -369,10 +379,22 @@ class ShoppingAdministration(object):
         with PartyMapper() as mapper:
             mapper.update(party)
 
-    def delete_party(self, party):
-        """Eine Gruppe löschen."""
+    def delete_party(self, party_id):
+        """Eine Gruppe löschen. Invitations und Listen werden gelöscht Listeintröge werden auf Dump-Liste gesetzt """
+
+        invitations = self.get_all_invitations_by_party(party_id)
+        for invitation in invitations:
+            self.delete_invitation(invitation.get_id())
+
+        lists = self.get_all_lists_by_partyl_id(party_id)
+        for list in lists:
+            listentries = self.get_listentry_by_list_id(list.get_id())
+            for listentry in listentries:
+                self.delete_listentry(listentry.get_id())
+            self.delete_list(list.get_id())
+
         with PartyMapper() as mapper:
-            mapper.delete(party)
+            mapper.delete(party_id)
 
     """
     Hier geht es um den User
