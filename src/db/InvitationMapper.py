@@ -69,6 +69,20 @@ class InvitationMapper(Mapper):
 
         return result
 
+    def find_all_invitations_by_party(self, partyi_id):
+        """Alle Invitations auslesen, bei denen der FK = partyi_id ist """
+        cursor = self._cnx.cursor()
+        command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
+                  "partyi_id LIKE '{}'".format(partyi_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            result = self.build_bo(tuples)
+        except IndexError:
+            result = None
+        return result
+
     def find_all_pend_user_in_party(self, partyi_id):
         """Alle User einer party auslesen, gibt nur die ID zurück """
         cursor = self._cnx.cursor()

@@ -166,6 +166,7 @@ class ShoppingAdministration(object):
     def delete_retailer(self, retailer):
         with RetailerMapper() as mapper:
             mapper.delete(retailer)
+
     """
     Ab hier geht es um Items.
     """
@@ -216,6 +217,7 @@ class ShoppingAdministration(object):
         """Invitations nach id auslesen."""
         with InvitationMapper() as mapper:
             return mapper.find_by_id(id)
+
 
     def get_all_pend_user_in_party(self, partyi_id):
         """Alle User mit pend invites für eine Party auslesen."""
@@ -301,6 +303,11 @@ class ShoppingAdministration(object):
 
     def delete_party(self, party):
         """Eine Gruppe löschen."""
+        with InvitationMapper() as mapper:
+            invitations = mapper.find_all_invitations_by_party(party)
+            for invitation in invitations:
+                mapper.delete_invitation(invitation)
+
         with PartyMapper() as mapper:
             mapper.delete(party)
 
