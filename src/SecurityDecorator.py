@@ -5,7 +5,6 @@ import google.oauth2.id_token
 from ShoppingAdministration import ShoppingAdministration
 
 
-
 def secured(function):
     """Decorator zur Google Firebase-basierten Authentifizierung von Benutzern
 
@@ -44,7 +43,6 @@ def secured(function):
                     google_user_id = claims.get("user_id")
                     email = claims.get("email")
                     name = claims.get("name")
-
 
                     user = adm.get_user_by_google_id(google_user_id)
                     if user is not None:
