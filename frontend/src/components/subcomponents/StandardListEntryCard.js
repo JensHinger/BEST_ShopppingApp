@@ -30,7 +30,7 @@ class StandardListEntryCard extends Component {
             sel_amount: null,
             sel_unit: null,
             sel_item_name: null,
-            units : ['St', 'kg', 'g', 'L', 'ml', 'm', 'cm', 'Pckg'] 
+            units : ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg '] 
         }
     }
 
@@ -147,7 +147,7 @@ class StandardListEntryCard extends Component {
     }
 
     render(){
-        const units = ['St', 'kg', 'g', 'L', 'ml', 'm', 'cm', 'Pckg']   
+        const units = ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg ']   
         console.log("standardListEntry:", this.state.standardListEntry)
         //console.log("state.sel_user",this.state.sel_user)
         //console.log("this.state.sel_item_name", this.state.sel_item_name)
