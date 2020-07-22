@@ -190,7 +190,7 @@ import ItemBO from '../../api/ItemBO'
                     <Card >
                     
                     <CardContent disabled = {true} style={{ textDecoration : this.state.checked ? 'line-through' : null}} >
-                    <pre>
+                    
                     <Checkbox checked={this.state.checked} onClick ={() => {this.scoreThroughHandler()}}/>
                     
                     {this.state.item.getName()}  {this.state.listentry.getAmount()}   {units [this.state.listentry.getUnit()]}  
@@ -200,7 +200,7 @@ import ItemBO from '../../api/ItemBO'
                         >
                             <ExpandMoreIcon/>
                         </IconButton>
-                    </pre>
+                    
                     </CardContent>
                     <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
                         <Card>
