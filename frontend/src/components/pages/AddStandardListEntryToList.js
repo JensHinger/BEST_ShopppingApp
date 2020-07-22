@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import { Button, Grid, Typography, withStyles } from '@material-ui/core';
 import ShoppingAPI from '../../api/ShoppingAPI';
 import DisplayStandardListEntry from '../subcomponents/DisplayStandardListEntry'
+import {Link as RouterLink} from 'react-router-dom'
+import ListIcon from '@material-ui/icons/List';
+import IconButton from '@material-ui/core/IconButton';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 
 class AddStandardListEntryToList extends Component {
     constructor(props) {
@@ -10,7 +14,8 @@ class AddStandardListEntryToList extends Component {
 
         this.state = {
             relevantStandardListEntries: [],
-            listId : this.props.match.params.listid
+            listId : this.props.match.params.listid,
+            party : null
 
         }
     }
@@ -22,20 +27,40 @@ class AddStandardListEntryToList extends Component {
     getStandardListEntries = () => {
         console.log(this.state.listId)    
         ShoppingAPI.getAPI().getListById(this.state.listId).then((mylist) => 
-            ShoppingAPI.getAPI().getStandardListEntryByPartyId(mylist.getPartylId())
-            .then((myListEntries) => this.setState({relevantStandardListEntries: myListEntries})))
-    }
+            ShoppingAPI.getAPI().getPartyById(mylist.getPartylId()).then((myparty) => {return(
+            this.setState({party : myparty}),
+            ShoppingAPI.getAPI().getStandardListEntryByPartyId(myparty.getID())
+            .then((myListEntries) => this.setState({relevantStandardListEntries: myListEntries})))}))}
+            
 
 
     render(){
         console.log("entries für die party: ", this.state.relevantStandardListEntries)
+        console.log("listID", this.state.listId)
         const relevantStandardListEntries = this.state.relevantStandardListEntries
+        const party = this.state.party
         return(
-            <div>
-                { relevantStandardListEntries ?
-                    relevantStandardListEntries.map((standardListEntry) => 
-                    <DisplayStandardListEntry key={standardListEntry.getID()} listId={this.state.listId} standardListEntry={standardListEntry} /> ) : null
-                }
+
+            <div style={{width : "50%", margin : "auto"}}>
+                <Grid container  direction={'row'}>
+                    
+                    <IconButton variant="outlined" component={RouterLink} to={`/partyshoppinglist/${this.state.listId}`}>
+                        <ArrowLeftIcon/>
+                        <ListIcon/>
+                    </IconButton>
+
+                    {   party ?
+                        <Typography variant="h6">Lieblingseinträge der Gruppe {party.getName()} </Typography>
+                        :null
+                    }
+               
+                    </Grid>
+                    <hr/>
+                    { relevantStandardListEntries ?
+                        relevantStandardListEntries.map((standardListEntry) => 
+                        <DisplayStandardListEntry key={standardListEntry.getID()} listId={this.state.listId} standardListEntry={standardListEntry} /> ) : null
+                    }
+                   
             </div>
 
 

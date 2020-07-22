@@ -174,7 +174,7 @@ import ItemBO from '../../api/ItemBO'
     }
 
     render(){
-        const units = ['St', 'kg', 'g', 'L', 'ml', 'm', 'cm', 'Pckg']   
+        const units = ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg ']   
         //console.log("sel_retailer:", this.state.sel_retailer)
         //console.log("state.sel_user",this.state.sel_user)
         //console.log("this.state.sel_item_name", this.state.sel_item_name)
@@ -186,10 +186,11 @@ import ItemBO from '../../api/ItemBO'
 
             { 
                 this.state.item && this.state.user && this.state.retailer && this.state.all_retailers_name && this.state.party_users  ? 
-                <Card>
+                <div>
+                    <Card >
                     
                     <CardContent disabled = {true} style={{ textDecoration : this.state.checked ? 'line-through' : null}} >
-                    <pre>
+                    
                     <Checkbox checked={this.state.checked} onClick ={() => {this.scoreThroughHandler()}}/>
                     
                     {this.state.item.getName()}  {this.state.listentry.getAmount()}   {units [this.state.listentry.getUnit()]}  
@@ -199,7 +200,7 @@ import ItemBO from '../../api/ItemBO'
                         >
                             <ExpandMoreIcon/>
                         </IconButton>
-                    </pre>
+                    
                     </CardContent>
                     <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
                         <Card>
@@ -239,6 +240,7 @@ import ItemBO from '../../api/ItemBO'
                         </Card>
                     </Collapse>
                 </Card> 
+                </div>    
                 : null 
             }    
             </div>
