@@ -97,6 +97,10 @@ class ShoppingAdministration(object):
     Hier geht es um die Listentrys
     """
 
+    def set_user_null(self, listentry):
+        with ListEntryMapper() as mapper:
+            return mapper.set_user_null(listentry)
+
     def get_all_listentries(self):
         """Alle Listeneinträge auslesen."""
         with ListEntryMapper() as mapper:
@@ -282,6 +286,11 @@ class ShoppingAdministration(object):
     Hier geht es um die Invitation
     """
 
+    def set_source_user_null(self, invitation):
+        """Setze den FK source_user auf null"""
+        with InvitationMapper() as mapper:
+            return mapper.set_source_user_null(invitation)
+
     def get_all_invitation(self):
         """Alle Invitations auslesen."""
         with InvitationMapper() as mapper:
@@ -296,6 +305,16 @@ class ShoppingAdministration(object):
         """Alle Invitations welche den FK == partyi_id"""
         with InvitationMapper() as mapper:
             return mapper.find_all_invitations_by_party(partyi_id)
+
+    def get_all_invitations_by_target_user(self, target_user_id):
+        """Alle Invitations welche den FK == target_user_id"""
+        with InvitationMapper() as mapper:
+            return mapper.find_all_invitations_by_target_user(target_user_id)
+
+    def get_all_invitations_by_source_user(self, source_user_id):
+        """Alle Invitations welche den FK == source_user_id"""
+        with InvitationMapper() as mapper:
+            return mapper.find_all_invitations_by_source_user(source_user_id)
 
     def get_all_pend_user_in_party(self, partyi_id):
         """Alle User mit pend invites für eine Party auslesen."""
@@ -437,12 +456,45 @@ class ShoppingAdministration(object):
 
     def delete_user(self, user):
         """Einen User löschen."""
+        inc_invitations = self.get_all_invitations_by_target_user(user.get_id())
+        if type(inc_invitations) is list:
+            for inc_invitation in inc_invitations:
+                self.delete_invitation(inc_invitation)
+        else:
+            self.delete_invitation(inc_invitations)
+
+        out_invitations = self.get_all_invitations_by_source_user(user.get_id())
+        if type(out_invitations) is list:
+            for out_invitation in out_invitations:
+                self.set_source_user_null(out_invitation)
+        else:
+            self.set_source_user_null(out_invitations)
+
+        listentries = self.get_listentry_by_user_id(user.get_id())
+        if type(listentries) is list:
+            for listentry in listentries:
+                self.set_user_null(listentry)
+        else:
+            self.set_user_null(listentries)
+
+        standard_listentries = self.get_standard_listentry_by_user_id(user.get_id())
+        if type(standard_listentries) is list:
+            for standardListentry in standard_listentries:
+                self.set_sle_user_null(standardListentry)
+        else:
+            self.set_sle_user_null(standard_listentries)
+
         with UserMapper() as mapper:
             mapper.delete(user)
 
     """
     Hier geht es um den Standartlisteneinträge
     """
+
+    def set_sle_user_null(self, standard_listentry):
+        """Setze den FK source_user auf null"""
+        with StandardListEntryMapper() as mapper:
+            return mapper.set_sle_user_null(standard_listentry)
 
     def get_all_standard_list_entrys(self):
         """Alle Standartlisteneinträge auslesen."""

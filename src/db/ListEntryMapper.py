@@ -45,6 +45,15 @@ class ListEntryMapper(Mapper):
 
         return result
 
+    def set_user_null(self, listentry):
+        cursor = self._cnx.cursor()
+        command = "UPDATE listentry SET user_id = null WHERE id LIKE ('{}')".format(listentry.get_id())
+        cursor.execute(command)
+
+        self._cnx.commit()
+        cursor.close()
+
+
     def find_all(self):
 
         result = []

@@ -111,7 +111,7 @@ class UserMapper(Mapper):
         try:
             result = self.build_bo(tuples)
         except IndexError:
-            """Falls kein User mit der angegebenen email gefunden werden konnte,
+            """Falls kein User mit der angegebenen id gefunden werden konnte,
             wird hier None als Rückgabewert deklariert"""
             result = None
 

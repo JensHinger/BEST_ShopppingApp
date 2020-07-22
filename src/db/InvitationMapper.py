@@ -35,6 +35,13 @@ class InvitationMapper(Mapper):
 
         return result
 
+    def set_source_user_null(self, invitation):
+        cursor = self._cnx.cursor()
+        command = "UPDATE invitation SET source_user = null WHERE id LIKE ('{}')".format(invitation.get_id())
+        cursor.execute(command)
+
+        self._cnx.commit()
+        cursor.close()
 
     def find_all(self):
         cursor = self._cnx.cursor()
@@ -74,6 +81,34 @@ class InvitationMapper(Mapper):
         cursor = self._cnx.cursor()
         command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
                   "partyi_id LIKE '{}'".format(partyi_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            result = self.build_bo(tuples)
+        except IndexError:
+            result = None
+        return result
+
+    def find_all_invitations_by_target_user(self, target_user_id):
+        """Alle Invitations auslesen, bei denen der FK = partyi_id ist """
+        cursor = self._cnx.cursor()
+        command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
+                  "target_user LIKE '{}'".format(target_user_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            result = self.build_bo(tuples)
+        except IndexError:
+            result = None
+        return result
+
+    def find_all_invitations_by_source_user(self, source_user_id):
+        """Alle Invitations auslesen, bei denen der FK = partyi_id ist """
+        cursor = self._cnx.cursor()
+        command = "SELECT id, creation_date, is_accepted, partyi_id, target_user, source_user FROM invitation WHERE " \
+                  "source_user LIKE '{}'".format(source_user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
