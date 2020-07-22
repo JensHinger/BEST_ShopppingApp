@@ -42,28 +42,25 @@ class AddStandardListEntryToList extends Component {
         return(
 
             <div style={{width : "50%", margin : "auto"}}>
-                <Grid container justify ="center" direction={'row'}>
-                    <Grid>
+                <Grid container  direction={'row'}>
+                    
                     <IconButton variant="outlined" component={RouterLink} to={`/partyshoppinglist/${this.state.listId}`}>
                         <ArrowLeftIcon/>
                         <ListIcon/>
                     </IconButton>
-                    </Grid>
-                    <Grid>
+
                     {   party ?
                         <Typography variant="h6">Lieblingseinträge der Gruppe {party.getName()} </Typography>
                         :null
                     }
-                    </Grid>
                
-                    <Grid>
+                    </Grid>
                     <hr/>
                     { relevantStandardListEntries ?
                         relevantStandardListEntries.map((standardListEntry) => 
                         <DisplayStandardListEntry key={standardListEntry.getID()} listId={this.state.listId} standardListEntry={standardListEntry} /> ) : null
                     }
-                    </Grid>
-                </Grid>
+                   
             </div>
 
 
