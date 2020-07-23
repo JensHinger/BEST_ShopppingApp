@@ -1,5 +1,5 @@
-from db.Mapper import Mapper
-from bo.StandardListEntry import StandardListEntry
+from server.db import Mapper
+from server.bo import StandardListEntry
 
 
 class StandardListEntryMapper(Mapper):
@@ -42,6 +42,14 @@ class StandardListEntryMapper(Mapper):
                 result.append(standardlistentry)
 
         return result
+
+    def set_sle_user_null(self, standard_listentry):
+        cursor = self._cnx.cursor()
+        command = "UPDATE standardlistentry SET user_id = null WHERE id LIKE ('{}')".format(standard_listentry.get_id())
+        cursor.execute(command)
+
+        self._cnx.commit()
+        cursor.close()
 
     def find_all(self):
 
@@ -156,8 +164,6 @@ class StandardListEntryMapper(Mapper):
 
         self._cnx.commit()
         cursor.close()
-
-        return
 
     def delete(self, listentry):
 

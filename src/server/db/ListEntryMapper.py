@@ -1,5 +1,5 @@
-from db.Mapper import Mapper
-from bo.ListEntry import ListEntry
+from server.db import Mapper
+from server.bo.ListEntry import ListEntry
 
 
 class ListEntryMapper(Mapper):
@@ -44,6 +44,15 @@ class ListEntryMapper(Mapper):
                 result.append(listentry)
 
         return result
+
+    def set_user_null(self, listentry):
+        cursor = self._cnx.cursor()
+        command = "UPDATE listentry SET user_id = null WHERE id LIKE ('{}')".format(listentry.get_id())
+        cursor.execute(command)
+
+        self._cnx.commit()
+        cursor.close()
+
 
     def find_all(self):
 
