@@ -1,5 +1,5 @@
-from db.Mapper import Mapper
-from bo.Item import Item
+from server.db import Mapper
+from server.bo import Item
 
 
 class ItemMapper(Mapper):

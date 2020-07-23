@@ -2,16 +2,16 @@ from flask import Flask
 from flask_restx import Resource, Api, fields
 from flask_cors import CORS
 
-from bo.ListEntry import ListEntry
-from bo.Party import Party
-from bo.Retailer import Retailer
-from bo.StandardListEntry import StandardListEntry
-from bo.User import User
-from bo.Invitation import Invitation
-from bo.Item import Item
-from bo.List import List
+from server.bo.ListEntry import ListEntry
+from server.bo import Party
+from server.bo import Retailer
+from server.bo import StandardListEntry
+from server.bo import User
+from server.bo import Invitation
+from server.bo import Item
+from server.bo.List import List
 
-from ShoppingAdministration import ShoppingAdministration
+from server.ShoppingAdministration import ShoppingAdministration
 
 from SecurityDecorator import secured
 

@@ -1,4 +1,4 @@
-from bo.BusinessObject import BusinessObject
+from server.bo.BusinessObject import BusinessObject
 
 
 class Party(BusinessObject):

@@ -1,5 +1,5 @@
-from db.Mapper import Mapper
-from bo.User import User
+from server.db import Mapper
+from server.bo import User
 
 """User Objekte werden noch nicht erzeugt. 
    Business Objekte fehlen noch alle"""

@@ -1,5 +1,5 @@
-from db.Mapper import Mapper
-from bo.Invitation import Invitation
+from server.db import Mapper
+from server.bo import Invitation
 
 
 class InvitationMapper(Mapper):

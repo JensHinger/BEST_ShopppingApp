@@ -1,24 +1,24 @@
 import collections
 
-from bo.List import List
-from bo.ListEntry import ListEntry
-from bo.Item import Item
-from bo.Invitation import Invitation
-from bo.Party import Party
-from bo.User import User
-from bo.StandardListEntry import StandardListEntry
-from bo.Retailer import Retailer
-from bo.ReportItem import ReportItem
-from bo.ReportRetailer import ReportRetailer
+from server.bo.List import List
+from server.bo.ListEntry import ListEntry
+from server.bo import Item
+from server.bo import Invitation
+from server.bo import Party
+from server.bo import User
+from server.bo import StandardListEntry
+from server.bo import Retailer
+from server.bo import ReportItem
+from server.bo.ReportRetailer import ReportRetailer
 
-from db.ListMapper import ListMapper
-from db.ListEntryMapper import ListEntryMapper
-from db.ItemMapper import ItemMapper
-from db.InvitationMapper import InvitationMapper
-from db.PartyMapper import PartyMapper
-from db.UserMapper import UserMapper
-from db.StandardListEntryMapper import StandardListEntryMapper
-from db.RetailerMapper import RetailerMapper
+from server.db import ListMapper
+from server.db.ListEntryMapper import ListEntryMapper
+from server.db.ItemMapper import ItemMapper
+from server.db.InvitationMapper import InvitationMapper
+from server.db.PartyMapper import PartyMapper
+from server.db import UserMapper
+from server.db import StandardListEntryMapper
+from server.db import RetailerMapper
 
 """
 Autoren: 
