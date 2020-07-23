@@ -1,4 +1,4 @@
-from server.db import Mapper
+from server.db.Mapper import Mapper
 from server.bo.ListEntry import ListEntry
 
 

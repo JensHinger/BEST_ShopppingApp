@@ -1,1 +1,7 @@
 runtime: python38
+
+handlers:
+- url : /server
+
+- url : /static
+  static_dir: static

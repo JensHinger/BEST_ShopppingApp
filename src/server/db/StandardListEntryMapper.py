@@ -1,5 +1,5 @@
-from server.db import Mapper
-from server.bo import StandardListEntry
+from server.db.Mapper import Mapper
+from server.bo.StandardListEntry import StandardListEntry
 
 
 class StandardListEntryMapper(Mapper):
