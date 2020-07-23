@@ -1,5 +1,5 @@
-from server.db import Mapper
-from server.bo import Retailer
+from server.db.Mapper import Mapper
+from server.bo.Retailer import Retailer
 
 
 class RetailerMapper(Mapper):

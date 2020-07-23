@@ -3,12 +3,12 @@ from flask_restx import Resource, Api, fields
 from flask_cors import CORS
 
 from server.bo.ListEntry import ListEntry
-from server.bo import Party
-from server.bo import Retailer
-from server.bo import StandardListEntry
-from server.bo import User
-from server.bo import Invitation
-from server.bo import Item
+from server.bo.Party import Party
+from server.bo.Retailer import Retailer
+from server.bo.StandardListEntry import StandardListEntry
+from server.bo.User import User
+from server.bo.Invitation import Invitation
+from server.bo.Item import Item
 from server.bo.List import List
 
 from server.ShoppingAdministration import ShoppingAdministration

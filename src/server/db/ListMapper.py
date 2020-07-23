@@ -1,5 +1,5 @@
 from server.bo.List import List
-from server.db import Mapper
+from server.db.Mapper import Mapper
 
 
 class ListMapper(Mapper):

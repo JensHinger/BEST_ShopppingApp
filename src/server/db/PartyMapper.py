@@ -1,5 +1,5 @@
-from server.db import Mapper
-from server.bo import Party
+from server.db.Mapper import Mapper
+from server.bo.Party import Party
 
 
 class PartyMapper(Mapper):
