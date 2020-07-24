@@ -96,7 +96,10 @@ class ListMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            list.set_id(maxid[0] + 1)
+            if maxid[0] is None:
+                list.set_id(1)
+            else:
+                list.set_id(maxid[0] + 1)
 
         command = "INSERT INTO list (id, name, creation_date, partyl_id) VALUES ('{}','{}','{}','{}')" \
             .format(list.get_id(), list.get_name(), list.get_creation_date(), list.get_partyl_id())

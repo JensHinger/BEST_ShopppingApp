@@ -42,6 +42,7 @@ class CreateGroupDialog extends Component{
     new_invitation.setSourceUserId(this.state.currentUser)
     new_invitation.setTargetUserId(this.state.currentUser)
     new_invitation.setPartyiId(partyId)
+    new_invitation.setIsAccepted(1)
 
     ShoppingAPI.getAPI().addInvitation(new_invitation)
 

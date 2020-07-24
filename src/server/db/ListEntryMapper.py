@@ -160,7 +160,10 @@ class ListEntryMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            listentry.set_id(maxid[0] + 1)
+            if maxid[0] is None:
+                listentry.set_id(1)
+            else:
+                listentry.set_id(maxid[0] + 1)
 
         command = "INSERT INTO listentry (id, name, creation_date, item_id, retailer_id, user_id, list_id, amount, unit, checked) " \
                   "VALUES ('{}','{}','{}','{}','{}','{}','{}', '{}', '{}', '{}')"\

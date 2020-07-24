@@ -75,7 +75,10 @@ class ItemMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            item.set_id(maxid[0] + 1)
+            if maxid[0] is None:
+                item.set_id(1)
+            else:
+                item.set_id(maxid[0]+1)
 
         command = "INSERT INTO item (id, name, creation_date) VALUES ('{}','{}','{}')" \
             .format(item.get_id(), item.get_name(), item.get_creation_date())

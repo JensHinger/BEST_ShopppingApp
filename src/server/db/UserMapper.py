@@ -127,7 +127,10 @@ class UserMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            user.set_id(maxid[0]+1)
+            if maxid[0] is None:
+                user.set_id(1)
+            else:
+                user.set_id(maxid[0]+1)
 
         command = "INSERT INTO user (id, name, creation_date, google_id, email) VALUES ('{}','{}','{}','{}','{}')"\
                 .format(user.get_id(), user.get_name(), user.get_creation_date(), user.get_google_id(),
@@ -163,6 +166,9 @@ class UserMapper(Mapper):
 if __name__ == "__main__":
     with UserMapper() as mapper:
         # Nach mapper jegliche Methode dieser Klasse
+        user = User()
+        user.set_name("Hallo")
+        user.set_google_id("dfasdfasdfasdf")
+        user.set_email("dfasdfasdfasdf")
+        mapper.insert(user)
 
-        result = mapper.find_by_id(2)
-        print(result.get_id())
