@@ -90,7 +90,10 @@ class RetailerMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            retailer.set_id(maxid[0] + 1)
+            if maxid[0] is None:
+                retailer.set_id(1)
+            else:
+                retailer.set_id(maxid[0] + 1)
 
         command = "INSERT INTO retailer (id, name, creation_date) VALUES ('{}','{}','{}')" \
             .format(retailer.get_id(), retailer.get_name(), retailer.get_creation_date())

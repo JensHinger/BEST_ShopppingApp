@@ -221,7 +221,10 @@ class InvitationMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            invitation.set_id(maxid[0] + 1)
+            if maxid[0] is None:
+                invitation.set_id(1)
+            else:
+                invitation.set_id(maxid[0] + 1)
 
         command = "INSERT INTO invitation (id, creation_date, is_accepted, partyi_id, target_user, source_user) " \
                   "VALUES ('{}','{}','{}','{}', '{}', '{}' )" \

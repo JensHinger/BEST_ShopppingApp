@@ -74,7 +74,10 @@ class PartyMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            party.set_id(maxid[0] + 1)
+            if maxid[0] is None:
+                party.set_id(1)
+            else:
+                party.set_id(maxid[0] + 1)
 
         command = "INSERT INTO party (id, name, creation_date) VALUES ('{}','{}','{}')"\
                 .format(party.get_id(), party.get_name(), party.get_creation_date())

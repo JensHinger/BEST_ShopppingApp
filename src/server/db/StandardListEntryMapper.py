@@ -138,7 +138,11 @@ class StandardListEntryMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            standardlistentry.set_id(maxid[0] + 1)
+            if maxid[0] is None:
+                standardlistentry.set_id(1)
+            else:
+                standardlistentry.set_id(maxid[0] + 1)
+
 
         command = "INSERT INTO standardlistentry " \
                   "(id, name, creation_date, item_id, retailer_id, user_id, party_sle_id, amount, unit) " \
