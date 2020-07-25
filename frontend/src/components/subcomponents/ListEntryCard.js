@@ -120,7 +120,7 @@ import ItemBO from '../../api/ItemBO'
 
     scoreThroughHandler = () => {
         this.setState({checked :!this.state.checked})
-        console.log("checked:", this.state.checked)
+        //console.log("checked:", this.state.checked)
         if (this.state.expanded === true){
             this.setState({expanded : !this.state.expanded})}
 
@@ -157,7 +157,7 @@ import ItemBO from '../../api/ItemBO'
         mylistentry.setchecked(this.state.checked ? 1 : 0 )
         mylistentry.setAmount(this.state.sel_amount ? this.state.sel_amount : this.state.listentry.getAmount())
         mylistentry.setUnit(this.state.units.indexOf(this.state.sel_unit))
-        console.log("mein LENTRY:", mylistentry)
+        //console.log("mein LENTRY:", mylistentry)
         this.props.onListEntryUpdated(this.state.listentry) 
         ShoppingAPI.getAPI().updateListEntry(mylistentry)
         .then(ShoppingAPI.getAPI().getUserById(this.state.listentry.getUserId()) 
@@ -193,7 +193,7 @@ import ItemBO from '../../api/ItemBO'
         //console.log("this.state.sel_item_name", this.state.sel_item_name)
         //console.log("item:", this.state.item)
         const { classes } = this.props; 
-        console.log("eine Card: ", this.props)
+        //console.log("eine Card: ", this.props)
         return(
             <div>
                 
