@@ -7,7 +7,7 @@ export default class ItemBO extends BusinessObject{
         
     }
 
-
+    // Returns an Array of ItemBOs from a given JSON structure
     static fromJSON(items) {
         let result = [];
 

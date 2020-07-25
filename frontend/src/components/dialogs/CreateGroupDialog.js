@@ -14,6 +14,10 @@ import ShoppingAPI from "../../api/ShoppingAPI"
 import PartyBO from "../../api/PartyBO"
 import InvitationBO from "../../api/InvitationBO"
 
+/**
+ * @author  Jens
+ */
+
 class CreateGroupDialog extends Component{
 
   constructor(props){
@@ -28,13 +32,14 @@ class CreateGroupDialog extends Component{
       }
   }
 
+  /** Das Erstellen einer Party  */
   handleGroupCreation = () => {
     const new_party = new PartyBO()
     new_party.setName(this.state.partyName)
     ShoppingAPI.getAPI().addParty(new_party)
     .then(party => this.handleInvitationCreation(party.getID()))  
   }
-
+  /** Das Erstellen einer Invitation */
   handleInvitationCreation = (partyId) => {
     const mailList = this.state.emailList
     const new_invitation = new InvitationBO()
@@ -48,7 +53,7 @@ class CreateGroupDialog extends Component{
     //Falls die MailListe leer ist können User nicht hinzugefügt werden der Originale User muss aber immer hinzugefügt werden
     //User ist nicht in der Database
     // -> this.emailList[0] == "" ? dann...
-    //2 Mal gleicher User einladen ist kacke ;-;
+    //2 Mal gleicher User einladen ist doof ;-;
 
     mailList.map((mail) =>
     ShoppingAPI.getAPI().getUserByEmail(mail)
@@ -62,25 +67,25 @@ class CreateGroupDialog extends Component{
     }.bind(this)
     ))
   }
-
+/** Funktion zum Öffnen des Dialogs */
   handleClickOpen = () => {
     this.setState({open: true});
   };
-
+/** Schließen des Dialogs und reset des States */
   handleClose = () => {
     this.setState({open: false});
     this.setState({emailList: []})
   };
-
+/** update */
   handleNameChange = (name) => {
     this.setState({partyName: name})
   };
-
+/** update */
   handleEmailChange = () => {
     this.setState({emailList : [...this.state.emailList, this.state.mail],
                    mail: ""})
   };
-
+/** delete */
   handleEmailDelete(index){
     let array = this.state.emailList
 

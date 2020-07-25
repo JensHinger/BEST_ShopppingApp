@@ -68,7 +68,7 @@ export default class ListEntryBO extends BusinessObject{
     getchecked(){
         return this.checked
     }
-
+    // Returns an Array of ListEntryBOs from a given JSON structure
     static fromJSON(listentries) {
         let result = [];
         

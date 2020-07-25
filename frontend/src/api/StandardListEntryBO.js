@@ -59,7 +59,7 @@ export default class StandardListEntryBO extends BusinessObject{
     getUnit(){
         return this.unit
     }
-
+    // Returns an Array of StandardListEntryBOs from a given JSON structure
     static fromJSON(standardlistentries) {
         let result = [];
         

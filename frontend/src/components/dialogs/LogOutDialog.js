@@ -5,6 +5,10 @@ import {ThemeProvider} from "@material-ui/core"
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
+/**
+ * @author  Dominic
+ */
+
 class LogOutDialog extends Component{
 
     constructor(props){
@@ -17,15 +21,15 @@ class LogOutDialog extends Component{
 
 
     }
-
+    /** Funktion zum Öffnen des Dialogs */
     handleClickOpen = () => {
        this.setState({open: true});}
-
+    /** Funktion zum Schließen des Dialogs */
     handleClose = () => {
-        firebase.auth().signOut()
-        .then(this.setState({open: false}))
-      
-      }
+      this.setState({open: false});}
+    /** Funktion zum Ausloggen des Users */
+    signOut = () => {
+      firebase.auth().signOut() }
 
     render (){
 
@@ -51,7 +55,7 @@ class LogOutDialog extends Component{
           <Button onClick={this.handleClose} color="primary">
             Nein
           </Button>
-          <Button onClick={this.handleClose} color="primary" autoFocus>
+          <Button onClick={this.signOut} color="primary" autoFocus>
             Ja
           </Button>
         </DialogActions>
