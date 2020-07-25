@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
-import SortRetailer from './SortRetailer'
+import SortRetailer from '../subcomponents/SortRetailer'
 
 /**
  * @author Jonathan, Anny und Jens
@@ -21,6 +21,7 @@ class PartyShoppingList extends Component{
         super(props)
         this.state = {
             listentries : null,
+            filteredEntries: null,
             list : null,
             youngestListEntry: null,
             filterArgument: null,
@@ -58,7 +59,7 @@ class PartyShoppingList extends Component{
     }
 
     updateListEntryHandler = (updatedListEntry) => {
-        var entries = this.state.listentries
+        var entries = this.state.filteredEntries
         var remainingEntries = entries.filter((entry) => entry.getID() != updatedListEntry.getID())
         ShoppingAPI.getAPI().getListEntryById(updatedListEntry.getID()).then(
             function(newEntry) {remainingEntries.push(newEntry[0])
@@ -77,36 +78,19 @@ class PartyShoppingList extends Component{
     }
 
    handleFilterSelected = (filteredRetailer) => {
-        const myState = this.state.listentries
-        this.setState({filterArgument : filteredRetailer})
-        const filterStart = 0
-        console.log("State: ", this.state)
-        console.log("filteredRetailer: ", filteredRetailer)
-        if(filterStart === 0){
-        if(this.state.filterArgument === null){
-            this.setState({filteredEntries : myState})
-            console.log("If funktioniert ")
-        
-        }
-        else{
-          const filteredState =  myState.filter((listEntry) => filteredRetailer.getID() === listEntry.getRetailerId())
-            this.setState({filteredEntries : filteredState})
-            console.log("filteredState: ", filteredState)
-            console.log("filteredRetailer: ", filteredRetailer)
-        }
-        }
-    
+        const filteredState =  this.state.filteredEntries.filter((listEntry) => filteredRetailer.getID() === listEntry.getRetailerId())
+        this.setState({filteredEntries : filteredState})
    }
 
     handleFilterReset = () => {
-        this.setState({filterArgument: null})
+        this.setState({filteredEntries: this.state.listentries})
    }
 
 
     render(){
 
-        const { listentries, list, youngestListEntry } = this.state;
-        //console.log("youngestlistentry laut render ", youngestListEntry)
+        const { filteredEntries, list, youngestListEntry } = this.state;
+        console.log("youngestlistentry laut render ", filteredEntries)
         
         return(
             <div style={{width : "50%", margin : "auto"}}>
@@ -131,8 +115,8 @@ class PartyShoppingList extends Component{
                 <hr/>
             </div>
             {
-                listentries ?
-                listentries.length === 0 ? 
+                filteredEntries ?
+                filteredEntries.length === 0 ? 
                 
                 <Typography variant="h4"> {"Du hast keine Listeneinträge"} </Typography>:
                 <div>
@@ -143,7 +127,7 @@ class PartyShoppingList extends Component{
                     </div>
                     :null}
                 <hr />
-                {listentries.map((listentry) => <ListEntryCard  onListEntryUpdated={this.updateListEntryHandler} onListEntryDeleted = {this.deleteListEntryHandler} listid = {this.props.match.params} listentry = {listentry} key = {listentry.getID()}/>)}
+                {filteredEntries.map((listentry) => <ListEntryCard  onListEntryUpdated={this.updateListEntryHandler} onListEntryDeleted = {this.deleteListEntryHandler} listid = {this.props.match.params} listentry = {listentry} key = {listentry.getID()}/>)}
                 </div>
                 : null
             }            
