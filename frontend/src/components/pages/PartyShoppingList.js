@@ -26,14 +26,11 @@ class PartyShoppingList extends Component{
     componentDidMount(){
         this.getListEntriesByList()
         this.getListName()
-        //console.log("log:", this.props.match.params)
 
     }
 
     getListEntriesByList = () => {
-        //console.log("versuchen die List id zu loggen:", this.props.match.params)
         const {listid} =  this.props.match.params
-        //console.log("list?:", listid)
         ShoppingAPI.getAPI().getListEntriesByListId(listid).then(listentryBOs =>
             {return(this.findNewestListEntry(listentryBOs))})
               
@@ -43,28 +40,23 @@ class PartyShoppingList extends Component{
             var youngestBO = listentryBOs.reduce((a, b) => {
                 return new Date(a.creation_date) > new Date(b.creation_date) ? a : b;
               })
-            //console.log("xoungest bo frisch ausm reduce: ", youngestBO)
-            listentryBOs.splice(listentryBOs.indexOf(youngestBO), 1)
             this.setState({youngestListEntry: null})
-            this.setState({listentries: listentryBOs})
+
+            var preSortEntries = listentryBOs
+            preSortEntries.sort((a, b) => {
+                return(
+                    a.getID() - b.getID()
+                )
+            })
+            this.setState({listentries: preSortEntries})
             this.setState({youngestListEntry: youngestBO})
-            //console.log("jüngster  als State:", this.state.youngestListEntry)
-
-            //this.setState({})
-
     }
 
     updateListEntryHandler = (updatedListEntry) => {
-        //console.log("entry der gepulled werden soll: ", updatedListEntry)
         var entries = this.state.listentries
-        entries.push(this.state.youngestListEntry)
-        //console.log("alle entries", entries)
         var remainingEntries = entries.filter((entry) => entry.getID() != updatedListEntry.getID())
-        //console.log("neuer Entry in der PartyShopping: ", remainingEntries)
         ShoppingAPI.getAPI().getListEntryById(updatedListEntry.getID()).then(
             function(newEntry) {remainingEntries.push(newEntry[0])
-                //console.log("remaingentries ergänzt: ", remainingEntries)
-                //console.log("state mit dem Entry der das neue Datum beinhaltet:", newEntry)
                 this.findNewestListEntry(remainingEntries)
                 }.bind(this))
     }
@@ -74,7 +66,6 @@ class PartyShoppingList extends Component{
     }
 
     deleteListEntryHandler = (deletedListEntry) => {
-        //console.log("diesen ListEntry haben wir gelöscht:", deletedListEntry.getID())
         this.setState({
             listentries: this.state.listentries.filter(listEntry => listEntry.getID() !== deletedListEntry.getID())
         })
@@ -86,7 +77,6 @@ class PartyShoppingList extends Component{
 
     render(){
 
-        //const { classes, list } = this.props;
         const { listentries, list, youngestListEntry } = this.state;
         console.log("youngestlistentry laut render ", youngestListEntry)
         
@@ -117,8 +107,11 @@ class PartyShoppingList extends Component{
                 
                 <Typography variant="h4"> {"Du hast keine Listeneinträge"} </Typography>:
                 <div>
-                    {youngestListEntry ? 
+                    {youngestListEntry ?
+                    <div>
+                    <Typography variant="h6"> {"Eintrag mit der letzten Änderung"} </Typography>
                     <ListEntryCard  onListEntryUpdated={this.updateListEntryHandler} onListEntryDeleted = {this.deleteListEntryHandler} listid = {this.props.match.params} listentry = {youngestListEntry}/>
+                    </div>
                     :null}
                 <hr />
                 {listentries.map((listentry) => <ListEntryCard  onListEntryUpdated={this.updateListEntryHandler} onListEntryDeleted = {this.deleteListEntryHandler} listid = {this.props.match.params} listentry = {listentry} key = {listentry.getID()}/>)}
