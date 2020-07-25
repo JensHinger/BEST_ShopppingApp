@@ -16,7 +16,7 @@ class RemoveGroupMemberDialog extends Component {
 
   constructor(props) {
     super(props);
-    
+    /** Propübergabe von Manageparty */
     this.state = {
       open: false,
       invitation: props.invitation,
@@ -31,7 +31,7 @@ class RemoveGroupMemberDialog extends Component {
     this.setState({ open: false });
     //this.setState({invitation: null})
   };
-
+  //** Löschen einer Invitation  */
   handleInvDelete = () => {
     console.log("Invitation ID: " , this.state.invitation[0].getID())
     console.log("invitation:", this.state.invitation)
@@ -43,7 +43,6 @@ class RemoveGroupMemberDialog extends Component {
   };
 
   render() {
-    //console.log("invitation die zu löschen ist:", this.state.invitation)
     return (
       <ThemeProvider theme={Theme}>
 

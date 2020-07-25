@@ -18,6 +18,8 @@ class UpdateListDialog extends Component {
     constructor(props) {
         super(props);
 
+
+        /** Prop Übergabe von UserParties  */
         this.state = {
 
             open: false,
@@ -34,11 +36,11 @@ class UpdateListDialog extends Component {
     handleClose = () => {
         this.setState({ open: false });
     };
-
+    
     handleListNameChange = (event) => {
         this.setState({ newName: event.target.value })
     };
-
+    /** Update List und prop Übergabe von UserParties */
     updateList = () => {
         var list = this.state.listBO
         list.setName(this.state.newName)

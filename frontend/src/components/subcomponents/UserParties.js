@@ -34,21 +34,19 @@ class UserParties extends Component {
     }
 
 
-
+    //** Die Funktion holt uns den eingeloggten User und dessen Partys  */
     getCurrUser = () => {
         console.log("eingeloggter User:", firebase.auth().currentUser)
         console.log("usertoken:", )
         ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
         .then((returnedUser) => {return (this.setState({user: returnedUser}),
-                                         this.getPartiesByUser()
-        
-        )}
+                                         this.getPartiesByUser())}
         
         
         )
     }
 
-
+    //** Alle Listen einer bestimmten Party */
     getListsByParty = (party_id) => {
         ShoppingAPI.getAPI().getListsByPartyId(party_id)
             .then(function (list) {
@@ -57,15 +55,15 @@ class UserParties extends Component {
             }.bind(this)
             )
     }
-
+   //** Alle Parties eines Users */
     getPartiesByUser = () => {
 
-        console.log("wir holen uns den User")
+        //console.log("wir holen uns den User")
         ShoppingAPI.getAPI().getAcceptedInvitationsByTargetUserId(this.state.user.getID())
         .then(invitations => this.getPartyByInvitations(invitations))
 
     }
-
+    
     getPartyByInvitations = (invitations) => {
         invitations.forEach(invitation => {
             ShoppingAPI.getAPI().getPartyById(invitation.getPartyiId())
@@ -76,7 +74,7 @@ class UserParties extends Component {
                 }.bind(this))
         });
     }
-
+    //** Löschen einer Liste */
     deleteList = (listId) => {
         //*console.log("versuche eine Liste zu löschen")
         ShoppingAPI.getAPI().deleteList(listId)
