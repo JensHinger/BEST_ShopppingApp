@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
-
+import SortRetailer from './SortRetailer'
 
 class PartyShoppingList extends Component{
 
@@ -71,7 +71,9 @@ class PartyShoppingList extends Component{
         })
     }
 
-   
+   handleFilterSelected = () => {
+
+   }
 
 
 
@@ -98,6 +100,7 @@ class PartyShoppingList extends Component{
                         <PlaylistAddIcon fontSize={"small"}/>
                         <FavoriteIcon />
                     </IconButton>
+                    <SortRetailer onFilterSelected = {this.handleFilterSelected()}/>
                 </Grid>
                 <hr/>
             </div>
