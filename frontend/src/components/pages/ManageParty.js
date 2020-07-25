@@ -16,7 +16,7 @@ import 'firebase/auth';
 class ManageGroup extends Component {
     constructor(props) {
         super(props);
-
+        //** Prop Übergabe von User Parties */
         this.state = {
             partyId: props.match.params.partyid,
             party: null,
@@ -24,7 +24,7 @@ class ManageGroup extends Component {
             invitations: [],
             userBO: null,
             mail : "",
-            user: null, //Hier muss noch der eingeloggte User übergeben werden!
+            user: null, 
             newName: "",
         }
     }
@@ -48,7 +48,7 @@ class ManageGroup extends Component {
                 this.getAllUsersInParty(party.getID())
             }.bind(this))
     }
-
+    /**  */
     handlePartyChange = () => {
         var newParty = this.state.party
         newParty.setName(this.state.newName)
