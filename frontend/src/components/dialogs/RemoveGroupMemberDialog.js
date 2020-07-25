@@ -9,7 +9,9 @@ import { ThemeProvider} from "@material-ui/core"
 import Theme from "../../Theme"
 import RemoveIcon from '@material-ui/icons/Remove';
 import ShoppingAPI from '../../api/ShoppingAPI';
-
+/**
+ * @author  Jens, Anny
+ */
 class RemoveGroupMemberDialog extends Component {
 
   constructor(props) {
@@ -21,7 +23,6 @@ class RemoveGroupMemberDialog extends Component {
     }
   }
 
-  /** Funktion für Mitglied entfernen fehlt noch, wie Umsetzen ? */
   handleClickOpen = () => {
     this.setState({ open: true });
   };

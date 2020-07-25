@@ -15,6 +15,7 @@ export default class ListBO extends BusinessObject{
         return this.partyl_id
     }
 
+    // Returns an Array of ListBOs from a given JSON structure
     static fromJSON(lists) {
         let result = [];
 

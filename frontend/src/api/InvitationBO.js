@@ -41,6 +41,7 @@ export default class InvitationBO extends BusinessObject{
     getIsAccepted() {
         return this.is_accepted
     }
+    // Returns an Array of InvitationBOs from a given JSON structure
     static fromJSON(invitations) {
         let result = [];
         

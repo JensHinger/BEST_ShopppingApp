@@ -10,7 +10,9 @@ import { ThemeProvider } from "@material-ui/core"
 import Button from '@material-ui/core/Button'
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
-
+/**
+ * @author  Dominic, Jens, anny
+ */
 class UpdateListDialog extends Component {
 
     constructor(props) {

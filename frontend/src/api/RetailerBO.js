@@ -1,7 +1,7 @@
 import BusinessObject from './BusinessObject'
 
 export default class RetailerBO extends BusinessObject{
-
+    // Returns an Array of RetailerBOs from a given JSON structure
     static fromJSON(retailer) {
         let result = [];
 

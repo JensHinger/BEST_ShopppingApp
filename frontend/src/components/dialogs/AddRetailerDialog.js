@@ -11,6 +11,10 @@ import { ThemeProvider } from "@material-ui/core"
 import RetailerBO from '../../api/RetailerBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
 
+/**
+ * @author  Dominic, Anny und Jens
+ */
+
 class AddRetailerDialog extends Component {
 
     constructor(props) {
@@ -22,19 +26,28 @@ class AddRetailerDialog extends Component {
 
         }
     }
-
+    /**
+    * Auszuführende Anweisung beim Öffnen des Dialogs
+    * Prüft ob es geöffnet ist
+    */
     handleClickOpen = () => {
         this.setState({ open: true })
     };
 
+    /**
+    * Auszuführende Anweisung beim Schließen des Dialogs
+    * Prüft ob es geschlossen ist 
+    */
     handleClose = () => {
         this.setState({ open: false });
     };
-
+    /** Setzen des Namens im State */
     handleAddRetailer(retailer) {
         this.setState({ retailerName: retailer })
     };
-
+    /**  
+    * Auszuführende Anweisung beim hinzufügen eines Retailers
+    */
     addRetailer = () => {
         const retailer = new RetailerBO()
         retailer.setName(this.state.retailerName)
