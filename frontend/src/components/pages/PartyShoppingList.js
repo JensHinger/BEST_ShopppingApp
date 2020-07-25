@@ -12,6 +12,9 @@ import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
 import SortRetailer from './SortRetailer'
 
+/**
+ * @author Jonathan, Anny und Jens
+ */
 class PartyShoppingList extends Component{
 
     constructor(props){
@@ -19,7 +22,8 @@ class PartyShoppingList extends Component{
         this.state = {
             listentries : null,
             list : null,
-            youngestListEntry: null
+            youngestListEntry: null,
+            filterArgument: null,
         }
     }
 
@@ -48,7 +52,8 @@ class PartyShoppingList extends Component{
                     a.getID() - b.getID()
                 )
             })
-            this.setState({listentries: preSortEntries})
+            this.setState({listentries: preSortEntries, 
+                            filteredEntries: preSortEntries})
             this.setState({youngestListEntry: youngestBO})
     }
 
@@ -71,16 +76,37 @@ class PartyShoppingList extends Component{
         })
     }
 
-   handleFilterSelected = () => {
-
+   handleFilterSelected = (filteredRetailer) => {
+        const myState = this.state.listentries
+        this.setState({filterArgument : filteredRetailer})
+        const filterStart = 0
+        console.log("State: ", this.state)
+        console.log("filteredRetailer: ", filteredRetailer)
+        if(filterStart === 0){
+        if(this.state.filterArgument === null){
+            this.setState({filteredEntries : myState})
+            console.log("If funktioniert ")
+        
+        }
+        else{
+          const filteredState =  myState.filter((listEntry) => filteredRetailer.getID() === listEntry.getRetailerId())
+            this.setState({filteredEntries : filteredState})
+            console.log("filteredState: ", filteredState)
+            console.log("filteredRetailer: ", filteredRetailer)
+        }
+        }
+    
    }
 
+    handleFilterReset = () => {
+        this.setState({filterArgument: null})
+   }
 
 
     render(){
 
         const { listentries, list, youngestListEntry } = this.state;
-        console.log("youngestlistentry laut render ", youngestListEntry)
+        //console.log("youngestlistentry laut render ", youngestListEntry)
         
         return(
             <div style={{width : "50%", margin : "auto"}}>
@@ -100,7 +126,7 @@ class PartyShoppingList extends Component{
                         <PlaylistAddIcon fontSize={"small"}/>
                         <FavoriteIcon />
                     </IconButton>
-                    <SortRetailer onFilterSelected = {this.handleFilterSelected()}/>
+                    <SortRetailer onFilterSelected = {() => this.handleFilterSelected} onResetFilter = {this.handleFilterReset}/>
                 </Grid>
                 <hr/>
             </div>

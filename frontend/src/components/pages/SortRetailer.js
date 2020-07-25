@@ -4,6 +4,10 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import ShoppingAPI from '../../api/ShoppingAPI';
 
+/**
+ * @author Anny, Jonathan und Jens
+ */
+
 class SortRetailer extends Component {
 
     constructor(props) {
@@ -12,7 +16,7 @@ class SortRetailer extends Component {
         this.state = {
             all_retailers: [],
             sel_retailer: null, 
-
+            autocompleteFieldKey: 0,
 
         }
     }
@@ -32,20 +36,30 @@ class SortRetailer extends Component {
         return (ret_names)
     }
 
-    
+    filtered = () => {
+        const filteredRetailer = this.state.all_retailers.filter((retailer)=> retailer.getName() == this.state.sel_retailer )
+        this.props.onFilterSelected(filteredRetailer[0])
+    }
+
+    resetFilter = () => {
+        this.setState({autocompleteFieldKey: this.state.autocompleteFieldKey + 1,            
+        })
+        this.props.onResetFilter()
+    }
 
     render() {
-        //const retailer = this.getAllRetailer()
+        
         return (
             <div>
                 <Autocomplete
+                    key = {this.state.autocompleteFieldKey}
                     id="combo-box-demo"
                     options={this.getListEntryPossibleRetailerNames()}
                     onInputChange={(event, value) => this.setState({ sel_retailer: value })}
-                    //getOptionSelected	= {(option, value) => console.log("value:",value , "optionn", option)} 
                     style={{ width: 300 }}
                     renderInput={(params) => <TextField {...params} label="Laden" />} />
-                <Button >Filter anwenden</Button>
+                <Button onClick = {this.filtered}>Filter anwenden</Button>
+                <Button onClick = {this.resetFilter}>Filter löschen</Button>
             </div>
         )
     }
