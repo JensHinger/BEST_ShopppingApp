@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import Overview from './components/pages/Overview';
 import About from './components/pages/About';
 import ManageParty from "./components/pages/ManageParty";
