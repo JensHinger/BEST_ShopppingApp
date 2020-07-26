@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button'
 import ListBO from '../../api/ListBO';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import IconButton from '@material-ui/core/IconButton';
+import ErrorDialog from './ErrorDialog'
 
 /**
  * @author  Dominic, Anny und Jens
@@ -25,6 +26,7 @@ class AddListDialog extends Component {
 
             open: false,
             listName: "",
+            errorDialog: false
 
         }
 
@@ -61,9 +63,17 @@ class AddListDialog extends Component {
         this.handleClose()
     }
 
+      /** Setzt den errorDialog state auf false */
+      handleErrorClose = () => {
+        this.setState({errorDialog : false})
+    }
+
     render() {
         return (
             <div>
+                {this.state.errorDialog? 
+                    <ErrorDialog errorMessage={"Der Listenname darf nicht leer sein!"} handleErrorClose={this.handleErrorClose}/>
+                :null}
                 <ThemeProvider theme={Theme}>
                     <IconButton onClick={() => this.handleClickOpen()}>
                         <PlaylistAddIcon fontSize='large' />
@@ -86,7 +96,7 @@ class AddListDialog extends Component {
                         </DialogContent>
 
                         <DialogActions>
-                            <Button onClick={() => this.addList()}>
+                            <Button onClick={() => this.state.listName === "" ? this.setState({errorDialog : true}) : this.addList()}>
                                 Liste hinzufügen
                     </Button>
                             <Button onClick={() => this.handleClose()}>
