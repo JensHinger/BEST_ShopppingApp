@@ -35,9 +35,9 @@ class InvitationMapper(Mapper):
 
         return result
 
-    def set_source_user_null(self, invitation):
+    def set_source_user_one(self, invitation):
         cursor = self._cnx.cursor()
-        command = "UPDATE invitation SET source_user = null WHERE id LIKE ('{}')".format(invitation.get_id())
+        command = "UPDATE invitation SET source_user = 1 WHERE id LIKE ('{}')".format(invitation.get_id())
         cursor.execute(command)
 
         self._cnx.commit()
