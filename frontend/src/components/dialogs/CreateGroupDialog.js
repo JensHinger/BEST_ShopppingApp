@@ -13,6 +13,8 @@ import Theme from "../../Theme"
 import ShoppingAPI from "../../api/ShoppingAPI"
 import PartyBO from "../../api/PartyBO"
 import InvitationBO from "../../api/InvitationBO"
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 /**
  * @author  Jens
@@ -28,8 +30,21 @@ class CreateGroupDialog extends Component{
         partyName: "",
         emailList: [],
         mail : "",
-        currentUser : 1 //Hier fehlt noch die props übergabe des eingeloggten Users sowie unten muss noch ein getID() hinzugefügt werden
+        currentUser : null //Hier fehlt noch die props übergabe des eingeloggten Users sowie unten muss noch ein getID() hinzugefügt werden
       }
+  }
+
+  componentDidMount(){
+    this.getCurrentUser()
+  }
+
+  /** Eingeloggter User in den State holen */
+  getCurrentUser = () => {
+    ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
+    .then(UserBO =>
+      this.setState({
+          currentUser: UserBO
+      }))
   }
 
   /** Das Erstellen einer Party  */
@@ -37,15 +52,15 @@ class CreateGroupDialog extends Component{
     const new_party = new PartyBO()
     new_party.setName(this.state.partyName)
     ShoppingAPI.getAPI().addParty(new_party)
-    .then(party => this.handleInvitationCreation(party.getID()))  
+    .then(party => this.handleInvitationCreation(party.getID()), this.handleClose())  
   }
   /** Das Erstellen einer Invitation */
   handleInvitationCreation = (partyId) => {
     const mailList = this.state.emailList
     const new_invitation = new InvitationBO()
     
-    new_invitation.setSourceUserId(this.state.currentUser)
-    new_invitation.setTargetUserId(this.state.currentUser)
+    new_invitation.setSourceUserId(this.state.currentUser.getID())
+    new_invitation.setTargetUserId(this.state.currentUser.getID())
     new_invitation.setPartyiId(partyId)
     new_invitation.setIsAccepted(1)
 
@@ -60,7 +75,7 @@ class CreateGroupDialog extends Component{
     ShoppingAPI.getAPI().getUserByEmail(mail)
     .then(function(user) {
       new_invitation.setTargetUserId(user.getID());
-      new_invitation.setSourceUserId(this.state.currentUser)
+      new_invitation.setSourceUserId(this.state.currentUser.getID())
       new_invitation.setPartyiId(partyId)
       ShoppingAPI.getAPI().addInvitation(new_invitation)
       .then(this.handleClose)

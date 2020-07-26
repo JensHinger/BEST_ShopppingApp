@@ -283,12 +283,13 @@ class ShoppingAdministration(object):
         with InvitationMapper() as mapper:
             return mapper.find_all_pend_invites()
 
-    def create_invitation(self, partyi_id, target_user_id, source_user_id):
+    def create_invitation(self, partyi_id, target_user_id, source_user_id, is_accepted):
         """Eine Invitation erstellen."""
         invitation = Invitation()
         invitation.set_partyi_id(partyi_id)
         invitation.set_target_user_id(target_user_id)
         invitation.set_source_user_id(source_user_id)
+        invitation.set_is_accepted(is_accepted)
 
         with InvitationMapper() as mapper:
             return mapper.insert(invitation)
