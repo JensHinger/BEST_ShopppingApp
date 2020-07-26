@@ -32,10 +32,10 @@ class ManageUser extends Component {
     getUserByGoogleId = () => {
         // Hier muss bei getPartiesByUser noch this.props.user.getID() bei dem Übergabewert ergänzt werden
         ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
-        .then(UserBO =>
-            this.setState({
-                userBO: UserBO
-            }))
+            .then(UserBO =>
+                this.setState({
+                    userBO: UserBO
+                }))
     }
     //** updaten des Users */
     updateUser = () => {
@@ -49,7 +49,7 @@ class ManageUser extends Component {
                         this.setState({
                             userBO: UserBO
                         }),
-                        
+
                     )
             }.bind(this))
 
@@ -66,7 +66,7 @@ class ManageUser extends Component {
 
     render() {
         const person = this.state.userBO
-        
+
 
         return (
             <Typography variant='h6' component='h1' align='center'>
@@ -130,4 +130,3 @@ class ManageUser extends Component {
 
 }
 export default ManageUser;
-

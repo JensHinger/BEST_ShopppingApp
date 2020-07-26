@@ -6,7 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {ThemeProvider} from "@material-ui/core"
+import { ThemeProvider } from "@material-ui/core"
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Theme from "../../Theme"
@@ -20,31 +20,31 @@ import 'firebase/auth';
  * @author  Jens
  */
 
-class CreateGroupDialog extends Component{
+class CreateGroupDialog extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
 
-      this.state = {
-        open: false,
-        partyName: "",
-        emailList: [],
-        mail : "",
-        currentUser : null //Hier fehlt noch die props übergabe des eingeloggten Users sowie unten muss noch ein getID() hinzugefügt werden
-      }
+    this.state = {
+      open: false,
+      partyName: "",
+      emailList: [],
+      mail: "",
+      currentUser: null //Hier fehlt noch die props übergabe des eingeloggten Users sowie unten muss noch ein getID() hinzugefügt werden
+    }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.getCurrentUser()
   }
 
   /** Eingeloggter User in den State holen */
   getCurrentUser = () => {
     ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
-    .then(UserBO =>
-      this.setState({
+      .then(UserBO =>
+        this.setState({
           currentUser: UserBO
-      }))
+        }))
   }
 
   /** Das Erstellen einer Party  */
@@ -52,13 +52,13 @@ class CreateGroupDialog extends Component{
     const new_party = new PartyBO()
     new_party.setName(this.state.partyName)
     ShoppingAPI.getAPI().addParty(new_party)
-    .then(party => this.handleInvitationCreation(party.getID()), this.handleClose())  
+      .then(party => this.handleInvitationCreation(party.getID()), this.handleClose())
   }
   /** Das Erstellen einer Invitation */
   handleInvitationCreation = (partyId) => {
     const mailList = this.state.emailList
     const new_invitation = new InvitationBO()
-    
+
     new_invitation.setSourceUserId(this.state.currentUser.getID())
     new_invitation.setTargetUserId(this.state.currentUser.getID())
     new_invitation.setPartyiId(partyId)
@@ -72,112 +72,114 @@ class CreateGroupDialog extends Component{
     //2 Mal gleicher User einladen ist doof ;-;
 
     mailList.map((mail) =>
-    ShoppingAPI.getAPI().getUserByEmail(mail)
-    .then(function(user) {
-      new_invitation.setTargetUserId(user.getID());
-      new_invitation.setSourceUserId(this.state.currentUser.getID())
-      new_invitation.setPartyiId(partyId)
-      ShoppingAPI.getAPI().addInvitation(new_invitation)
-      .then(this.handleClose)
+      ShoppingAPI.getAPI().getUserByEmail(mail)
+        .then(function (user) {
+          new_invitation.setTargetUserId(user.getID());
+          new_invitation.setSourceUserId(this.state.currentUser.getID())
+          new_invitation.setPartyiId(partyId)
+          ShoppingAPI.getAPI().addInvitation(new_invitation)
+            .then(this.handleClose)
 
-    }.bind(this)
-    ))
+        }.bind(this)
+        ))
   }
-/** Funktion zum Öffnen des Dialogs */
+  /** Funktion zum Öffnen des Dialogs */
   handleClickOpen = () => {
-    this.setState({open: true});
+    this.setState({ open: true });
   };
-/** Schließen des Dialogs und reset des States */
+  /** Schließen des Dialogs und reset des States */
   handleClose = () => {
-    this.setState({open: false});
-    this.setState({emailList: []})
+    this.setState({ open: false });
+    this.setState({ emailList: [] })
   };
-/** update */
+  /** update */
   handleNameChange = (name) => {
-    this.setState({partyName: name})
+    this.setState({ partyName: name })
   };
-/** update */
+  /** update */
   handleEmailChange = () => {
-    this.setState({emailList : [...this.state.emailList, this.state.mail],
-                   mail: ""})
+    this.setState({
+      emailList: [...this.state.emailList, this.state.mail],
+      mail: ""
+    })
   };
-/** delete */
-  handleEmailDelete(index){
+  /** delete */
+  handleEmailDelete(index) {
     let array = this.state.emailList
 
     array.splice(index, 1)
-    this.setState({emailList : array})
+    this.setState({ emailList: array })
   }
 
-  render(){
+  render() {
     let emailList = this.state.emailList;
     return (
       <div>
-        <ThemeProvider theme = {Theme}>
+        <ThemeProvider theme={Theme}>
 
-            <Button onClick={() => this.handleClickOpen()}>
-              <GroupAddIcon fontSize='large' color='primary'/>
-            </Button>
+          <Button onClick={() => this.handleClickOpen()}>
+            <GroupAddIcon fontSize='large' color='primary' />
+          </Button>
 
-            <Dialog open={this.state.open} onClose={this.handleClose}  aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-title">Gruppe erstellen</DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  Geben sie einen Gruppennamen ein !! 
+          <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">Gruppe erstellen</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Geben sie einen Gruppennamen ein !!
                 </DialogContentText>
-                <TextField
-                  onChange = {(event) => this.handleNameChange(event.target.value) /*Name der Gruppe darf nicht leer sein*/}
-                  margin="dense"
-                  id="partyName"
-                  label="Gruppenname"
-                  type="string"
-                  fullWidth
-                />
+              <TextField
+                onChange={(event) => this.handleNameChange(event.target.value) /*Name der Gruppe darf nicht leer sein*/}
+                margin="dense"
+                id="partyName"
+                label="Gruppenname"
+                type="string"
+                fullWidth
+              />
 
-                <DialogContentText>
-                <br margin-top='20px'/>
+              <DialogContentText>
+                <br margin-top='20px' />
                   Fügen Sie Gruppenmitglieder hinzu!
                 </DialogContentText>
-                  
-                <TextField
-                  onChange = {(event) => this.setState({mail : event.target.value}) /*Textfield darf nicht leer sein muss geleert werden sobald email hinzugefügt wurde*/ }
-                  required
-                  margin="dense"
-                  id="userEmail"
-                  label="E-Mail"
-                  type="string"
-                  value = {this.state.mail}
-                  fullWidth/>
-                <Button onClick={() => this.state.mail === "" ? console.log("feld leer") : this.handleEmailChange()}>
-                  <GroupAddIcon/>
-                </Button>
-                
-                <ul>
-                  {emailList.map((mail, index) => 
-                    <p>
-                      {mail}
-                      <Button onClick = {() => this.handleEmailDelete(index)}>
-                        <DeleteIcon/>
-                      </Button>
-                    </p>
-                  )}
-                </ul>
 
-              </DialogContent>
+              <TextField
+                onChange={(event) => this.setState({ mail: event.target.value }) /*Textfield darf nicht leer sein muss geleert werden sobald email hinzugefügt wurde*/}
+                required
+                margin="dense"
+                id="userEmail"
+                label="E-Mail"
+                type="string"
+                value={this.state.mail}
+                fullWidth />
+              <Button onClick={() => this.state.mail === "" ? console.log("feld leer") : this.handleEmailChange()}>
+                <GroupAddIcon />
+              </Button>
 
-              <DialogActions>
-                <Button onClick={() => this.handleGroupCreation()}>
-                  Gruppe erstellen
+              <ul>
+                {emailList.map((mail, index) =>
+                  <p>
+                    {mail}
+                    <Button onClick={() => this.handleEmailDelete(index)}>
+                      <DeleteIcon />
+                    </Button>
+                  </p>
+                )}
+              </ul>
+
+            </DialogContent>
+
+            <DialogActions>
+              <Button onClick={() => this.handleGroupCreation()}>
+                Gruppe erstellen
                 </Button>
-                <Button onClick={() => this.handleClose()}>
-                  Abbrechen
+              <Button onClick={() => this.handleClose()}>
+                Abbrechen
                 </Button>
-              </DialogActions>
-            </Dialog>
+            </DialogActions>
+          </Dialog>
         </ThemeProvider>
       </div>
     );
-  } 
-} 
+  }
+}
 
 export default CreateGroupDialog;
