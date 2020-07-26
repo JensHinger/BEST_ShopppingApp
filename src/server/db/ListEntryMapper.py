@@ -200,7 +200,7 @@ class ListEntryMapper(Mapper):
     def delete(self, listentry):
 
         cursor = self._cnx.cursor()
-        command = "DELETE FROM listentry WHERE id LIKE ('{}')".format(listentry.get_id())
+        command = "DELETE FROM listentry WHERE id LIKE ('{}')".format(listentry)
         cursor.execute(command)
 
         self._cnx.commit()
