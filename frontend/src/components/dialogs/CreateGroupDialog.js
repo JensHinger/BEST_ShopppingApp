@@ -10,7 +10,6 @@ import {ThemeProvider} from "@material-ui/core"
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Theme from "../../Theme"
-import CustomAlert from "../subcomponents/CustomAlert"
 import ShoppingAPI from "../../api/ShoppingAPI"
 import PartyBO from "../../api/PartyBO"
 import InvitationBO from "../../api/InvitationBO"
