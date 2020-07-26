@@ -154,7 +154,7 @@ class StandardListEntryCard extends Component {
             this.props.onStandardListEntryDeleted(this.state.standardListEntry)
         }
         )
-       
+
     }
 
     render() {
@@ -168,52 +168,86 @@ class StandardListEntryCard extends Component {
                 {
                     this.state.item && this.state.user && this.state.retailer && this.state.all_retailers_name && this.state.party_users ?
                         <Card>
+                            <CardContent>
+                                <TextField onChange={(e) => { this.setState({ sel_item_name: e.target.value }) }} required id="standard-required" label="Name" defaultValue={this.state.item.getName()} />
+                                <TextField onChange={(e) => { this.setState({ sel_amount: e.target.value }) }} required id="standard-required" label="Menge" defaultValue={this.state.standardListEntry.getAmount()} />
+                                <Autocomplete
+                                    id="combo-box-demo"
+                                    options={units}
+                                    defaultValue={units[this.state.standardListEntry.getUnit()]}
+                                    onInputChange={(event, value) => this.setState({ sel_unit: value })}
+                                    style={{ width: 300 }}
+                                    renderInput={(params) => <TextField {...params} label="Einheit" />} />
 
-                            <CardContent  >
-                                {this.state.item.getName()} {this.state.standardListEntry.getAmount()}  {units[this.state.standardListEntry.getUnit()]}
-                                {this.state.user.getName()} {this.state.retailer.getName()}
-                                <IconButton disabled={this.state.checked ? true : false} justify="right" onClick={() => { this.expandHandler() }}
-                                >
-                                    <ExpandMoreIcon />
-                                </IconButton>
+                                <Autocomplete
+                                    id="combo-box-demo"
+                                    options={this.getStandardListEntryPossibleRetailerNames()}
+                                    defaultValue={this.state.retailer.getName()}
+                                    onInputChange={(event, value) => this.setState({ sel_retailer: value })}
+                                    //getOptionSelected	= {(option, value) => console.log("value:",value , "optionn", option)} 
+                                    style={{ width: 300 }}
+                                    renderInput={(params) => <TextField {...params} label="Laden" />} />
+
+                                <Autocomplete
+                                    id="combo-box-demo"
+                                    options={this.getStandardListEntryPossibleUserNames()}
+                                    onInputChange={(event, value) => this.setState({ sel_user: value })}
+                                    defaultValue={this.state.user.getName()}
+                                    style={{ width: 300 }}
+                                    renderInput={(params) => <TextField {...params} label="User" />} />
+
+                                <Button onClick={() => this.state.sel_retailer && this.state.sel_user && (this.state.sel_amount === null || this.state.sel_amount != "" && Math.sign(parseFloat(this.state.sel_amount)) === 1)
+                                    && this.state.sel_unit && (this.state.sel_item_name != "" || this.state.sel_item_name === null || this.state.sel_item_name) ?
+                                    this.updateItem() : console.log("ajajaja")} size="large" color="primary" startIcon={< CheckCircleOutlineIcon />} />
+                                <Button onClick={() => this.deleteLEntry()} size="large" color="primary" startIcon={<DeleteForeverIcon />} />
+
+
+                                <CardContent  >
+                                    {this.state.item.getName()} {this.state.standardListEntry.getAmount()}  {units[this.state.standardListEntry.getUnit()]}
+                                    {this.state.user.getName()} {this.state.retailer.getName()}
+                                    <IconButton disabled={this.state.checked ? true : false} justify="right" onClick={() => { this.expandHandler() }}
+                                    >
+                                        <ExpandMoreIcon />
+                                    </IconButton>
+                                </CardContent>
+                                <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+                                    <Card>
+                                        <CardContent>
+                                            <TextField onChange={(e) => { this.setState({ sel_item_name: e.target.value }) }} required id="standard-required" label="Name" defaultValue={this.state.item.getName()} />
+                                            <TextField onChange={(e) => { this.setState({ sel_amount: e.target.value }) }} required id="standard-required" label="Menge" defaultValue={this.state.standardListEntry.getAmount()} />
+                                            <Autocomplete
+                                                id="combo-box-demo"
+                                                options={units}
+                                                defaultValue={units[this.state.standardListEntry.getUnit()]}
+                                                onInputChange={(event, value) => this.setState({ sel_unit: value })}
+                                                style={{ width: 300 }}
+                                                renderInput={(params) => <TextField {...params} label="Einheit" />} />
+
+                                            <Autocomplete
+                                                id="combo-box-demo"
+                                                options={this.getStandardListEntryPossibleRetailerNames()}
+                                                defaultValue={this.state.retailer.getName()}
+                                                onInputChange={(event, value) => this.setState({ sel_retailer: value })}
+                                                //getOptionSelected	= {(option, value) => console.log("value:",value , "optionn", option)} 
+                                                style={{ width: 300 }}
+                                                renderInput={(params) => <TextField {...params} label="Laden" />} />
+
+                                            <Autocomplete
+                                                id="combo-box-demo"
+                                                options={this.getStandardListEntryPossibleUserNames()}
+                                                onInputChange={(event, value) => this.setState({ sel_user: value })}
+                                                defaultValue={this.state.user.getName()}
+                                                style={{ width: 300 }}
+                                                renderInput={(params) => <TextField {...params} label="User" />} />
+
+                                            <Button onClick={() => this.updateItem()} size="large" color="primary" startIcon={< CheckCircleOutlineIcon />} />
+                                            <Button onClick={() => this.deleteLEntry()} size="large" color="primary" startIcon={<DeleteForeverIcon />} />
+
+
+                                        </CardContent>
+                                    </Card>
+                                </Collapse>
                             </CardContent>
-                            <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-                                <Card>
-                                    <CardContent>
-                                        <TextField onChange={(e) => { this.setState({ sel_item_name: e.target.value }) }} required id="standard-required" label="Name" defaultValue={this.state.item.getName()} />
-                                        <TextField onChange={(e) => { this.setState({ sel_amount: e.target.value }) }} required id="standard-required" label="Menge" defaultValue={this.state.standardListEntry.getAmount()} />
-                                        <Autocomplete
-                                            id="combo-box-demo"
-                                            options={units}
-                                            defaultValue={units[this.state.standardListEntry.getUnit()]}
-                                            onInputChange={(event, value) => this.setState({ sel_unit: value })}
-                                            style={{ width: 300 }}
-                                            renderInput={(params) => <TextField {...params} label="Einheit" />} />
-
-                                        <Autocomplete
-                                            id="combo-box-demo"
-                                            options={this.getStandardListEntryPossibleRetailerNames()}
-                                            defaultValue={this.state.retailer.getName()}
-                                            onInputChange={(event, value) => this.setState({ sel_retailer: value })}
-                                            //getOptionSelected	= {(option, value) => console.log("value:",value , "optionn", option)} 
-                                            style={{ width: 300 }}
-                                            renderInput={(params) => <TextField {...params} label="Laden" />} />
-
-                                        <Autocomplete
-                                            id="combo-box-demo"
-                                            options={this.getStandardListEntryPossibleUserNames()}
-                                            onInputChange={(event, value) => this.setState({ sel_user: value })}
-                                            defaultValue={this.state.user.getName()}
-                                            style={{ width: 300 }}
-                                            renderInput={(params) => <TextField {...params} label="User" />} />
-
-                                        <Button onClick={() => this.updateItem()} size="large" color="primary" startIcon={< CheckCircleOutlineIcon />} />
-                                        <Button onClick={() => this.deleteLEntry()} size="large" color="primary" startIcon={<DeleteForeverIcon />} />
-
-
-                                    </CardContent>
-                                </Card>
-                            </Collapse>
                         </Card>
                         : null
                 }

@@ -40,22 +40,23 @@ class PartyShoppingList extends Component {
     }
     //** Eine Funktion die den Listentrag mit der neuesten Änderung herausfilterd */
     findNewestListEntry = (listentryBOs) => {
-        var youngestBO = listentryBOs.reduce((a, b) => {
-            return new Date(a.creation_date) > new Date(b.creation_date) ? a : b;
-        })
-        this.setState({ youngestListEntry: null })
+            this.setState({youngestListEntry: null})
+            if (listentryBOs.length !== 0){
+            const youngestBO = listentryBOs.reduce((a, b) => {
+                return new Date(a.creation_date) > new Date(b.creation_date) ? a : b;
+              })
+            this.setState({youngestListEntry: youngestBO})}
+            
 
-        var preSortEntries = listentryBOs
-        preSortEntries.sort((a, b) => {
-            return (
-                a.getID() - b.getID()
-            )
-        })
-        this.setState({
-            listentries: preSortEntries,
-            filteredEntries: preSortEntries
-        })
-        this.setState({ youngestListEntry: youngestBO })
+            var preSortEntries = listentryBOs
+            preSortEntries.sort((a, b) => {
+                return(
+                    a.getID() - b.getID()
+                )
+            })
+            this.setState({listentries: preSortEntries, 
+                            filteredEntries: preSortEntries})
+            
     }
     //** Funktion zum Updaten eines ListEntries */
     updateListEntryHandler = (updatedListEntry) => {

@@ -185,7 +185,7 @@ class ListEntryCard extends Component {
     render() {
         const units = ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg ']
         const { classes } = this.props;
-
+        //console.log("eine Card: ", this.props)
         return (
             <div>
 
@@ -238,7 +238,9 @@ class ListEntryCard extends Component {
                                                 style={{ width: 300 }}
                                                 renderInput={(params) => <TextField {...params} label="User" />} />
 
-                                            <Button onClick={() => this.updateItem()} size="large" color="primary" startIcon={< CheckCircleOutlineIcon />} />
+                                            <Button onClick={() => this.state.sel_retailer && this.state.sel_user && (this.state.sel_amount === null || this.state.sel_amount != "" && Math.sign(parseFloat(this.state.sel_amount)) === 1)
+                                                && this.state.sel_unit && (this.state.sel_item_name != "" || this.state.sel_item_name === null || this.state.sel_item_name) ?
+                                                this.updateItem() : console.log("da stimmt was nicht")} size="large" color="primary" startIcon={< CheckCircleOutlineIcon />} />
                                             <Button onClick={() => this.deleteLEntry()} size="large" color="primary" startIcon={<DeleteForeverIcon />} />
 
 

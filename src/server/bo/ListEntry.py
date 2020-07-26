@@ -1,6 +1,5 @@
 from server.bo.BusinessObject import BusinessObject
-
-
+from datetime import datetime
 class ListEntry(BusinessObject):
 
     def __init__(self):
@@ -62,9 +61,11 @@ class ListEntry(BusinessObject):
         self._unit = unit
 
     def get_checked(self):
+        """Auslesen des checked Status"""
         return self._checked
 
     def set_checked(self, condition):
+        """Setzen des checked Status"""
         self._checked = condition
 
     @staticmethod
@@ -84,6 +85,7 @@ class ListEntry(BusinessObject):
 
     def __str__(self):
         """Erzeugen eines Strings welcher das Objekt beschreibt"""
-        return "Listentry id: {}, name: {}, item_id: {}, retailer_id:{}, user_id: {}, list_id: {}, checked: {} "\
-            .format(self.get_id(),self.get_name(), self.get_item_id(),
+        return "Listentry id: {}, name: {}, creation_date {}, item_id: {}, retailer_id:{}, " \
+               "user_id: {}, list_id: {}, checked: {} "\
+            .format(self.get_id(), self.get_name(), self.get_creation_date(), self.get_item_id(),
                     self.get_retailer_id(), self.get_user_id(), self.get_list_id(), self.get_amount(), self.get_unit(), self.get_checked())
