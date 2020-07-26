@@ -12,6 +12,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ItemBO from '../../api/ItemBO'
+import ErrorDialog from '../dialogs/ErrorDialog'
 
 /**
  * @author Jonathan
@@ -38,7 +39,8 @@ import ItemBO from '../../api/ItemBO'
             sel_amount: null,
             sel_unit: null,
             sel_item_name: null,
-            units : ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg '] 
+            units : ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg '],
+            errorDialog: false,
 
         }
     }
@@ -178,6 +180,10 @@ import ItemBO from '../../api/ItemBO'
 
     }
 
+    handleErrorClose = () =>{
+        this.setState({errorDialog : false})
+    }
+
     render(){
         const units = ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg ']   
         console.log("sel_retailer:", this.state.sel_retailer)
@@ -191,6 +197,10 @@ import ItemBO from '../../api/ItemBO'
         //console.log("eine Card: ", this.props)
         return(
             <div>
+
+            {this.state.errorDialog?
+                <ErrorDialog errorMessage="Irgendetwas stimmt hier nicht :c" handleErrorClose={this.handleErrorClose}/>
+            : null}
                 
 
             { 
@@ -243,7 +253,7 @@ import ItemBO from '../../api/ItemBO'
                                 
                                 <Button onClick={() => this.state.sel_retailer && this.state.sel_user && (this.state.sel_amount === null ||  this.state.sel_amount != "" && Math.sign(parseFloat(this.state.sel_amount)) === 1) 
                                                        && this.state.sel_unit && (this.state.sel_item_name != "" || this.state.sel_item_name === null || this.state.sel_item_name) ?
-                                    this.updateItem() : console.log("da stimmt was nicht")} size ="large" color="primary" startIcon={< CheckCircleOutlineIcon/>} />
+                                    this.updateItem() : this.setState({errorDialog : true})} size ="large" color="primary" startIcon={< CheckCircleOutlineIcon/>} />
                                 <Button onClick={() => this.deleteLEntry()} size="large" color="primary" startIcon={<DeleteForeverIcon/>}/>          
                                 
 

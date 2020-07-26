@@ -11,6 +11,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ItemBO from '../../api/ItemBO'
+import ErrorDialog from '../dialogs/ErrorDialog'
 
 /**
  * @author Jonathan
@@ -35,7 +36,8 @@ class StandardListEntryCard extends Component {
             sel_amount: null,
             sel_unit: null,
             sel_item_name: null,
-            units : ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg '] 
+            units : ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg '],
+            errorDialog: false
         }
     }
 
@@ -152,6 +154,10 @@ class StandardListEntryCard extends Component {
         console.log("versuche einen Eintrag zu löschen:", this.state.standardListEntry)
     }
 
+    handleErrorClose = () =>{
+        this.setState({errorDialog : false})
+    }
+
     render(){
         const units = ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg ']   
         console.log("standardListEntry:", this.state.standardListEntry)
@@ -162,7 +168,10 @@ class StandardListEntryCard extends Component {
         return(
 
             <div>
-                
+            
+            {this.state.errorDialog?
+                <ErrorDialog errorMessage="Irgendetwas stimmt hier nicht :c" handleErrorClose={this.handleErrorClose}/>
+            : null}
 
             { 
                 this.state.item && this.state.user && this.state.retailer && this.state.all_retailers_name && this.state.party_users  ? 
@@ -208,7 +217,7 @@ class StandardListEntryCard extends Component {
                                 
                                 <Button onClick={() => this.state.sel_retailer && this.state.sel_user && (this.state.sel_amount === null ||  this.state.sel_amount != "" && Math.sign(parseFloat(this.state.sel_amount)) === 1) 
                                                        && this.state.sel_unit && (this.state.sel_item_name != "" || this.state.sel_item_name === null || this.state.sel_item_name) ?
-                                    this.updateItem() : console.log("ajajaja")} size ="large" color="primary" startIcon={< CheckCircleOutlineIcon/>} />
+                                    this.updateItem() : this.setState({errorDialog : true})} size ="large" color="primary" startIcon={< CheckCircleOutlineIcon/>} />
                                 <Button onClick={() => this.deleteLEntry()} size="large" color="primary" startIcon={<DeleteForeverIcon/>}/>          
                                 
 

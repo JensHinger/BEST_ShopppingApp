@@ -6,6 +6,7 @@ import ShoppingAPI from '../../api/ShoppingAPI';
 import ItemBO from '../../api/ItemBO';
 import { Link as RouterLink } from 'react-router-dom'
 import AddRetailerDialog from '../dialogs/AddRetailerDialog';
+import ErrorDialog from '../dialogs/ErrorDialog'
 import StandardListEntryBO from '../../api/StandardListEntryBO';
 
 /**
@@ -34,7 +35,8 @@ class AddStandardLisEntry extends Component {
             retailerAutoCompleteKey: 5,
             unitTextFieldKey: 12,
             amountTextFieldKey: 33,
-            itemAutoCompleteKey: 44
+            itemAutoCompleteKey: 44,
+            errorDialog: false
 
         }
 
@@ -169,6 +171,10 @@ class AddStandardLisEntry extends Component {
         this.getAllRetailer()
     };
 
+    handleErrorClose = () =>{
+        this.setState({errorDialog : false})
+      }
+
     render() {
         console.log("user", this.state.party_users)
         const units = [
@@ -213,6 +219,9 @@ class AddStandardLisEntry extends Component {
 
         return (
             <div>
+                {this.state.errorDialog?
+                    <ErrorDialog errorMessage="Irgendetwas stimmt hier nicht :c" handleErrorClose={this.handleErrorClose}/>
+                : null}
                 <Typography variant='h6' component='h1' align='center'>
 
                     <br margin-top='20px' />
@@ -323,8 +332,8 @@ class AddStandardLisEntry extends Component {
 
                             <br margin-top='20px' />
                             <Button onClick={() => this.state.amount && this.state.pickedItem && this.state.pickedRetailer
-                                && this.state.pickedUser && (this.state.unit == 0 | this.state.unit) ?
-                                this.createNewItem() : console.log("da stimmt was nicht")} variant="contained" color="primary"> Neuen Standard Eintrag Hinzufügen </Button>
+                                && this.state.pickedUser && (this.state.unit == 0 | this.state.unit) && Math.sign(parseFloat(this.state.amount)) === 1 ?
+                                this.createNewItem() : this.setState({errorDialog : true})} variant="contained" color="primary"> Neuen Standard Eintrag Hinzufügen </Button>
 
                         </Grid>
                     </div>
