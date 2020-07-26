@@ -70,14 +70,13 @@ class CreateGroupDialog extends Component {
     new_invitation.setPartyiId(partyId)
     new_invitation.setIsAccepted(1)
 
-    ShoppingAPI.getAPI().addInvitation(new_invitation)
-
-    new_invitation.setSourceUserId(1)
-    new_invitation.setTargetUserId(1)
-    new_invitation.setPartyiId(partyId)
-    new_invitation.setIsAccepted(1)
-
-    ShoppingAPI.getAPI().addInvitation(new_invitation)
+    ShoppingAPI.getAPI().addInvitation(new_invitation).then(() =>
+    {return (
+    new_invitation.setSourceUserId(1),
+    new_invitation.setTargetUserId(1),
+    new_invitation.setPartyiId(partyId),
+    new_invitation.setIsAccepted(1),
+    ShoppingAPI.getAPI().addInvitation(new_invitation))})
     
     //Falls die MailListe leer ist können User nicht hinzugefügt werden der Originale User muss aber immer hinzugefügt werden
     //User ist nicht in der Database
@@ -99,7 +98,6 @@ class CreateGroupDialog extends Component {
     }
     else{
       this.handleClose()
-      window.location.reload(true)
     }
 
   }
@@ -206,7 +204,7 @@ class CreateGroupDialog extends Component {
               </DialogContent>
 
               <DialogActions>
-                <Button onClick={() => this.state.partyName === "" ? this.setState({errorNameDialog: true}) : this.handleNameChange()}>
+                <Button onClick={() => this.state.partyName === "" ? this.setState({errorNameDialog: true}) : this.handleGroupCreation()}>
                   Gruppe erstellen
 
                 </Button>
