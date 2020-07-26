@@ -13,7 +13,7 @@ import Grid from '@material-ui/core/Grid';
 import SortRetailer from '../subcomponents/SortRetailer'
 
 /**
- * @author Jonathan, Anny und Jens
+ * @author Jonathan, Anny, Jens und Dominic
  */
 class PartyShoppingList extends Component{
 
@@ -26,20 +26,20 @@ class PartyShoppingList extends Component{
             youngestListEntry: null,
         }
     }
-
+    //** Wird ausgeführt nachdem der Client gerendert wurde */
     componentDidMount(){
         this.getListEntriesByList()
         this.getListName()
 
     }
-
+    //** Prop Übergabe von UserPartie; Holt alle Listentries einer Liste */
     getListEntriesByList = () => {
         const {listid} =  this.props.match.params
         ShoppingAPI.getAPI().getListEntriesByListId(listid).then(listentryBOs =>
             {return(this.findNewestListEntry(listentryBOs))})
               
     }
-
+    //** Eine Funktion die den Listentrag mit der neuesten Änderung herausfilterd */
     findNewestListEntry = (listentryBOs) => {
             var youngestBO = listentryBOs.reduce((a, b) => {
                 return new Date(a.creation_date) > new Date(b.creation_date) ? a : b;
@@ -56,7 +56,7 @@ class PartyShoppingList extends Component{
                             filteredEntries: preSortEntries})
             this.setState({youngestListEntry: youngestBO})
     }
-
+   //** Funktion zum Updaten eines ListEntries */
     updateListEntryHandler = (updatedListEntry) => {
         var entries = this.state.filteredEntries
         var remainingEntries = entries.filter((entry) => entry.getID() != updatedListEntry.getID())
@@ -65,24 +65,22 @@ class PartyShoppingList extends Component{
                 this.findNewestListEntry(remainingEntries)
                 }.bind(this))
     }
-
+    //** Speichert die übergebene Liste im State */
     getListName = () => {
         ShoppingAPI.getAPI().getListById(this.props.match.params.listid).then((mylist) => this.setState({list: mylist}))
     }
-
+    //** Funktion zum Löschen eines Entries */
     deleteListEntryHandler = (deletedListEntry) => {
         this.setState({
             listentries: this.state.listentries.filter(listEntry => listEntry.getID() !== deletedListEntry.getID())
         })
     }
-
+   //** Handler für einen ausgewählten Filter */
    handleFilterSelected = (filteredRetailer) => {
-       console.log("filteredRetailer: ", filteredRetailer)
         const filteredState =  this.state.filteredEntries.filter((listEntry) => filteredRetailer.getID() === listEntry.getRetailerId())
-        console.log("filteredState: ", filteredState)
         this.setState({filteredEntries : filteredState})
    }
-
+    //** Funktion um den Filter zu resetten  */
     handleFilterReset = () => {
         this.setState({filteredEntries: this.state.listentries})
         console.log("setzen zurück, state: ", this.state.filteredEntries)
