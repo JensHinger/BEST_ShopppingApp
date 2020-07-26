@@ -6,7 +6,9 @@ import ClearIcon from '@material-ui/icons/Clear';
 import IconButton from '@material-ui/core/IconButton'
 import { Menu, Grid, MenuItem } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
-
+/**
+ * @author Jens
+ */
 class InvitationNotifications extends Component{
 
     constructor(props){
@@ -19,20 +21,19 @@ class InvitationNotifications extends Component{
             parties: [],
         }
     }
-
+    //** Wird ausgeführt nachdem der Client gerendert wird */
     componentDidMount(){
         this.getOpenInvitations(this.state.currentUser.getID())
     }
-
+    //** Holt sich alle offenen Einladungen eines Users */
     getOpenInvitations = (userId) => {
         ShoppingAPI.getAPI().getPendInvitationsByTargetUserId(userId)
         .then((pendInvitations) => {return (this.setState({invitations : pendInvitations}),
               this.state.invitations.map(invitation => this.getPartyByInvitation(invitation.getPartyiId())))})
         
     }
-
+    
     getPartyByInvitation = (partyId) => {
-        //console.log("füge Parties hinzu, partyiID:", partyId)
         this.setState({parties : []})
         ShoppingAPI.getAPI().getPartyById(partyId)
         .then(party => this.setState({parties : [...this.state.parties, party]}))
@@ -41,17 +42,15 @@ class InvitationNotifications extends Component{
     handleAccepted = (invite, index) => {
         const updatedInvitations = this.state.invitations
         const updatedParties = this.state.parties
-        //console.log("inv copy:", updatedInvitations)
         invite.setIsAccepted(1)
         updatedInvitations.splice(index, 1)
-        //console.log("inv copy nach entfernen des entsprechenden eintrags:", updatedInvitations)
         updatedParties.splice(index, 1)
 
         ShoppingAPI.getAPI().updateInvitation(invite)
         .then(() => {return (this.setState({invitations : updatedInvitations,
                                    parties : updatedParties}
         ))})
-        //updatedInvitations.splice(index, 1), this.setState({invitations : updatedInvitations})
+        
     }
 
     handleDecline = (invite, index) => {
@@ -72,10 +71,9 @@ class InvitationNotifications extends Component{
     handleClose = () => {
         this.setState({AnchorEl : null})
     }
-
+    //** Den Namen der Party holen */
     getPartyName = (invite) => {
         const myparty = this.state.parties.filter((party) => party.getID() === invite.getPartyiId())
-        //console.log("myparty:", myparty[0].getName())
         return (myparty[0].getName())
         
     }
@@ -86,8 +84,7 @@ class InvitationNotifications extends Component{
         const parties = this.state.parties
         const invitations = this.state.invitations
         const isMenuOpen = Boolean(this.state.AnchorEl)
-        //console.log("parties:", parties)
-        //console.log("invitations:", invitations)
+        
         return(
             <Grid>
                 <IconButton aria-controls="invitation-list" aria-haspopup="true" onClick = {(event) => this.handleOpen(event)}>

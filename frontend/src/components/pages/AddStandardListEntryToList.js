@@ -8,6 +8,10 @@ import ListIcon from '@material-ui/icons/List';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 
+/**
+ * @author Jonathan
+ */
+
 class AddStandardListEntryToList extends Component {
     constructor(props) {
         super(props)
