@@ -66,3 +66,33 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+
+<h1> Installation </h1>
+
+<h2> Requirements </h2>
+- PyCharm
+- Visual Studio Code
+- MySQL Workbench
+
+<h2> PyCharm - Requirements </h2>
+- Python 3.7
+- Flask 
+- Flask-Cors
+- flask-restx
+- React
+
+<h2> Visual Studio Code - Requirements </h2>
+- Code Runner
+- Live Server
+
+<h2> How to start the application </h2>
+
+Step 1: Start MySQL Workbench server. 
+
+Step 2: Open PyCharm.
+    - Run Main.py
+
+Step 3: Open Visual Studio Code.
+    - Type cd frontend in the TERMINAL
+    - Type npm start in the TERMINAL
