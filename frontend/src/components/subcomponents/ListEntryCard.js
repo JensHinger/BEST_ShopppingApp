@@ -188,10 +188,13 @@ import ItemBO from '../../api/ItemBO'
 
     render(){
         const units = ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg ']   
-        //console.log("sel_retailer:", this.state.sel_retailer)
-        //console.log("state.sel_user",this.state.sel_user)
-        //console.log("this.state.sel_item_name", this.state.sel_item_name)
-        //console.log("item:", this.state.item)
+        console.log("sel_retailer:", this.state.sel_retailer)
+        console.log("sel_amount: ", this.state.sel_amount)
+        console.log("sel_unit: ", this.state.sel_unit)
+        console.log("state.sel_user",this.state.sel_user)
+        console.log("this.state.sel_item_name", this.state.sel_item_name)
+        console.log("item:", this.state.item)
+        console.log("type: ", typeof this.state.sel_amount)
         const { classes } = this.props; 
         //console.log("eine Card: ", this.props)
         return(
@@ -246,7 +249,9 @@ import ItemBO from '../../api/ItemBO'
                                 style={{ width: 300 }}
                                 renderInput={(params) =><TextField {...params}  label="User"  />}/>
                                 
-                                <Button onClick={() => this.updateItem()} size ="large" color="primary" startIcon={< CheckCircleOutlineIcon/>} />
+                                <Button onClick={() => this.state.sel_retailer && this.state.sel_user && (this.state.sel_amount === null ||  this.state.sel_amount != "" && Math.sign(parseFloat(this.state.sel_amount)) === 1) 
+                                                       && this.state.sel_unit && (this.state.sel_item_name != "" || this.state.sel_item_name === null || this.state.sel_item_name) ?
+                                    this.updateItem() : console.log("da stimmt was nicht")} size ="large" color="primary" startIcon={< CheckCircleOutlineIcon/>} />
                                 <Button onClick={() => this.deleteLEntry()} size="large" color="primary" startIcon={<DeleteForeverIcon/>}/>          
                                 
 
