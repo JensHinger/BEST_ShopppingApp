@@ -21,6 +21,9 @@
 - Code Runner </br>
 - Live Server
 
+<h2> mySQL Workbench - Requirements </h2>
+- run SQLDUMP in a new Query 
+
 <h2> How to start the application </h2>
 
 Step 1: Start MySQL Workbench server. 
