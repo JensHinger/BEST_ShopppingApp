@@ -3,4 +3,4 @@
 /venv/
 /frontend/node_modules/
 /node_modules/
-/src/static/build
+/src/static
