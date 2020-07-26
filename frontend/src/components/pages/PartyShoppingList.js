@@ -57,6 +57,7 @@ class PartyShoppingList extends Component {
             this.setState({listentries: preSortEntries, 
                             filteredEntries: preSortEntries})
             
+            
     }
     //** Funktion zum Updaten eines ListEntries */
     updateListEntryHandler = (updatedListEntry) => {
@@ -74,9 +75,13 @@ class PartyShoppingList extends Component {
     }
     //** Funktion zum Löschen eines Entries */
     deleteListEntryHandler = (deletedListEntry) => {
+        
         this.setState({
-            listentries: this.state.listentries.filter(listEntry => listEntry.getID() !== deletedListEntry.getID())
+            filteredEntries: this.state.filteredEntries.filter(listEntry => listEntry.getID() !== deletedListEntry.getID()),
+            listentries : this.state.listentries.filter(listEntry => listEntry.getID() !== deletedListEntry.getID())
         })
+        if (this.state.youngestListEntry.getID() === deletedListEntry.getID()){
+        this.setState({youngestListEntry: null})}
     }
     //** Handler für einen ausgewählten Filter */
     handleFilterSelected = (filteredRetailer) => {
