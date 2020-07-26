@@ -199,7 +199,7 @@ class CreateGroupDialog extends Component {
               </DialogContent>
 
               <DialogActions>
-                <Button onClick={() => this.state.partyName === "" ? this.setState({errorNameDialog: true}) : console.log("Leerer Gruppenname")}>
+                <Button onClick={() => this.state.partyName === "" ? this.setState({errorNameDialog: true}) : this.handleNameChange()}>
                   Gruppe erstellen
 
                 </Button>
