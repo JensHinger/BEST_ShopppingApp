@@ -7,6 +7,7 @@ import ListEntryBO from '../../api/ListEntryBO'
 import { Link as RouterLink } from 'react-router-dom'
 import AddRetailerDialog from '../dialogs/AddRetailerDialog';
 import ItemBO from '../../api/ItemBO';
+import ErrorDialog from '../dialogs/ErrorDialog'
 
 /**
  * @author Anny, Dominic, Jens, Jonathan
@@ -113,6 +114,7 @@ class AddListEntry extends Component {
             pickedUser: "",
             pickedRetailer: "",
             item: null,
+            errorDialog: false
         })
         
         //generating random keys to force the autocomplete boxes to re-render, thus making them empty 
@@ -175,6 +177,11 @@ class AddListEntry extends Component {
         this.getAllRetailer()
     };
 
+    //Schließt den ErrorDialog
+    handleErrorClose = () =>{
+        this.setState({errorDialog : false})
+      }
+
     render() {
         
         const units = [
@@ -218,6 +225,11 @@ class AddListEntry extends Component {
 
         return (
             <div>
+                
+                {this.state.errorDialog?
+                    <ErrorDialog errorMessage="Alle Felder müssen befüllt sein!" handleErrorClose={this.handleErrorClose}/>
+                : null}
+
                 <Typography variant='h6' component='h1' align='center'>
 
                     <br margin-top='20px' />
@@ -332,10 +344,8 @@ class AddListEntry extends Component {
                             justify="center">
 
                             <br margin-top='20px' />
-                            <Button onClick={() => this.state.amount && this.state.pickedItem && this.state.pickedRetailer && this.state.pickedUser && (this.state.unit == 0 | this.state.unit) ?
-                                this.createItem() : console.log("da stimmt was nicht!")} variant="contained" color="primary"> Eintrag hinzufügen </Button>
-                            <Button onClick={() => (this.state.amount &&  !isNaN(this.state.amount)) && this.state.pickedItem && this.state.pickedRetailer && this.state.pickedUser && (this.state.unit == 0 || this.state.unit) ?
-                                                   this.createItem() : console.log("da stimmt was nicht!")} variant="contained" color="primary"> Eintrag hinzufügen </Button>
+                            <Button onClick={() => (this.state.amount &&  !isNaN(this.state.amount)) && this.state.pickedItem && this.state.pickedRetailer && this.state.pickedUser && (this.state.unit == 0 || this.state.unit) && Math.sign(parseFloat(this.state.amount)) === 1 ?
+                                                   this.createItem() : this.setState({errorDialog : true})} variant="contained" color="primary"> Eintrag hinzufügen </Button>
 
                         </Grid>
 

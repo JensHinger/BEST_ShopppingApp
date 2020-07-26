@@ -124,11 +124,12 @@ class CreateGroupDialog extends Component {
     this.setState({ emailList: array })
   }
 
-
+  /** Setz errorEmailDialog auf false */
   handleEmailErrorClose = () =>{
     this.setState({errorEmailDialog : false})
   }
 
+  /** Setz errorNameDialog auf false */
   handleNameErrorClose = () =>{
     this.setState({errorNameDialog : false})
   }
