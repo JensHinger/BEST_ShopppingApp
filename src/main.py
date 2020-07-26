@@ -429,7 +429,9 @@ class ListEntryOperations(Resource):
     def put(self, id):
         """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
         adm = ShoppingAdministration()
+        print("payload:", api.payload)
         lentry = ListEntry.from_dict(api.payload)
+        print("Lentry welcher zu updaten ist: ", lentry)
 
 
         if lentry is not None:
