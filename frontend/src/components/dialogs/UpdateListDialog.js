@@ -10,6 +10,7 @@ import { ThemeProvider } from "@material-ui/core"
 import Button from '@material-ui/core/Button'
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
+import ErrorDialog from './ErrorDialog'
 /**
  * @author  Dominic, Jens, anny
  */
@@ -24,8 +25,9 @@ class UpdateListDialog extends Component {
 
             open: false,
             listBO: this.props.list,
-            newName: null,
+            newName: "",
             list: "",
+            errorDialog: false
         }
     }
 
@@ -50,6 +52,10 @@ class UpdateListDialog extends Component {
             .then(this.handleClose(), this.props.replaceNewList(list))
 
     }
+    /** Setzt den errorDialog state auf false */
+    handleErrorClose = () => {
+        this.setState({errorDialog : false})
+    }
 
     render() {
         const list = this.state.listBO
@@ -57,6 +63,9 @@ class UpdateListDialog extends Component {
 
         return (
             <div>
+                {this.state.errorDialog? 
+                    <ErrorDialog errorMessage={"Der Listenname darf nicht leer sein!"} handleErrorClose={this.handleErrorClose}/>
+                :null}
                 <ThemeProvider theme={Theme}>
                     <IconButton onClick={() => this.handleClickOpen()}>
                         <EditIcon />
@@ -81,7 +90,7 @@ class UpdateListDialog extends Component {
                         </DialogContent>
 
                         <DialogActions>
-                            <Button onClick={() => this.updateList()}>
+                            <Button onClick={() => this.state.newName === "" ? this.setState({errorDialog : true}) : this.updateList()}>
                                 Speichern
                     </Button>
                             <Button onClick={() => this.handleClose()}>
