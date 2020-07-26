@@ -15,6 +15,7 @@ import PartyBO from "../../api/PartyBO"
 import InvitationBO from "../../api/InvitationBO"
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import ErrorDialog from '../dialogs/ErrorDialog'
 
 /**
  * @author  Jens
@@ -30,7 +31,9 @@ class CreateGroupDialog extends Component{
         partyName: "",
         emailList: [],
         mail : "",
-        currentUser : null //Hier fehlt noch die props übergabe des eingeloggten Users sowie unten muss noch ein getID() hinzugefügt werden
+        currentUser : null, //Hier fehlt noch die props übergabe des eingeloggten Users sowie unten muss noch ein getID() hinzugefügt werden
+        errorEmailDialog: false,
+        errorNameDialog: false,
       }
   }
 
@@ -52,7 +55,7 @@ class CreateGroupDialog extends Component{
     const new_party = new PartyBO()
     new_party.setName(this.state.partyName)
     ShoppingAPI.getAPI().addParty(new_party)
-    .then(party => this.handleInvitationCreation(party.getID()), this.handleClose())  
+    .then(party => this.handleInvitationCreation(party.getID()))  
   }
   /** Das Erstellen einer Invitation */
   handleInvitationCreation = (partyId) => {
@@ -71,17 +74,22 @@ class CreateGroupDialog extends Component{
     // -> this.emailList[0] == "" ? dann...
     //2 Mal gleicher User einladen ist doof ;-;
 
-    mailList.map((mail) =>
-    ShoppingAPI.getAPI().getUserByEmail(mail)
-    .then(function(user) {
-      new_invitation.setTargetUserId(user.getID());
-      new_invitation.setSourceUserId(this.state.currentUser.getID())
-      new_invitation.setPartyiId(partyId)
-      ShoppingAPI.getAPI().addInvitation(new_invitation)
-      .then(this.handleClose)
+    if(mailList.length > 0){
+      const async = mailList.map((mail) =>
+      ShoppingAPI.getAPI().getUserByEmail(mail)
+      .then(function(user) {
+        new_invitation.setTargetUserId(user.getID());
+        new_invitation.setSourceUserId(this.state.currentUser.getID())
+        new_invitation.setPartyiId(partyId)
+        ShoppingAPI.getAPI().addInvitation(new_invitation)
+        .then(this.handleClose())
 
-    }.bind(this)
-    ))
+      }.bind(this))) 
+    }
+    else{
+      this.handleClose()
+      window.location.reload(true)
+    }
   }
 /** Funktion zum Öffnen des Dialogs */
   handleClickOpen = () => {
@@ -109,10 +117,24 @@ class CreateGroupDialog extends Component{
     this.setState({emailList : array})
   }
 
+  handleEmailErrorClose = () =>{
+    this.setState({errorEmailDialog : false})
+  }
+
+  handleNameErrorClose = () =>{
+    this.setState({errorNameDialog : false})
+  }
+
   render(){
     let emailList = this.state.emailList;
     return (
       <div>
+        {this.state.errorEmailDialog?
+          <ErrorDialog errorMessage="Emailfeld darf nicht leer sein!" handleErrorClose={this.handleEmailErrorClose}/>
+        : null}
+        {this.state.errorNameDialog? 
+          <ErrorDialog errorMessage="Partyname darf nicht leer sein!" handleErrorClose={this.handleNameErrorClose}/>
+        :null}
         <ThemeProvider theme = {Theme}>
 
             <Button onClick={() => this.handleClickOpen()}>
@@ -148,7 +170,7 @@ class CreateGroupDialog extends Component{
                   type="string"
                   value = {this.state.mail}
                   fullWidth/>
-                <Button onClick={() => this.state.mail === "" ? console.log("feld leer") : this.handleEmailChange()}>
+                <Button onClick={() => this.state.mail === "" ? this.setState({errorEmailDialog: true}): this.handleEmailChange()}>
                   <GroupAddIcon/>
                 </Button>
                 
@@ -166,7 +188,7 @@ class CreateGroupDialog extends Component{
               </DialogContent>
 
               <DialogActions>
-                <Button onClick={() => this.handleGroupCreation()}>
+                <Button onClick={() => this.state.partyName === "" ? this.setState({errorNameDialog: true}) : console.log("Leerer Gruppenname")}>
                   Gruppe erstellen
                 </Button>
                 <Button onClick={() => this.handleClose()}>

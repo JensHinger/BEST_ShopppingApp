@@ -23,9 +23,9 @@ class UserParties extends Component {
         this.state = {
 
             user: null,
-            parties : [],
-            lists : [],
-            expanded: true 
+            parties: [],
+            lists: [],
+            expanded: true
 
         }
     }
@@ -38,13 +38,13 @@ class UserParties extends Component {
     //** Die Funktion holt uns den eingeloggten User und dessen Partys  */
     getCurrUser = () => {
         console.log("eingeloggter User:", firebase.auth().currentUser)
-        console.log("usertoken:", )
+        console.log("usertoken:",)
         ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
-        .then((returnedUser) => {return (this.setState({user: returnedUser}),
-                                         this.getPartiesByUser())}
-        
-        
-        )
+            .then((returnedUser) => {
+                return (this.setState({ user: returnedUser }),
+                    this.getPartiesByUser())
+            }
+            )
     }
 
     //** Alle Listen einer bestimmten Party */
@@ -56,14 +56,15 @@ class UserParties extends Component {
             }.bind(this)
             )
     }
-   //** Alle Parties eines Users */
+    //** Alle Parties eines Users */
     getPartiesByUser = () => {
 
         ShoppingAPI.getAPI().getAcceptedInvitationsByTargetUserId(this.state.user.getID())
-        .then(invitations => this.getPartyByInvitations(invitations))
+            .then(invitations => this.getPartyByInvitations(invitations))
 
     }
-    //** Für jede Invitation die Party herausfiltern */
+    
+    //** Für jede Invitation die Party herausfiltern */r
     getPartyByInvitations = (invitations) => {
         invitations.forEach(invitation => {
             ShoppingAPI.getAPI().getPartyById(invitation.getPartyiId())
@@ -94,12 +95,7 @@ class UserParties extends Component {
 
         this.setState({ lists: Liste })
 
-
     }
-
-
-
-
 
 
     render() {
@@ -109,7 +105,7 @@ class UserParties extends Component {
 
             <div>
                 {userParties.map((party) =>
-                    <ExpansionPanel style={{width : "50%", margin : "auto"}} expanded={this.state.expanded === party.getID()} onChange={() => this.getListsByParty(party.getID())} key={party.getID()}>
+                    <ExpansionPanel style={{ width: "50%", margin: "auto" }} expanded={this.state.expanded === party.getID()} onChange={() => this.getListsByParty(party.getID())} key={party.getID()}>
                         <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                         >

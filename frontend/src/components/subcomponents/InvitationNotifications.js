@@ -70,6 +70,7 @@ class InvitationNotifications extends Component{
 
     handleClose = () => {
         this.setState({AnchorEl : null})
+        window.location.reload(true)
     }
     //** Den Namen der Party holen */
     getPartyName = (invite) => {
