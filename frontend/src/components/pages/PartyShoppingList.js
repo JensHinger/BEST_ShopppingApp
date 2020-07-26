@@ -24,7 +24,6 @@ class PartyShoppingList extends Component{
             filteredEntries: null,
             list : null,
             youngestListEntry: null,
-            filterArgument: null,
         }
     }
 
@@ -78,20 +77,22 @@ class PartyShoppingList extends Component{
     }
 
    handleFilterSelected = (filteredRetailer) => {
+       console.log("filteredRetailer: ", filteredRetailer)
         const filteredState =  this.state.filteredEntries.filter((listEntry) => filteredRetailer.getID() === listEntry.getRetailerId())
+        console.log("filteredState: ", filteredState)
         this.setState({filteredEntries : filteredState})
    }
 
     handleFilterReset = () => {
         this.setState({filteredEntries: this.state.listentries})
+        console.log("setzen zurück, state: ", this.state.filteredEntries)
    }
 
 
     render(){
 
-        const { filteredEntries, list, youngestListEntry } = this.state;
-        console.log("youngestlistentry laut render ", filteredEntries)
-        
+        const { entries, filteredEntries, list, youngestListEntry } = this.state;
+        console.log("FEntries laut render ", filteredEntries)
         return(
             <div style={{width : "50%", margin : "auto"}}>
             <div>
@@ -110,7 +111,7 @@ class PartyShoppingList extends Component{
                         <PlaylistAddIcon fontSize={"small"}/>
                         <FavoriteIcon />
                     </IconButton>
-                    <SortRetailer onFilterSelected = {() => this.handleFilterSelected} onResetFilter = {this.handleFilterReset}/>
+                    <SortRetailer onFilterSelected = {this.handleFilterSelected} onResetFilter = {this.handleFilterReset}/>
                 </Grid>
                 <hr/>
             </div>
