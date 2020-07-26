@@ -134,7 +134,6 @@ class ManageGroup extends Component {
                     users.map((user, index) =>
                         <Grid>
                             {user.getName()}
-                            {user.getID()}
                             <RemoveGroupMemberDialog invitation={this.state.invitations.filter(invitation => invitation.getTargetUserId() === user.getID())} handleInvitationDelete={this.handleUserDelete} index={index} />
                         </Grid>
                     )
