@@ -32,10 +32,10 @@ class ManageUser extends Component {
     getUserByGoogleId = () => {
         // Hier muss bei getPartiesByUser noch this.props.user.getID() bei dem Übergabewert ergänzt werden
         ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
-        .then(UserBO =>
-            this.setState({
-                userBO: UserBO
-            }))
+            .then(UserBO =>
+                this.setState({
+                    userBO: UserBO
+                }))
     }
     //** updaten des Users */
     updateUser = () => {
@@ -49,7 +49,7 @@ class ManageUser extends Component {
                         this.setState({
                             userBO: UserBO
                         }),
-                        
+
                     )
             }.bind(this))
 
@@ -66,7 +66,6 @@ class ManageUser extends Component {
 
     render() {
         const person = this.state.userBO
-        
 
         return (
             <Typography variant='h6' component='h1' align='center'>
@@ -92,7 +91,7 @@ class ManageUser extends Component {
 
                         : null}
 
-                    <Button onClick={() => this.updateUser()}>Speichern</Button>
+                    <Button onClick={() => this.state.newName != "" && this.state.newName != null ? this.updateUser() : console.log("da stimmt was ned")}>Speichern</Button>
                     <Collapse in={this.state.alertOpen}>
                         <Alert
                             action={
@@ -108,7 +107,7 @@ class ManageUser extends Component {
                                 </IconButton>
                             }
                         >
-                            Close me!
+                            Du heißt jetzt {this.state.newName}!
                         </Alert>
                     </Collapse>
 
@@ -130,4 +129,3 @@ class ManageUser extends Component {
 
 }
 export default ManageUser;
-

@@ -18,14 +18,19 @@ class LogOutDialog extends Component{
 
     }
 
+    /** Funktion zum Öffnen des Dialogs */
     handleClickOpen = () => {
        this.setState({open: true});}
 
+    /** Funktion zum Schließen des Dialogs */
     handleClose = () => {
         firebase.auth().signOut()
         .then(this.setState({open: false}))
-      
       }
+
+    /** Funktion zum Ausloggen des Users */
+    signOut = () => {
+      firebase.auth().signOut() }
 
     render (){
 
@@ -51,7 +56,7 @@ class LogOutDialog extends Component{
           <Button onClick={this.handleClose} color="primary">
             Nein
           </Button>
-          <Button onClick={this.handleClose} color="primary" autoFocus>
+          <Button onClick={this.signOut} color="primary" autoFocus>
             Ja
           </Button>
         </DialogActions>

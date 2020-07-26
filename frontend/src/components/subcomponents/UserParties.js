@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Button } from '@material-ui/core'
+import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Button, Typography } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ShoppingAPI from '../../api/ShoppingAPI'
 import { Link as RouterLink } from 'react-router-dom';
@@ -12,9 +12,11 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import UpdateListDialog from '../dialogs/UpdateListDialog';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+
 /**
  * @author Michael, René, Jens und Anny
  */
+
 class UserParties extends Component {
 
     constructor(props) {
@@ -37,13 +39,13 @@ class UserParties extends Component {
 
     //** Die Funktion holt uns den eingeloggten User und dessen Partys  */
     getCurrUser = () => {
-        console.log("eingeloggter User:", firebase.auth().currentUser)
-        console.log("usertoken:",)
+
         ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
             .then((returnedUser) => {
                 return (this.setState({ user: returnedUser }),
                     this.getPartiesByUser())
             }
+
             )
     }
 
@@ -98,6 +100,7 @@ class UserParties extends Component {
     }
 
 
+
     render() {
         const userParties = this.state.parties
         const lists = this.state.lists
@@ -122,7 +125,12 @@ class UserParties extends Component {
                                 </IconButton>
                             </div>
                         </ExpansionPanelSummary>
-                        {lists.map((list) =>
+                        
+                        {lists.length === 0 ?   
+                            <Typography variant="h4"> In dieser Party gibt es keine Listen!</Typography>
+                        
+                        :
+                        lists.map((list) =>
 
                             <ExpansionPanelDetails key={list.getID()}>
 

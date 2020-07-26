@@ -2,8 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Grid, Typography, withStyles } from '@material-ui/core';
 
+/**
+ * @author  Jonathan
+ */
+
 class SignIn extends Component {
 
+    //** SignIn Funktion; Prop Übergabe von App.js */
     handleSignInButton = () => {
         this.props.onSignIn()
     }

@@ -15,7 +15,7 @@ class SortRetailer extends Component {
 
         this.state = {
             all_retailers: [],
-            sel_retailer: null, 
+            sel_retailer: null,
             autocompleteFieldKey: 0,
 
         }
@@ -42,30 +42,31 @@ class SortRetailer extends Component {
 
     //Filtert die Retailer
     filtered = () => {
-        const filteredRetailer = this.state.all_retailers.filter((retailer)=> retailer.getName() == this.state.sel_retailer )
+        const filteredRetailer = this.state.all_retailers.filter((retailer) => retailer.getName() == this.state.sel_retailer)
         this.props.onFilterSelected(filteredRetailer[0])
     }
 
     //Filter wird gereset 
     resetFilter = () => {
-        this.setState({autocompleteFieldKey: this.state.autocompleteFieldKey + 1,            
+        this.setState({
+            autocompleteFieldKey: this.state.autocompleteFieldKey + 1,
         })
         this.props.onResetFilter()
     }
 
     render() {
-        
+
         return (
             <div>
                 <Autocomplete
-                    key = {this.state.autocompleteFieldKey}
+                    key={this.state.autocompleteFieldKey}
                     id="combo-box-demo"
                     options={this.getListEntryPossibleRetailerNames()}
                     onInputChange={(event, value) => this.setState({ sel_retailer: value })}
                     style={{ width: 300 }}
                     renderInput={(params) => <TextField {...params} label="Laden" />} />
-                <Button onClick = {this.filtered}>Filter anwenden</Button>
-                <Button onClick = {this.resetFilter}>Filter löschen</Button>
+                <Button onClick={this.filtered}>Filter anwenden</Button>
+                <Button onClick={this.resetFilter}>Filter löschen</Button>
             </div>
         )
     }
