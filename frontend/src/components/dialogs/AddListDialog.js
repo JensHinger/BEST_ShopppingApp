@@ -44,12 +44,14 @@ class AddListDialog extends Component {
         this.setState({ open: false });
     };
 /**
- * 
+ * Setzen des Namens
  */
     handleAddList(list) {
         this.setState({ listName: list })
     };
-
+/**  
+ * Auszuführende Anweisung beim hinzufügen einer Liste
+ */
     addList = () => {
         const list = new ListBO()
         list.setName(this.state.listName)

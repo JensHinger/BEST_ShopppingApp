@@ -9,7 +9,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
 import ItemBO from '../../api/ItemBO';
 
 /**
- * @author Dominic, Anny und Jens
+ * @author Dominic, Anny, Jens, Jonathan
  */
  class AddListEntry extends Component {
 

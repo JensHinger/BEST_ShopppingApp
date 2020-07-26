@@ -4,7 +4,9 @@ import { Link as RouterLink } from 'react-router-dom';
 import ShoppingAPI from '../../api/ShoppingAPI'
 
 class ExitGroupDialog extends Component {
-
+/**
+ * @author  Dominic, Anny 
+ */
   constructor(props) {
     super(props)
 
@@ -13,15 +15,15 @@ class ExitGroupDialog extends Component {
       invitation : this.props.invitation
     }
   }
-
+ /** Funktion zum Öffnen des Dialogs */
   handleClickOpen = () => {
     this.setState({ open: true });
   }
-
+/** Schließen des Dialogs */
   handleClose = () => {
     this.setState({ open: false });
   }
-
+ /** Löschen eines InvitationBOs */
   handleInvitationDelete = () => {
     ShoppingAPI.getAPI().deleteInvitation(this.state.invitation[0].getID())
       .then(this.handleClose())

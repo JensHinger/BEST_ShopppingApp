@@ -18,6 +18,7 @@ import 'firebase/auth';
 import SignIn from './components/pages/SignIn';
 
 class App extends Component {
+	/** Constructor of the app, which initializes firebase  */
   constructor(props) {
 		super(props);
 
@@ -27,7 +28,7 @@ class App extends Component {
 			authError: null,
 		};
   }
-  
+  /** The firebase config structure for the best shared shoppinglist project as provided by the firebase admin website */
   #firebaseConfig = {
     apiKey: "AIzaSyA_ZrGtPOWbBlpPGuEccEGNLJS0Z6hHcig",
     authDomain: "best-it-projekt.firebaseapp.com",
@@ -95,6 +96,7 @@ class App extends Component {
 		firebase.auth().onAuthStateChanged(this.handleAuthStateChange);
 	}
   
+  /** Renders the whole app */
   render() {
     return (
       <ThemeProvider theme={Theme}>
@@ -103,7 +105,8 @@ class App extends Component {
 
           <Router basename={process.env.PUBLIC_URL}>
             
-            {	this.state.currentUser ?	
+			{	//** Is a user signed in? */
+			this.state.currentUser ?	
 			<>
 			  <Header />
               <Redirect from='/' to='/overview' />
@@ -135,6 +138,7 @@ class App extends Component {
                 <About />
               </Route>
 			</> : 
+				// elso show the sign in page
 				<>
 				<Redirect to='/index.html'/>
 				<SignIn onSignIn={this.handleSignIn}/>

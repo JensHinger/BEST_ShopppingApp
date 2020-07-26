@@ -10,58 +10,90 @@ import IconButton from '@material-ui/core/IconButton';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
+import SortRetailer from '../subcomponents/SortRetailer'
 
-
+/**
+ * @author Jonathan, Anny und Jens
+ */
 class PartyShoppingList extends Component{
 
     constructor(props){
         super(props)
         this.state = {
             listentries : null,
+            filteredEntries: null,
             list : null,
+            youngestListEntry: null,
+            filterArgument: null,
         }
     }
 
     componentDidMount(){
         this.getListEntriesByList()
         this.getListName()
-        console.log("log:", this.props.match.params)
 
     }
 
     getListEntriesByList = () => {
-        console.log("versuchen die List id zu loggen:", this.props.match.params)
         const {listid} =  this.props.match.params
-        console.log("list?:", listid)
         ShoppingAPI.getAPI().getListEntriesByListId(listid).then(listentryBOs =>
-            this.setState({  
-              listentries: listentryBOs})
-              )
+            {return(this.findNewestListEntry(listentryBOs))})
               
+    }
+
+    findNewestListEntry = (listentryBOs) => {
+            var youngestBO = listentryBOs.reduce((a, b) => {
+                return new Date(a.creation_date) > new Date(b.creation_date) ? a : b;
+              })
+            this.setState({youngestListEntry: null})
+
+            var preSortEntries = listentryBOs
+            preSortEntries.sort((a, b) => {
+                return(
+                    a.getID() - b.getID()
+                )
+            })
+            this.setState({listentries: preSortEntries, 
+                            filteredEntries: preSortEntries})
+            this.setState({youngestListEntry: youngestBO})
+    }
+
+    updateListEntryHandler = (updatedListEntry) => {
+        var entries = this.state.filteredEntries
+        var remainingEntries = entries.filter((entry) => entry.getID() != updatedListEntry.getID())
+        ShoppingAPI.getAPI().getListEntryById(updatedListEntry.getID()).then(
+            function(newEntry) {remainingEntries.push(newEntry[0])
+                this.findNewestListEntry(remainingEntries)
+                }.bind(this))
     }
 
     getListName = () => {
         ShoppingAPI.getAPI().getListById(this.props.match.params.listid).then((mylist) => this.setState({list: mylist}))
     }
+
     deleteListEntryHandler = (deletedListEntry) => {
-        console.log("diesen ListEntry haben wir gelöscht:", deletedListEntry.getID())
         this.setState({
             listentries: this.state.listentries.filter(listEntry => listEntry.getID() !== deletedListEntry.getID())
         })
     }
 
-   
+   handleFilterSelected = (filteredRetailer) => {
+        const filteredState =  this.state.filteredEntries.filter((listEntry) => filteredRetailer.getID() === listEntry.getRetailerId())
+        this.setState({filteredEntries : filteredState})
+   }
 
+    handleFilterReset = () => {
+        this.setState({filteredEntries: this.state.listentries})
+   }
 
 
     render(){
 
-        //const { classes, list } = this.props;
-        const { listentries, list } = this.state;
-        //console.log("aktuelle liste", this.props.match.params.listid)
+        const { filteredEntries, list, youngestListEntry } = this.state;
+        console.log("youngestlistentry laut render ", filteredEntries)
         
         return(
-        <div style={{width : "50%", margin : "auto"}}>
+            <div style={{width : "50%", margin : "auto"}}>
             <div>
                 <Grid  container direction={'row'}> 
                     { list ?
@@ -78,14 +110,25 @@ class PartyShoppingList extends Component{
                         <PlaylistAddIcon fontSize={"small"}/>
                         <FavoriteIcon />
                     </IconButton>
+                    <SortRetailer onFilterSelected = {() => this.handleFilterSelected} onResetFilter = {this.handleFilterReset}/>
                 </Grid>
                 <hr/>
             </div>
             {
-                listentries ?
-                listentries.length === 0 ? 
-                 <Typography variant="h4"> {"Du hast keine Listeneinträge"} </Typography>:
-                listentries.map((listentry) => <ListEntryCard  onListEntryDeleted = {this.deleteListEntryHandler} listid = {this.props.match.params} listentry = {listentry} key = {listentry.getID()}/>)
+                filteredEntries ?
+                filteredEntries.length === 0 ? 
+                
+                <Typography variant="h4"> {"Du hast keine Listeneinträge"} </Typography>:
+                <div>
+                    {youngestListEntry ?
+                    <div>
+                    <Typography variant="h6"> {"Eintrag mit der letzten Änderung"} </Typography>
+                    <ListEntryCard  onListEntryUpdated={this.updateListEntryHandler} onListEntryDeleted = {this.deleteListEntryHandler} listid = {this.props.match.params} listentry = {youngestListEntry}/>
+                    </div>
+                    :null}
+                <hr />
+                {filteredEntries.map((listentry) => <ListEntryCard  onListEntryUpdated={this.updateListEntryHandler} onListEntryDeleted = {this.deleteListEntryHandler} listid = {this.props.match.params} listentry = {listentry} key = {listentry.getID()}/>)}
+                </div>
                 : null
             }            
         </div>
