@@ -71,28 +71,28 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 <h1> Installation </h1>
 
 <h2> Requirements </h2>
-- PyCharm
-- Visual Studio Code
-- MySQL Workbench
+- PyCharm </br>
+- Visual Studio Code </br>
+- MySQL Workbench 
 
 <h2> PyCharm - Requirements </h2>
-- Python 3.7
-- Flask 
-- Flask-Cors
-- flask-restx
+- Python 3.7 </br>
+- Flask </br>
+- Flask-Cors </br>
+- flask-restx </br>
 - React
 
 <h2> Visual Studio Code - Requirements </h2>
-- Code Runner
+- Code Runner </br>
 - Live Server
 
 <h2> How to start the application </h2>
 
 Step 1: Start MySQL Workbench server. 
 
-Step 2: Open PyCharm.
+Step 2: Open PyCharm. </br>
     - Run Main.py
 
-Step 3: Open Visual Studio Code.
-    - Type cd frontend in the TERMINAL
+Step 3: Open Visual Studio Code. </br>
+    - Type cd frontend in the TERMINAL </br>
     - Type npm start in the TERMINAL
