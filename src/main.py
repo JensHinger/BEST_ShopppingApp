@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import send_from_directory, Flask
 from flask_restx import Resource, Api, fields
 from flask_cors import CORS
 
@@ -15,17 +15,17 @@ from server.ShoppingAdministration import ShoppingAdministration
 
 from SecurityDecorator import secured
 
-app = Flask(__name__, static_folder='./static', static_url_path='/')
+app = Flask(__name__)
 
 
-@app.route('/editor')
+@app.route('/edit')
 def editor_index():
-    return app.send_static_file('editor/index.html')
+    return send_from_directory('static/editor', 'index.html')
 
 
-@app.route('/report')
+@app.route('/rep')
 def report_index():
-    return app.send_static_file('report/index.html')
+    return send_from_directory('static/report', 'index.html')
 
 
 CORS(app, resources=r'/shopping/*')
