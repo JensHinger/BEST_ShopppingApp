@@ -97,7 +97,7 @@ class AddListEntry extends Component {
         console.log("item: ", oneItem)
         ListEntry.setItemId(oneItem.getID())
         ListEntry.setListId(this.state.listid)
-        ListEntry.setAmount(parseInt(this.state.amount))
+        ListEntry.setAmount(this.state.amount)
         ListEntry.setUnit(parseInt(this.state.unit))
         ListEntry.setRetailerId(this.state.retailer[this.getListEntryPossibleRetailerNames().indexOf(this.state.pickedRetailer)].getID())
         ListEntry.setUserId(this.state.users[this.getListEntryPossibleUserNames().indexOf(this.state.pickedUser)].getID())
@@ -341,8 +341,9 @@ class AddListEntry extends Component {
                             justify="center">
 
                             <br margin-top='20px' />
-                            <Button onClick={() => this.state.amount && this.state.pickedItem && this.state.pickedRetailer && this.state.pickedUser && (this.state.unit == 0 | this.state.unit) ?
-                                this.createItem() : console.log("da stimmt was nicht!")} variant="contained" color="primary"> Eintrag hinzufügen </Button>
+
+                            <Button onClick={() => (this.state.amount &&  !isNaN(this.state.amount)) && this.state.pickedItem && this.state.pickedRetailer && this.state.pickedUser && (this.state.unit == 0 || this.state.unit) ?
+                                                   this.createItem() : console.log("da stimmt was nicht!")} variant="contained" color="primary"> Eintrag hinzufügen </Button>
 
                         </Grid>
 
