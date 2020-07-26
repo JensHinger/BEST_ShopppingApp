@@ -14,6 +14,11 @@ import Button from '@material-ui/core/Button';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
+
+/**
+ * @author Jens, Jonathan
+ */
+
 const styles = theme => ({
 
   divider: {
@@ -36,6 +41,7 @@ class Header extends Component{
     }
   }
 
+  //** Der aktuelle User wird gefetched */
   getCurrentUser = () => {
     ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
     .then(UserBO =>
@@ -44,18 +50,22 @@ class Header extends Component{
       }))
   }
 
+  //** Wird nach dem Rendering aufgerufen */
   componentDidMount(){
     this.getCurrentUser()
   }
 
+  //** öffnen des Menüs */
   handleProfileMenuOpen = (event) => {
     this.setState({AnchorEL : event.currentTarget});
   };
 
+  //** Schließen des Menüs im Header */
   handleMenuClose = () => {
     this.setState({AnchorEL : null})
   };
 
+  //** User updaten  */
   handleUserUpdate = () => {
     this.getCurrentUser()
     console.log('Hallo')
