@@ -8,7 +8,7 @@ import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-
+import DeleteUserAccountDialog from '../dialogs/DeleteUserAccountDialog'
 /**
  * @author Jens, Jonathan, Dominic, Anny
  */
@@ -55,6 +55,9 @@ class ManageUser extends Component {
 
 
     }
+
+    
+
     //** Funktion für die Namensändeurng eines Users */
     handleUserNameChange = (event) => {
         this.setState({ newName: event.target.value })
@@ -111,11 +114,17 @@ class ManageUser extends Component {
                             Du heißt jetzt {this.state.newName}!
                         </Alert>
                     </Collapse>
-
+                    <br />
+                    <br margin-top='20px' />
+                    {person ? 
+                        
+                        
+                        <DeleteUserAccountDialog user={person}/> : null }
                     <br />
                     <br margin-top='20px' />
 
-                Gruppen
+                
+                    Gruppen
                 <Divider />
 
                     <br margin-top='20px' />
