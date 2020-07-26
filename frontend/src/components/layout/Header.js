@@ -26,6 +26,10 @@ const styles = theme => ({
   }
 })
 
+/**
+ * @author Jens, Jonathan
+ */
+
 class Header extends Component{
 
   constructor(props){
@@ -36,7 +40,7 @@ class Header extends Component{
       currentUser: null
     }
   }
-
+ //** Der aktuelle User wird gefetched */
   getCurrentUser = () => {
     ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
     .then(UserBO =>
@@ -44,22 +48,22 @@ class Header extends Component{
           currentUser: UserBO
       }))
   }
-
+//** Wird nach dem Rendering aufgerufen */
   componentDidMount(){
     this.getCurrentUser()
   }
-
+ //** öffnen des Menüs */
   handleProfileMenuOpen = (event) => {
     this.setState({AnchorEL : event.currentTarget});
   };
-
+ //** Schließen des Menüs im Header */
   handleMenuClose = () => {
     this.setState({AnchorEL : null})
   };
-
+//** User updaten  */
   handleUserUpdate = () => {
     this.getCurrentUser()
-    console.log('Hallo')
+  
 
   };
 
@@ -81,7 +85,7 @@ class Header extends Component{
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-         {user? <MenuItem onClick={this.handleMenuClose}  component={RouterLink} to={`/manageuser/`} /*onUserUpdated = {this.handleUserUpdate}*/>My account </MenuItem> :null}
+         {user? <MenuItem onClick={this.handleMenuClose}  component={RouterLink} to={`/manageuser/`}>My account </MenuItem> :null}
         <MenuItem onClick={this.handleMenuClose}><LogOutDialog></LogOutDialog></MenuItem> 
       </Menu>
     );

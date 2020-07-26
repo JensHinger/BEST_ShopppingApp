@@ -8,7 +8,7 @@ class Retailer(BusinessObject):
 
     @staticmethod
     def from_dict(dictionary=dict()):
-        """Umwandeln eines Python dict() in einen listentry()."""
+        """Umwandeln eines Python dict() in einen Retailer()."""
         obj = Retailer()
         obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
         obj.set_name(dictionary["name"])

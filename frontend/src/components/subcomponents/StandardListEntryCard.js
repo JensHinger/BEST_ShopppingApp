@@ -11,6 +11,11 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ItemBO from '../../api/ItemBO'
+
+/**
+ * @author Jonathan
+ */
+
 class StandardListEntryCard extends Component {
     constructor(props){
         super(props)
@@ -34,16 +39,16 @@ class StandardListEntryCard extends Component {
         }
     }
 
+    //wird nach dem rendern aufgerufen
     componentDidMount(){
         this.getStandardListEntryInformation()
         this.getStandardListEntryPossibleUsersInvitations()
-
     }
 
 
+    //holt sich die Information der StandardlistenEinträge
     getStandardListEntryInformation = () => {
-            // Informationen über die Listeneinträge  erhalten 
-            // -> Item(id) -> Menge und ArtikelName, User(id), Retailer(id) 
+            
             ShoppingAPI.getAPI().getItemById(this.state.standardListEntry.getItemId()) 
             .then(ItemBO =>
                 this.setState({  
@@ -64,44 +69,44 @@ class StandardListEntryCard extends Component {
             
             ShoppingAPI.getAPI().getAllRetailer()
             .then(retailerBOs => retailerBOs.map((retailerBO) => this.setState({all_retailers: [...this.state.all_retailers, retailerBO]}))
-                )
-            
+                ) 
         }
     
+    //holt sich die Standardlisteneinträge der möglichen Usereinladungen
     getStandardListEntryPossibleUsersInvitations = () => {
        ShoppingAPI.getAPI().getPartyById(this.state.partyId)
             .then((party) => ShoppingAPI.getAPI().getAcceptedInvitationsByPartyId(party.getID())
             .then((invitations) => invitations.map((inv) => this.getStandardListEntryPossibleUsers(inv.getTargetUserId(),
             ))))}
 
+    //holt sich die Standardlisteneinträge des Users
     getStandardListEntryPossibleUsers = (target_user_id) => {
         ShoppingAPI.getAPI().getUserById(target_user_id)
             .then((user) => this.setState({party_users: [...this.state.party_users, user]})
-            //.then(console.log("später"))
             )    
-    
     }
 
+    //holt sich den Retailer Namen und gibt es der Variablen ret_names zurück
     getStandardListEntryPossibleRetailerNames = () => {
         var ret_names = this.state.all_retailers.map((retailer) => retailer.getName()
         )
-        //console.log(ret_names)
         return (ret_names)
     }
 
+    //holt sich den Usernamen und gibt es den Variablen names zurück
     getStandardListEntryPossibleUserNames = () => { 
         var names = this.state.party_users.map((user) => user.getName()
                       )
         return (names)
     }
 
+    //der expanded Status wird hier umgedreht
     expandHandler = () => {
         this.setState({expanded : !this.state.expanded})
     }
 
-
+    //Item wird geupdatet; neuer Name wird gesetzt
     updateItem = () => {
-        
         var myitem = new ItemBO
         myitem.setName(this.state.sel_item_name ? this.state.sel_item_name : this.state.item.getName())
         console.log("item zum updaten:", myitem)
@@ -110,6 +115,7 @@ class StandardListEntryCard extends Component {
             this.updateStandardListEntry(newItem))})
     }
 
+    //Standardlisteneinträge werden geupdatet
     updateStandardListEntry(item){
         const myStandardListEntry = this.state.standardListEntry
         console.log("myStandardListEntry", myStandardListEntry)
@@ -137,8 +143,8 @@ class StandardListEntryCard extends Component {
         ) 
     }
 
+    //Listeneinträge werden gelöscht
     deleteLEntry = () => {
-        
         ShoppingAPI.getAPI().deleteStandardListEntry(this.state.standardListEntry.getID()).then(() => {  
             this.props.onStandardListEntryDeleted(this.state.standardListEntry)
             }
@@ -200,7 +206,9 @@ class StandardListEntryCard extends Component {
                                 style={{ width: 300 }}
                                 renderInput={(params) =><TextField {...params}  label="User"  />}/>
                                 
-                                <Button onClick={() => this.updateItem()} size ="large" color="primary" startIcon={< CheckCircleOutlineIcon/>} />
+                                <Button onClick={() => this.state.sel_retailer && this.state.sel_user && (this.state.sel_amount === null ||  this.state.sel_amount != "" && Math.sign(parseFloat(this.state.sel_amount)) === 1) 
+                                                       && this.state.sel_unit && (this.state.sel_item_name != "" || this.state.sel_item_name === null || this.state.sel_item_name) ?
+                                    this.updateItem() : console.log("ajajaja")} size ="large" color="primary" startIcon={< CheckCircleOutlineIcon/>} />
                                 <Button onClick={() => this.deleteLEntry()} size="large" color="primary" startIcon={<DeleteForeverIcon/>}/>          
                                 
 

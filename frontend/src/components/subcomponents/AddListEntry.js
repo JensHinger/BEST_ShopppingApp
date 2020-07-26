@@ -9,7 +9,7 @@ import AddRetailerDialog from '../dialogs/AddRetailerDialog';
 import ItemBO from '../../api/ItemBO';
 
 /**
- * @author Dominic, Anny, Jens, Jonathan
+ * @author Anny, Dominic, Jens, Jonathan
  */
 class AddListEntry extends Component {
 
@@ -36,9 +36,7 @@ class AddListEntry extends Component {
             amountTextFieldKey: 4,
 
         }
-
-
-
+    }
 
     }
     componentDidMount() {
@@ -47,17 +45,23 @@ class AddListEntry extends Component {
         this.getListEntryPossibleUsersInvitations()
     }
 
-
+    //holt sich alle Retailer und setzt diese in einen State
     getAllRetailer() {
         ShoppingAPI.getAPI().getAllRetailer()
             .then(retailer => this.setState({ retailer: retailer }))
     }
 
+    //holt sich alle Items und setzt sie in einen State
     getAllItems = () => {
         ShoppingAPI.getAPI().getAllItems()
             .then(items => this.setState({ items: items }))
     }
 
+    /**
+     * holt sich die ListenId
+     * listId wird in state gesetzt
+     * holt sich aus der Liste die PartylId
+     */
     getListEntryPossibleUsersInvitations = () => {
         ShoppingAPI.getAPI().getListById(this.state.listid)
             .then((list) => ShoppingAPI.getAPI().getPartyById(list.getPartylId())
@@ -66,6 +70,7 @@ class AddListEntry extends Component {
                     )))))
     }
 
+    //holt sich die UserId von dem eingeloggten User
     getListEntryPossibleUsers = (target_user_id) => {
         ShoppingAPI.getAPI().getUserById(target_user_id)
             .then((user) => this.setState({ users: [...this.state.users, user] })
@@ -73,7 +78,7 @@ class AddListEntry extends Component {
 
     }
 
-
+    //neues Item wird erzeugt
     createItem = () => {
         var myitem = new ItemBO
         myitem.setName(this.state.pickedItem)
@@ -85,12 +90,13 @@ class AddListEntry extends Component {
             })
     }
 
+    //neue Listeneinträge werden erstellt
     createNewListEntry = (oneItem) => {
         var ListEntry = new ListEntryBO
         console.log("item: ", oneItem)
         ListEntry.setItemId(oneItem.getID())
         ListEntry.setListId(this.state.listid)
-        ListEntry.setAmount(parseInt(this.state.amount))
+        ListEntry.setAmount(this.state.amount)
         ListEntry.setUnit(parseInt(this.state.unit))
         ListEntry.setRetailerId(this.state.retailer[this.getListEntryPossibleRetailerNames().indexOf(this.state.pickedRetailer)].getID())
         ListEntry.setUserId(this.state.users[this.getListEntryPossibleUserNames().indexOf(this.state.pickedUser)].getID())
@@ -102,6 +108,7 @@ class AddListEntry extends Component {
 
     }
 
+    //neue Keys werden erstellt
     emptyState = () => {
         this.setState({
             article: "",
@@ -123,51 +130,52 @@ class AddListEntry extends Component {
         })
     }
 
+     //holt sich die listEntry User Namen und gibt diese an die Konstante userNames zurück
     getListEntryPossibleUserNames = () => {
         const userNames = this.state.users.map((user) => user.getName())
-        //console.log("alle Usernamen:", userNames)
         return (userNames)
     }
 
+    //holt sich die listEnty Retailer Namen und gibt diese an die ret_names zurück
     getListEntryPossibleRetailerNames = () => {
         var ret_names = this.state.retailer.map((retailer) => retailer.getName()
         )
-        console.log("namen aller Retailer:", ret_names)
         return (ret_names)
     }
 
+    //holt sich die StandardlistEntry User Namen und gibt diese an die Variable item_names zurück
     getListEntryPossibleItemNames = () => {
         var item_names = this.state.items.map((item) => item.getName()
         )
-        console.log("namen aller Items:", item_names)
         return (item_names)
     }
 
-
+    //Value wird hier übergeben und setzt den State.amount auf value
     handleAmountChange = (value) => {
         this.setState({ amount: value })
-        //console.log(this.state.amount)
     };
 
+    //Value wird hier übergeben und setzt den State.article auf value
     handleArticleChange = (value) => {
         this.setState({ article: value })
-        //console.log(this.state.article)
     };
 
+    //Value wird hier übergeben und setzt den State.unit auf value
     handleUnitChange = (value) => {
         this.setState({ unit: value })
     };
 
+    //checked Status wird hier umgedreht
     handleClicked = () => {
         this.setState({ checked: !this.state.checked })
-        //console.log("checked:", this.state.checked)
     };
 
+    //Value wird hier übergeben und setzt den State.pickedUser auf value
     handleUserChange = (value) => {
         this.setState({ pickedUser: value })
     };
 
-
+    //holt sich alle Retailer
     handleNewRetailer = () => {
         this.getAllRetailer()
     };
@@ -320,42 +328,37 @@ class AddListEntry extends Component {
                             </Grid>
                         </Grid>
                     </div>
-                    <div>
-                        {/**<Grid container justify="center"> 
-                    <Grid xs>
-                        <br margin-top ='20px'/>
-                        <Checkbox 
-                        checked={this.state.checked} onClick={() => {this.handleClicked()}}
-                        />
-                        Standardartikel
-                    </Grid>
-                    </Grid>*/}
-                    </div>
+                    
+                 
                     <div>
                         <br margin-top='20px' />
                         <Grid container
                             direction="row"
                             justify="center">
 
-
                             <br margin-top='20px' />
                             <Button onClick={() => this.state.amount && this.state.pickedItem && this.state.pickedRetailer && this.state.pickedUser && (this.state.unit == 0 | this.state.unit) ?
                                 this.createItem() : console.log("da stimmt was nicht!")} variant="contained" color="primary"> Eintrag hinzufügen </Button>
-
+                            <Button onClick={() => (this.state.amount &&  !isNaN(this.state.amount)) && this.state.pickedItem && this.state.pickedRetailer && this.state.pickedUser && (this.state.unit == 0 || this.state.unit) ?
+                                                   this.createItem() : console.log("da stimmt was nicht!")} variant="contained" color="primary"> Eintrag hinzufügen </Button>
 
                         </Grid>
 
                     </div>
-                    <div>   <Grid
-                        justify="center">
+
+                    <div>   
+                        <Grid justify="center">
                         <br margin-top='20px' />
                         <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> zurück zu meinen Einträgen </Button>
-
-                        <br margin-top='20px' />
-                        <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> abbrechen </Button>
-                    </Grid>
+                        </Grid>
                     </div>
 
+                    <div>
+                        <Grid justify="center">
+                            <br margin-top='20px' />
+                            <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> abbrechen </Button>
+                        </Grid>
+                    </div>
 
                 </Typography>
 

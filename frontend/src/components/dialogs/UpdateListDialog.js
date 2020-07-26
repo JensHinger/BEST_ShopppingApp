@@ -36,7 +36,7 @@ class UpdateListDialog extends Component {
     handleClose = () => {
         this.setState({ open: false });
     };
-    
+    /** Funktion die den geänderten Namen aus dem Textfeld in den State speichert */
     handleListNameChange = (event) => {
         this.setState({ newName: event.target.value })
     };

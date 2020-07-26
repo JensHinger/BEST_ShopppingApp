@@ -9,7 +9,7 @@ import InvitationBO from '../../api/InvitationBO';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
-//Hier muss noch das update rein sobald User gelöscht wird muss neu gerendert werden.
+
 /**
  * @author Michael, René, Jens und Anny
  */
@@ -28,19 +28,19 @@ class ManageGroup extends Component {
             newName: "",
         }
     }
-
+    //** User anhand der Google Id aus dem Backend holen */
     getCurrentUserByGoogleId = () => {
         ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
         .then(UserBO => this.setState({
                 userBO: UserBO
             }))
     }
-
+    //** Wird auf dem Client nach dem Rendering einmal aufgerufen */
     componentDidMount() {
         this.getParty()
         this.getCurrentUserByGoogleId()
     }
-
+    //** Funktion zum Fetchen der Party */
     getParty = () => {
         ShoppingAPI.getAPI().getPartyById(this.state.partyId)
             .then(function (party) {
@@ -48,17 +48,17 @@ class ManageGroup extends Component {
                 this.getAllUsersInParty(party.getID())
             }.bind(this))
     }
-    /**  */
+    //** Das updaten eines PartyBOs  */
     handlePartyChange = () => {
         var newParty = this.state.party
         newParty.setName(this.state.newName)
         ShoppingAPI.getAPI().updateParty(newParty)
     }
-
+    //** Party umbenennen */
     renameParty = (event) =>{
         this.setState({newName : event.target.value})
     }
-    
+    //** Alle User in eine Party */
     getAllUsersInParty = (id) => {
         ShoppingAPI.getAPI().getAcceptedInvitationsByPartyId(id)
             .then(function (invitations) {
@@ -72,19 +72,18 @@ class ManageGroup extends Component {
                 )
             }.bind(this))
     }
-
+    //** Funktion zum Löschen eines Users */
     handleUserDelete = () => {
  
         this.setState({ users: [] })
         this.setState({ invitations: [] })
         this.getAllUsersInParty(this.state.partyId)
-        console.log("users nach update:", this.state.users)
-        console.log("invitations nach update", this.state.invitations)
+       
 
         // Hier noch ein router auf die Overview page
 
     }
-
+    //** Jemanden zur Gruppe hinzufügen */
     addMemberToGroup = () => {
 
         ShoppingAPI.getAPI().getUserByEmail(this.state.mail)
@@ -100,8 +99,6 @@ class ManageGroup extends Component {
 
     render() {
 
-        //console.log("invitations:", this.state.invitations)
-        //console.log("users:", this.state.users)
         const currentParty = this.state.party
         const users = this.state.users
         const userBO = this.state.userBO
