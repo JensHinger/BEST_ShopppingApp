@@ -161,7 +161,7 @@ class ShoppingAdministration(object):
         retailer = Retailer()
         retailer.set_name(name)
 
-        retailers = self.get_all_items()
+        retailers = self.get_all_retailer()
         for sRetailer in retailers:
             if sRetailer.get_name().lower() == name.lower():
                 return None
