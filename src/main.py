@@ -107,7 +107,7 @@ class InvitationListOperations(Resource):
         print("proposal", proposal)
         if proposal is not None:
             invi = adm.create_invitation(proposal.get_partyi_id(), proposal.get_target_user_id(),
-                                         proposal.get_source_user_id(), invitation.get_is_accepted())
+                                         proposal.get_source_user_id(), proposal.get_is_accepted())
             return invi, 200
         else:
             return "", 500
