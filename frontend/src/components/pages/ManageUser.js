@@ -67,7 +67,6 @@ class ManageUser extends Component {
     render() {
         const person = this.state.userBO
 
-
         return (
             <Typography variant='h6' component='h1' align='center'>
                 <Grid>
@@ -92,7 +91,7 @@ class ManageUser extends Component {
 
                         : null}
 
-                    <Button onClick={() => this.updateUser()}>Speichern</Button>
+                    <Button onClick={() => this.state.newName != "" && this.state.newName != null ? this.updateUser() : console.log("da stimmt was ned")}>Speichern</Button>
                     <Collapse in={this.state.alertOpen}>
                         <Alert
                             action={
@@ -108,7 +107,7 @@ class ManageUser extends Component {
                                 </IconButton>
                             }
                         >
-                            Close me!
+                            Du heißt jetzt {this.state.newName}!
                         </Alert>
                     </Collapse>
 

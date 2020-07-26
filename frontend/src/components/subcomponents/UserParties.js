@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Button } from '@material-ui/core'
+import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Button, Typography } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ShoppingAPI from '../../api/ShoppingAPI'
 import { Link as RouterLink } from 'react-router-dom';
@@ -39,12 +39,12 @@ class UserParties extends Component {
 
     //** Die Funktion holt uns den eingeloggten User und dessen Partys  */
     getCurrUser = () => {
+
         ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
             .then((returnedUser) => {
                 return (this.setState({ user: returnedUser }),
                     this.getPartiesByUser())
             }
-
 
             )
     }
@@ -65,7 +65,8 @@ class UserParties extends Component {
             .then(invitations => this.getPartyByInvitations(invitations))
 
     }
-    //** Für jede Invitation die Party herausfiltern */
+    
+    //** Für jede Invitation die Party herausfiltern */r
     getPartyByInvitations = (invitations) => {
         invitations.forEach(invitation => {
             ShoppingAPI.getAPI().getPartyById(invitation.getPartyiId())
@@ -95,6 +96,7 @@ class UserParties extends Component {
         Liste[Liste.indexOf(TargetList)] = list
 
         this.setState({ lists: Liste })
+
     }
 
 
@@ -123,7 +125,12 @@ class UserParties extends Component {
                                 </IconButton>
                             </div>
                         </ExpansionPanelSummary>
-                        {lists.map((list) =>
+                        
+                        {lists.length === 0 ?   
+                            <Typography variant="h4"> In dieser Party gibt es keine Listen!</Typography>
+                        
+                        :
+                        lists.map((list) =>
 
                             <ExpansionPanelDetails key={list.getID()}>
 

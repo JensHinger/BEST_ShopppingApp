@@ -90,7 +90,10 @@ class InvitationNotifications extends Component {
     * Prüft ob es geschlossen ist 
     */
     handleClose = () => {
-        this.setState({ AnchorEl: null })
+
+        this.setState({AnchorEl : null})
+        window.location.reload(true)
+
     }
 
     //** Den Namen der Party holen */

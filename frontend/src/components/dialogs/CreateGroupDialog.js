@@ -15,6 +15,7 @@ import PartyBO from "../../api/PartyBO"
 import InvitationBO from "../../api/InvitationBO"
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import ErrorDialog from '../dialogs/ErrorDialog'
 
 /**
  * @author  Jens
@@ -25,13 +26,17 @@ class CreateGroupDialog extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      open: false,
-      partyName: "",
-      emailList: [],
-      mail: "",
-      currentUser: null //Hier fehlt noch die props übergabe des eingeloggten Users sowie unten muss noch ein getID() hinzugefügt werden
-    }
+
+      this.state = {
+        open: false,
+        partyName: "",
+        emailList: [],
+        mail : "",
+        currentUser : null, //Hier fehlt noch die props übergabe des eingeloggten Users sowie unten muss noch ein getID() hinzugefügt werden
+        errorEmailDialog: false,
+        errorNameDialog: false,
+      }
+
   }
 
   componentDidMount() {
@@ -52,7 +57,8 @@ class CreateGroupDialog extends Component {
     const new_party = new PartyBO()
     new_party.setName(this.state.partyName)
     ShoppingAPI.getAPI().addParty(new_party)
-      .then(party => this.handleInvitationCreation(party.getID()), this.handleClose())
+    .then(party => this.handleInvitationCreation(party.getID()))  
+
   }
   /** Das Erstellen einer Invitation */
   handleInvitationCreation = (partyId) => {
@@ -71,17 +77,24 @@ class CreateGroupDialog extends Component {
     // -> this.emailList[0] == "" ? dann...
     //2 Mal gleicher User einladen ist doof ;-;
 
-    mailList.map((mail) =>
-      ShoppingAPI.getAPI().getUserByEmail(mail)
-        .then(function (user) {
-          new_invitation.setTargetUserId(user.getID());
-          new_invitation.setSourceUserId(this.state.currentUser.getID())
-          new_invitation.setPartyiId(partyId)
-          ShoppingAPI.getAPI().addInvitation(new_invitation)
-            .then(this.handleClose)
 
-        }.bind(this)
-        ))
+    if(mailList.length > 0){
+      const async = mailList.map((mail) =>
+      ShoppingAPI.getAPI().getUserByEmail(mail)
+      .then(function(user) {
+        new_invitation.setTargetUserId(user.getID());
+        new_invitation.setSourceUserId(this.state.currentUser.getID())
+        new_invitation.setPartyiId(partyId)
+        ShoppingAPI.getAPI().addInvitation(new_invitation)
+        .then(this.handleClose())
+
+      }.bind(this))) 
+    }
+    else{
+      this.handleClose()
+      window.location.reload(true)
+    }
+
   }
   /** Funktion zum Öffnen des Dialogs */
   handleClickOpen = () => {
@@ -111,11 +124,27 @@ class CreateGroupDialog extends Component {
     this.setState({ emailList: array })
   }
 
-  render() {
+
+  handleEmailErrorClose = () =>{
+    this.setState({errorEmailDialog : false})
+  }
+
+  handleNameErrorClose = () =>{
+    this.setState({errorNameDialog : false})
+  }
+
+  render(){
     let emailList = this.state.emailList;
     return (
       <div>
-        <ThemeProvider theme={Theme}>
+        {this.state.errorEmailDialog?
+          <ErrorDialog errorMessage="Emailfeld darf nicht leer sein!" handleErrorClose={this.handleEmailErrorClose}/>
+        : null}
+        {this.state.errorNameDialog? 
+          <ErrorDialog errorMessage="Partyname darf nicht leer sein!" handleErrorClose={this.handleNameErrorClose}/>
+        :null}
+        <ThemeProvider theme = {Theme}>
+
 
           <Button onClick={() => this.handleClickOpen()}>
             <GroupAddIcon fontSize='large' color='primary' />
@@ -141,35 +170,37 @@ class CreateGroupDialog extends Component {
                   Fügen Sie Gruppenmitglieder hinzu!
                 </DialogContentText>
 
-              <TextField
-                onChange={(event) => this.setState({ mail: event.target.value }) /*Textfield darf nicht leer sein muss geleert werden sobald email hinzugefügt wurde*/}
-                required
-                margin="dense"
-                id="userEmail"
-                label="E-Mail"
-                type="string"
-                value={this.state.mail}
-                fullWidth />
-              <Button onClick={() => this.state.mail === "" ? console.log("feld leer") : this.handleEmailChange()}>
-                <GroupAddIcon />
-              </Button>
+                  
+                <TextField
+                  onChange = {(event) => this.setState({mail : event.target.value}) /*Textfield darf nicht leer sein muss geleert werden sobald email hinzugefügt wurde*/ }
+                  required
+                  margin="dense"
+                  id="userEmail"
+                  label="E-Mail"
+                  type="string"
+                  value = {this.state.mail}
+                  fullWidth/>
+                <Button onClick={() => this.state.mail === "" ? this.setState({errorEmailDialog: true}): this.handleEmailChange()}>
+                  <GroupAddIcon/>
+                </Button>
+                
+                <ul>
+                  {emailList.map((mail, index) => 
+                    <p>
+                      {mail}
+                      <Button onClick = {() => this.handleEmailDelete(index)}>
+                        <DeleteIcon/>
+                      </Button>
+                    </p>
+                  )}
+                </ul>
 
-              <ul>
-                {emailList.map((mail, index) =>
-                  <p>
-                    {mail}
-                    <Button onClick={() => this.handleEmailDelete(index)}>
-                      <DeleteIcon />
-                    </Button>
-                  </p>
-                )}
-              </ul>
+              </DialogContent>
 
-            </DialogContent>
+              <DialogActions>
+                <Button onClick={() => this.state.partyName === "" ? this.setState({errorNameDialog: true}) : console.log("Leerer Gruppenname")}>
+                  Gruppe erstellen
 
-            <DialogActions>
-              <Button onClick={() => this.handleGroupCreation()}>
-                Gruppe erstellen
                 </Button>
               <Button onClick={() => this.handleClose()}>
                 Abbrechen

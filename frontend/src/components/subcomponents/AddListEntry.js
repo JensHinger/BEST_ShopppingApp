@@ -36,10 +36,7 @@ class AddListEntry extends Component {
             amountTextFieldKey: 4,
 
         }
-
     }
-
-    // wird nach der rendern aufgerufen 
     componentDidMount() {
         this.getAllItems()
         this.getAllRetailer()
@@ -219,8 +216,6 @@ class AddListEntry extends Component {
         const item = this.state.items
         const user = this.state.users
 
-
-
         return (
             <div>
                 <Typography variant='h6' component='h1' align='center'>
@@ -281,7 +276,6 @@ class AddListEntry extends Component {
                                 <Grid container justify="center">
                                     {item ?
                                         <Autocomplete
-
                                             freeSolo
                                             key={this.state.itemAutoCompleteKey}
                                             id="combo-box-demo"
@@ -338,14 +332,17 @@ class AddListEntry extends Component {
                             justify="center">
 
                             <br margin-top='20px' />
-
+                            <Button onClick={() => this.state.amount && this.state.pickedItem && this.state.pickedRetailer && this.state.pickedUser && (this.state.unit == 0 | this.state.unit) ?
+                                this.createItem() : console.log("da stimmt was nicht!")} variant="contained" color="primary"> Eintrag hinzufügen </Button>
                             <Button onClick={() => (this.state.amount &&  !isNaN(this.state.amount)) && this.state.pickedItem && this.state.pickedRetailer && this.state.pickedUser && (this.state.unit == 0 || this.state.unit) ?
                                                    this.createItem() : console.log("da stimmt was nicht!")} variant="contained" color="primary"> Eintrag hinzufügen </Button>
 
                         </Grid>
 
                     </div>
-                    <div>
+
+
+                    <div>   
                         <Grid justify="center">
                             <br margin-top='20px' />
                             <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> zurück zu meinen Einträgen </Button>
