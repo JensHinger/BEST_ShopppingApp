@@ -12,9 +12,11 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import UpdateListDialog from '../dialogs/UpdateListDialog';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+
 /**
  * @author Michael, René, Jens und Anny
  */
+
 class UserParties extends Component {
 
     constructor(props) {
@@ -37,13 +39,13 @@ class UserParties extends Component {
 
     //** Die Funktion holt uns den eingeloggten User und dessen Partys  */
     getCurrUser = () => {
-        console.log("eingeloggter User:", firebase.auth().currentUser)
-        console.log("usertoken:",)
+
         ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
             .then((returnedUser) => {
                 return (this.setState({ user: returnedUser }),
                     this.getPartiesByUser())
             }
+
             )
     }
 
@@ -96,6 +98,7 @@ class UserParties extends Component {
         this.setState({ lists: Liste })
 
     }
+
 
 
     render() {

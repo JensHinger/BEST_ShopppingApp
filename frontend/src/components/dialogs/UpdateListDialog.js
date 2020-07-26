@@ -29,10 +29,12 @@ class UpdateListDialog extends Component {
         }
     }
 
+    /** Funktion zum Öffnen des Dialogs */
     handleClickOpen = () => {
         this.setState({ open: true })
     };
 
+    /** Funktion zum Schließen des Dialogs */
     handleClose = () => {
         this.setState({ open: false });
     };
@@ -95,9 +97,3 @@ class UpdateListDialog extends Component {
 }
 
 export default UpdateListDialog;
-
-
-
-
-
-

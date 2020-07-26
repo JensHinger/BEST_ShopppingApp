@@ -80,7 +80,6 @@ class AddListEntry extends Component {
     createItem = () => {
         var myitem = new ItemBO
         myitem.setName(this.state.pickedItem)
-        console.log("item zum updaten:", myitem)
         ShoppingAPI.getAPI().addItem(myitem)
             .then((newItem) => {
                 return (this.setState({ items: [...this.state.items, newItem] }),
@@ -91,7 +90,6 @@ class AddListEntry extends Component {
     //neue Listeneinträge werden erstellt
     createNewListEntry = (oneItem) => {
         var ListEntry = new ListEntryBO
-        console.log("item: ", oneItem)
         ListEntry.setItemId(oneItem.getID())
         ListEntry.setListId(this.state.listid)
         ListEntry.setAmount(this.state.amount)
@@ -99,7 +97,6 @@ class AddListEntry extends Component {
         ListEntry.setRetailerId(this.state.retailer[this.getListEntryPossibleRetailerNames().indexOf(this.state.pickedRetailer)].getID())
         ListEntry.setUserId(this.state.users[this.getListEntryPossibleUserNames().indexOf(this.state.pickedUser)].getID())
         ListEntry.setName("Wir sind die besten!")
-        console.log("der neue Entry:", ListEntry)
         ShoppingAPI.getAPI().addListEntry(ListEntry).then(
             this.emptyState()
         )
@@ -117,7 +114,7 @@ class AddListEntry extends Component {
             pickedRetailer: "",
             item: null,
         })
-        console.log("state nachdem er geleert wurde", this.state)
+        
         //generating random keys to force the autocomplete boxes to re-render, thus making them empty 
         this.setState({
             retailerAutoCompleteKey: this.state.retailerAutoCompleteKey + 1,
@@ -128,7 +125,7 @@ class AddListEntry extends Component {
         })
     }
 
-     //holt sich die listEntry User Namen und gibt diese an die Konstante userNames zurück
+    //holt sich die listEntry User Namen und gibt diese an die Konstante userNames zurück
     getListEntryPossibleUserNames = () => {
         const userNames = this.state.users.map((user) => user.getName())
         return (userNames)
@@ -179,7 +176,7 @@ class AddListEntry extends Component {
     };
 
     render() {
-        console.log("user", this.state.users)
+        
         const units = [
             {
                 value: 0,
@@ -326,8 +323,8 @@ class AddListEntry extends Component {
                             </Grid>
                         </Grid>
                     </div>
-                    
-                 
+
+
                     <div>
                         <br margin-top='20px' />
                         <Grid container
@@ -344,10 +341,11 @@ class AddListEntry extends Component {
 
                     </div>
 
+
                     <div>   
                         <Grid justify="center">
-                        <br margin-top='20px' />
-                        <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> zurück zu meinen Einträgen </Button>
+                            <br margin-top='20px' />
+                            <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> zurück zu meinen Einträgen </Button>
                         </Grid>
                     </div>
 
@@ -366,4 +364,3 @@ class AddListEntry extends Component {
 }
 
 export default AddListEntry
-

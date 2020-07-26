@@ -93,7 +93,6 @@ class AddStandardLisEntry extends Component {
     //neue StandardlistenEinträge werden erstellt
     createNewStandardListEntry = (oneItem) => {
         var standardListEntry = new StandardListEntryBO()
-        console.log("item:", oneItem)
         standardListEntry.setItemId(oneItem.getID())
         standardListEntry.setPartyId(Number(this.state.partyId))
         standardListEntry.setRetailerId(this.state.retailer[this.getStandardListEntryPossibleRetailerNames().indexOf(this.state.pickedRetailer)].getID())
@@ -101,7 +100,6 @@ class AddStandardLisEntry extends Component {
         standardListEntry.setAmount(this.state.amount)
         standardListEntry.setUnit(this.state.unit)
         standardListEntry.setName("Wir sind die besten!")
-        console.log("der neue Entry:", standardListEntry)
         ShoppingAPI.getAPI().addStandardListEntry(standardListEntry).then(
             this.emptyState()
         )
@@ -170,7 +168,7 @@ class AddStandardLisEntry extends Component {
     };
 
     render() {
-        console.log("user", this.state.party_users)
+      
         const units = [
             {
                 value: 0,
@@ -268,22 +266,22 @@ class AddStandardLisEntry extends Component {
                             <Grid xs={4}>
                                 <br margin-top='20px' />
                                 <Grid container justify="center">
-                                {this.state.items ?
-                                    <Autocomplete
+                                    {this.state.items ?
+                                        <Autocomplete
 
-                                        freeSolo
-                                        key={this.state.itemAutoCompleteKey}
-                                        id="combo-box-demo"
-                                        onInputChange={(event, value) => this.setState({ pickedItem: value })}
-                                        options={this.state.items}
-                                        getOptionLabel={(option) => option.getName()}
-                                        style={{ width: 200 }}
-                                        renderInput={(params) => <TextField  {...params} label="Artikel" />} />
-                                    : null}
+                                            freeSolo
+                                            key={this.state.itemAutoCompleteKey}
+                                            id="combo-box-demo"
+                                            onInputChange={(event, value) => this.setState({ pickedItem: value })}
+                                            options={this.state.items}
+                                            getOptionLabel={(option) => option.getName()}
+                                            style={{ width: 200 }}
+                                            renderInput={(params) => <TextField  {...params} label="Artikel" />} />
+                                        : null}
                                 </Grid>
                             </Grid>
 
-                            <Grid xs ={4}>
+                            <Grid xs={4}>
                                 <br margin-top='20px' />
                                 <TextField
                                     key={this.state.amountTextFieldKey}
