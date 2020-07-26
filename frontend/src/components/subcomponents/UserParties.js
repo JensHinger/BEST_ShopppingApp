@@ -12,7 +12,9 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import UpdateListDialog from '../dialogs/UpdateListDialog';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-
+/**
+ * @author Michael, René, Jens und Anny
+ */
 class UserParties extends Component {
 
     constructor(props) {
@@ -27,9 +29,8 @@ class UserParties extends Component {
 
         }
     }
-
+    //** Wird auf Client und Server vor dem Rendering einmalig aufgerufen */
     componentWillMount() {
-        //console.log("Cookie:", document.cookie)
         this.getCurrUser()
     }
 
@@ -58,12 +59,11 @@ class UserParties extends Component {
    //** Alle Parties eines Users */
     getPartiesByUser = () => {
 
-        //console.log("wir holen uns den User")
         ShoppingAPI.getAPI().getAcceptedInvitationsByTargetUserId(this.state.user.getID())
         .then(invitations => this.getPartyByInvitations(invitations))
 
     }
-    
+    //** Für jede Invitation die Party herausfiltern */
     getPartyByInvitations = (invitations) => {
         invitations.forEach(invitation => {
             ShoppingAPI.getAPI().getPartyById(invitation.getPartyiId())
@@ -76,7 +76,6 @@ class UserParties extends Component {
     }
     //** Löschen einer Liste */
     deleteList = (listId) => {
-        //*console.log("versuche eine Liste zu löschen")
         ShoppingAPI.getAPI().deleteList(listId)
             .then(this.setState({
                 lists: this.state.lists.filter(list => list.getID() !== listId)
@@ -84,7 +83,7 @@ class UserParties extends Component {
             ))
 
     }
-
+    //** Das neue (geupdatete) Listenobjekt wird in der Liste ersetzt */
     replaceNewList = (list) => {
 
         var Liste = this.state.lists

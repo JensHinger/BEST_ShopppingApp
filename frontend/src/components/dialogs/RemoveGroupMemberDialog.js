@@ -29,9 +29,9 @@ class RemoveGroupMemberDialog extends Component {
 
   handleClose = () => {
     this.setState({ open: false });
-    //this.setState({invitation: null})
+    
   };
-  //** Löschen einer Invitation  */
+  //** Löschen einer Invitation; Prop Übergabe von Manage Party */
   handleInvDelete = () => {
     console.log("Invitation ID: " , this.state.invitation[0].getID())
     console.log("invitation:", this.state.invitation)

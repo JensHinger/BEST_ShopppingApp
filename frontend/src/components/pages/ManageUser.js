@@ -9,6 +9,10 @@ import CloseIcon from '@material-ui/icons/Close';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
+/**
+ * @author Jens, Jonathan, Dominic, Anny
+ */
+
 class ManageUser extends Component {
     constructor(props) {
         super(props)
@@ -20,11 +24,11 @@ class ManageUser extends Component {
 
         }
     }
-
+    //** Einmaliges aufrufen nach dem Rendering */
     componentDidMount() {
         this.getUserByGoogleId()
     }
-
+    //** Fetch den User aus dem Backend */
     getUserByGoogleId = () => {
         // Hier muss bei getPartiesByUser noch this.props.user.getID() bei dem Übergabewert ergänzt werden
         ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
@@ -33,7 +37,7 @@ class ManageUser extends Component {
                 userBO: UserBO
             }))
     }
-
+    //** updaten des Users */
     updateUser = () => {
         var user = this.state.userBO
         user.setName(this.state.newName)
@@ -45,13 +49,13 @@ class ManageUser extends Component {
                         this.setState({
                             userBO: UserBO
                         }),
-                        // this.props.onUserUpdated(),
+                        
                     )
             }.bind(this))
 
 
     }
-
+    //** Funktion für die Namensändeurng eines Users */
     handleUserNameChange = (event) => {
         this.setState({ newName: event.target.value })
     }
@@ -62,8 +66,7 @@ class ManageUser extends Component {
 
     render() {
         const person = this.state.userBO
-        //console.log(this.state.user)
-        //console.log(this.refs.newname.input.value)
+        
 
         return (
             <Typography variant='h6' component='h1' align='center'>
@@ -128,4 +131,3 @@ class ManageUser extends Component {
 }
 export default ManageUser;
 
-//gruppen fehlen noch
