@@ -361,7 +361,7 @@ export default class ShoppingAPI {
     //#getListEntryByIdURL = (id) => `${this.#shoppingServerBaseURL}/listentry/${id}`
     getListEntryById(id){
         return this.#fetchAdvanced(this.#getListEntryByIdURL(id)).then((responseJSON) => {
-            let responseListEntryBO = ListEntryBO.fromJSON(responseJSON[0]);
+            let responseListEntryBO = ListEntryBO.fromJSON(responseJSON);
                 return new Promise(function(resolve){
                     resolve(responseListEntryBO)
                 })

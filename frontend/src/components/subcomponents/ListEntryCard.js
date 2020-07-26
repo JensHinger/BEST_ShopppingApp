@@ -34,7 +34,7 @@ import ItemBO from '../../api/ItemBO'
             sel_amount: null,
             sel_unit: null,
             sel_item_name: null,
-            units : ['St', 'kg', 'g', 'L', 'ml', 'm', 'cm', 'Pckg'] 
+            units : ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg '] 
 
         }
     }
@@ -46,17 +46,17 @@ import ItemBO from '../../api/ItemBO'
     }
 
 
-    componentWillUnmount(){
-        console.log("schließe die komponente!")
-        this.setLeavingCheckState()
-    }
+    //componentWillUnmount(){
+        //console.log("schließe die komponente!")
+        //this.setLeavingCheckState()
+    //}
 
-    setLeavingCheckState = () => {
-        const mylistentry = this.state.listentry
-        mylistentry.setchecked(this.state.checked ? 1 : 0 )
-        console.log("setze den checked state entsprechend.")
-        ShoppingAPI.getAPI().updateListEntry(mylistentry)
-    }
+     //setLeavingCheckState = () => {
+        // const mylistentry = this.state.listentry
+         //mylistentry.setchecked(this.state.checked ? 1 : 0 )
+         //console.log("setze den checked state entsprechend.")
+         //ShoppingAPI.getAPI().updateListEntry(mylistentry)
+     //}
 
 
     getListentryInformation = () => {
@@ -97,7 +97,7 @@ import ItemBO from '../../api/ItemBO'
         ShoppingAPI.getAPI().getUserById(target_user_id)
             .then((user) => this.setState({party_users: [...this.state.party_users, user]})
             //.then(console.log("später"))
-            )    
+            )  
     
     }
 
@@ -120,12 +120,20 @@ import ItemBO from '../../api/ItemBO'
 
     scoreThroughHandler = () => {
         this.setState({checked :!this.state.checked})
+        //console.log("checked:", this.state.checked)
         if (this.state.expanded === true){
             this.setState({expanded : !this.state.expanded})}
-        console.log("checked:", this.state.checked)
+
+        //console.log("checked:", this.state.checked)
+        const mylistentry = this.state.listentry
+        mylistentry.setchecked(this.state.checked ? 0 : 1 )
+        //console.log("setze den checked state entsprechend.")
+        
+        ShoppingAPI.getAPI().updateListEntry(this.state.listentry).then(() => this.props.onListEntryUpdated(this.state.listentry) )
+
     }
     
-    updateItem = () => {        
+    updateItem = () => {       
         var myitem = new ItemBO
         //console.log(this.state.sel_amount)
         myitem.setName(this.state.sel_item_name ? this.state.sel_item_name : this.state.item.getName())
@@ -137,6 +145,8 @@ import ItemBO from '../../api/ItemBO'
     }
 
     updateListEntry(item){
+        console.log("users:", this.state.party_users)
+        console.log("sel_user:", this.state.sel_user)
         const mylistentry = this.state.listentry 
         mylistentry.setItemId(item.getID())
         //find retailer Id corresponding to retailer ID
@@ -147,7 +157,8 @@ import ItemBO from '../../api/ItemBO'
         mylistentry.setchecked(this.state.checked ? 1 : 0 )
         mylistentry.setAmount(this.state.sel_amount ? this.state.sel_amount : this.state.listentry.getAmount())
         mylistentry.setUnit(this.state.units.indexOf(this.state.sel_unit))
-        console.log("mein LENTRY:", mylistentry)
+        //console.log("mein LENTRY:", mylistentry)
+        this.props.onListEntryUpdated(this.state.listentry) 
         ShoppingAPI.getAPI().updateListEntry(mylistentry)
         .then(ShoppingAPI.getAPI().getUserById(this.state.listentry.getUserId()) 
                 .then(UserBO =>
@@ -159,8 +170,10 @@ import ItemBO from '../../api/ItemBO'
                 .then(RetailerBO =>
                     this.setState({  
                     retailer : RetailerBO})
-                    )
-                )
+                    ),
+            this.props.onListEntryUpdated(this.state.listentry) 
+        
+        )
     }
 
     deleteLEntry = () => {
@@ -180,6 +193,7 @@ import ItemBO from '../../api/ItemBO'
         //console.log("this.state.sel_item_name", this.state.sel_item_name)
         //console.log("item:", this.state.item)
         const { classes } = this.props; 
+        //console.log("eine Card: ", this.props)
         return(
             <div>
                 
@@ -248,4 +262,6 @@ import ItemBO from '../../api/ItemBO'
     }
  }
 
-export default ListEntryCard
+
+
+ export default ListEntryCard

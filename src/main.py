@@ -734,27 +734,16 @@ class UserByEmailOperations(Resource):
         return u
 
 """Report related."""
-@shopping.route("/counted-retailer/<int:userid>")
-class CountedRetailerOperations(Resource):
 
-    @shopping.marshal_with(report_retailer)
+@shopping.route("/checked-listentries/<int:userid>")
+class ReportOperations(Resource):
+
+    @shopping.marshal_with(list_entry)
     def get(self, userid):
         adm = ShoppingAdministration()
-        ret = adm.get_counted_retailer(userid)
-        if ret is not None:
-            return ret, 200
-        else:
-            return None, 500
-
-@shopping.route("/counted-items/<int:userid>")
-class CountedItemOperations(Resource):
-
-    @shopping.marshal_with(report_item)
-    def get(self, userid):
-        adm = ShoppingAdministration()
-        item = adm.get_counted_item(userid)
-        if item is not None:
-            return item, 200
+        listentries = adm.get_checked_by_user_id(userid)
+        if listentries is not None:
+            return listentries, 200
         else:
             return None, 500
 

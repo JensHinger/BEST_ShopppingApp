@@ -6,8 +6,6 @@ import ListEntryBO from './ListEntryBO'
 import StandardListEntryBO from './StandardListEntryBO'
 import RetailerBO from './RetailerBO'
 import InvitationBO from './InvitationBO'
-import ReportItemBO from './ReportItemBO'
-import ReportRetailerBO from './ReportRetailerBO'
 
 export default class ShoppingAPI {
 
@@ -85,8 +83,7 @@ export default class ShoppingAPI {
     #deleteUserURL = (id) => `${this.#shoppingServerBaseURL}/user/${id}`
 
     //Report related
-    #getCountedRetailerURL = (id) => `${this.#shoppingServerBaseURL}/counted-retailer/${id}`
-    #getCountedItemsURL = (id) => `${this.#shoppingServerBaseURL}/counted-items/${id}`
+    #getCheckedListentriesByUserURL = (id) => `${this.#shoppingServerBaseURL}/checked-listentries/${id}`
 
     static getAPI() {
         if (this.#api == null) {
@@ -712,20 +709,11 @@ export default class ShoppingAPI {
 
     //Report related
 
-    getCountedRetailer(userid) {
-        return this.#fetchAdvanced(this.#getCountedRetailerURL(userid)).then((responseJSON) => {
-            let responseReportRetailerBO = ReportRetailerBO.fromJSON(responseJSON);
+    getCheckedListentriesByUser(userid) {
+        return this.#fetchAdvanced(this.#getCheckedListentriesByUserURL(userid)).then((responseJSON) => {
+            let responseListEntryBO = ListEntryBO.fromJSON(responseJSON);
                 return new Promise(function(resolve){
-                    resolve(responseReportRetailerBO)
-                })
-        })
-    }
-
-    getCountedItem(userid) {
-        return this.#fetchAdvanced(this.#getCountedItemsURL(userid)).then((responseJSON) => {
-            let responseReportItemBO = ReportItemBO.fromJSON(responseJSON);
-                return new Promise(function(resolve){
-                    resolve(responseReportItemBO)
+                    resolve(responseListEntryBO)
                 })
         })
     }

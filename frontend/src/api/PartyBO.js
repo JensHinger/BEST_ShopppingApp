@@ -1,7 +1,7 @@
 import BusinessObject from './BusinessObject'
 
 export default class PartyBO extends BusinessObject{
-
+    // Returns an Array of PartyBOs from a given JSON structure
     static fromJSON(parties) {
         let result = [];
 
