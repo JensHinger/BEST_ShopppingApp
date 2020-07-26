@@ -37,8 +37,6 @@ class AddListEntry extends Component {
 
         }
     }
-
-    }
     componentDidMount() {
         this.getAllItems()
         this.getAllRetailer()
