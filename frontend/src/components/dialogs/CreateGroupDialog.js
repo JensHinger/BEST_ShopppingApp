@@ -10,6 +10,7 @@ import {ThemeProvider} from "@material-ui/core"
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Theme from "../../Theme"
+import CustomAlert from "../subcomponents/CustomAlert"
 import ShoppingAPI from "../../api/ShoppingAPI"
 import PartyBO from "../../api/PartyBO"
 import InvitationBO from "../../api/InvitationBO"
@@ -52,7 +53,7 @@ class CreateGroupDialog extends Component{
     const new_party = new PartyBO()
     new_party.setName(this.state.partyName)
     ShoppingAPI.getAPI().addParty(new_party)
-    .then(party => this.handleInvitationCreation(party.getID()), this.handleClose())  
+    .then(party => this.handleInvitationCreation(party.getID()))  
   }
   /** Das Erstellen einer Invitation */
   handleInvitationCreation = (partyId) => {
@@ -71,17 +72,22 @@ class CreateGroupDialog extends Component{
     // -> this.emailList[0] == "" ? dann...
     //2 Mal gleicher User einladen ist doof ;-;
 
-    mailList.map((mail) =>
-    ShoppingAPI.getAPI().getUserByEmail(mail)
-    .then(function(user) {
-      new_invitation.setTargetUserId(user.getID());
-      new_invitation.setSourceUserId(this.state.currentUser.getID())
-      new_invitation.setPartyiId(partyId)
-      ShoppingAPI.getAPI().addInvitation(new_invitation)
-      .then(this.handleClose)
+    if(mailList.length > 0){
+      const async = mailList.map((mail) =>
+      ShoppingAPI.getAPI().getUserByEmail(mail)
+      .then(function(user) {
+        new_invitation.setTargetUserId(user.getID());
+        new_invitation.setSourceUserId(this.state.currentUser.getID())
+        new_invitation.setPartyiId(partyId)
+        ShoppingAPI.getAPI().addInvitation(new_invitation)
+        .then(this.handleClose())
 
-    }.bind(this)
-    ))
+      }.bind(this))) 
+    }
+    else{
+      this.handleClose()
+      window.location.reload(true)
+    }
   }
 /** Funktion zum Öffnen des Dialogs */
   handleClickOpen = () => {
@@ -148,7 +154,7 @@ class CreateGroupDialog extends Component{
                   type="string"
                   value = {this.state.mail}
                   fullWidth/>
-                <Button onClick={() => this.state.mail === "" ? console.log("feld leer") : this.handleEmailChange()}>
+                <Button onClick={() => this.state.mail === "" ? console.log("Leeres Emailfeld") : this.handleEmailChange()}>
                   <GroupAddIcon/>
                 </Button>
                 
@@ -166,7 +172,7 @@ class CreateGroupDialog extends Component{
               </DialogContent>
 
               <DialogActions>
-                <Button onClick={() => this.handleGroupCreation()}>
+                <Button onClick={() => this.state.partyName ? this.handleGroupCreation() : console.log("Leerer Gruppenname")}>
                   Gruppe erstellen
                 </Button>
                 <Button onClick={() => this.handleClose()}>

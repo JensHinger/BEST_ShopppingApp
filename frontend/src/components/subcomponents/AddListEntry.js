@@ -11,37 +11,37 @@ import ItemBO from '../../api/ItemBO';
 /**
  * @author Dominic, Anny, Jens, Jonathan
  */
- class AddListEntry extends Component {
+class AddListEntry extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
 
-        open: false, 
-        article: "",
-        amount: null,
-        unit: null,
-        listid: this.props.match.params.listid,
-        retailer: [],
-        items: [],
-        users: [],
-        pickedUser: null,
-        pickedRetailer: null,
-        pickedItem: null,
-        retailerAutoCompleteKey: 0,
-        userAutoCompleteKey: 1,
-        unitTextFieldKey: 2,
-        itemAutoCompleteKey: 3,
-        amountTextFieldKey: 4,
+            open: false,
+            article: "",
+            amount: null,
+            unit: null,
+            listid: this.props.match.params.listid,
+            retailer: [],
+            items: [],
+            users: [],
+            pickedUser: null,
+            pickedRetailer: null,
+            pickedItem: null,
+            retailerAutoCompleteKey: 0,
+            userAutoCompleteKey: 1,
+            unitTextFieldKey: 2,
+            itemAutoCompleteKey: 3,
+            amountTextFieldKey: 4,
 
         }
-        
 
 
 
-  }
-    componentDidMount(){
+
+    }
+    componentDidMount() {
         this.getAllItems()
         this.getAllRetailer()
         this.getListEntryPossibleUsersInvitations()
@@ -55,7 +55,7 @@ import ItemBO from '../../api/ItemBO';
 
     getAllItems = () => {
         ShoppingAPI.getAPI().getAllItems()
-        .then(items => this.setState({items: items}))
+            .then(items => this.setState({ items: items }))
     }
 
     getListEntryPossibleUsersInvitations = () => {
@@ -79,8 +79,10 @@ import ItemBO from '../../api/ItemBO';
         myitem.setName(this.state.pickedItem)
         console.log("item zum updaten:", myitem)
         ShoppingAPI.getAPI().addItem(myitem)
-        .then((newItem) => {return (this.setState({items : [...this.state.items, newItem]}),
-            this.createNewListEntry(newItem))})
+            .then((newItem) => {
+                return (this.setState({ items: [...this.state.items, newItem] }),
+                    this.createNewListEntry(newItem))
+            })
     }
 
     createNewListEntry = (oneItem) => {
@@ -117,7 +119,7 @@ import ItemBO from '../../api/ItemBO';
             userAutoCompleteKey: this.state.userAutoCompleteKey + 1,
             unitTextFieldKey: this.state.unitTextFieldKey + 1,
             itemAutoCompleteKey: this.state.itemAutoCompleteKey + 1,
-            amountTextFieldKey: this.state.amountTextFieldKey + 1, 
+            amountTextFieldKey: this.state.amountTextFieldKey + 1,
         })
     }
 
@@ -210,10 +212,6 @@ import ItemBO from '../../api/ItemBO';
         const retailer = this.state.retailer
         const item = this.state.items
         const user = this.state.users
-        //console.log(retailer)
-        //console.log(user)
-
-
 
         return (
             <div>
@@ -268,23 +266,22 @@ import ItemBO from '../../api/ItemBO';
                     </div>
 
                     <div>
-                        <Grid container justify= "center" >
+                        <Grid container justify="center" >
 
-                            <Grid xs ={4}>
-                                <br margin-top='20px'/>
+                            <Grid xs={4}>
+                                <br margin-top='20px' />
                                 <Grid container justify="center">
-                                {item ?
-                                <Autocomplete
-                                    
-                                    freeSolo
-                                    key={this.state.itemAutoCompleteKey}
-                                    id="combo-box-demo"
-                                    onInputChange={(event, value) => this.setState({ pickedItem: value })}
-                                    options={item}
-                                    getOptionLabel={(option) => option.getName()}
-                                    style={{ width: 200 }}
-                                    renderInput={(params) => <TextField  {...params} label="Artikel" />} />
-                                : null}
+                                    {item ?
+                                        <Autocomplete
+                                            freeSolo
+                                            key={this.state.itemAutoCompleteKey}
+                                            id="combo-box-demo"
+                                            onInputChange={(event, value) => this.setState({ pickedItem: value })}
+                                            options={item}
+                                            getOptionLabel={(option) => option.getName()}
+                                            style={{ width: 200 }}
+                                            renderInput={(params) => <TextField  {...params} label="Artikel" />} />
+                                        : null}
                                 </Grid>
                             </Grid>
 
@@ -294,10 +291,10 @@ import ItemBO from '../../api/ItemBO';
                                     key={this.state.amountTextFieldKey}
                                     label="Menge"
                                     helperText="Geben Sie eine Menge an"
-                                    value = {this.state.amount}
-                                    onChange={(event)=> this.handleAmountChange(event.target.value)}/>
+                                    value={this.state.amount}
+                                    onChange={(event) => this.handleAmountChange(event.target.value)} />
 
-                                
+
                             </Grid>
 
 
@@ -342,26 +339,21 @@ import ItemBO from '../../api/ItemBO';
 
 
                             <br margin-top='20px' />
-                            <Button onClick={() => this.state.amount && this.state.pickedItem && this.state.pickedRetailer && this.state.pickedUser && (this.state.unit == 0 |this.state.unit) ?
-                                                   this.createItem() : console.log("da stimmt was nicht!")} variant="contained" color="primary"> Eintrag hinzufügen </Button>
-                            
-                            
-                            
-
-
+                            <Button onClick={() => this.state.amount && this.state.pickedItem && this.state.pickedRetailer && this.state.pickedUser && (this.state.unit == 0 | this.state.unit) ?
+                                this.createItem() : console.log("da stimmt was nicht!")} variant="contained" color="primary"> Eintrag hinzufügen </Button>
 
 
                         </Grid>
 
                     </div>
-                    <div>   <Grid 
-                            justify="center">
-                            <br margin-top='20px' />
-                            <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> zurück zu meinen Einträgen </Button>
+                    <div>   <Grid
+                        justify="center">
+                        <br margin-top='20px' />
+                        <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> zurück zu meinen Einträgen </Button>
 
-                            <br margin-top='20px' />
-                            <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> abbrechen </Button>
-                            </Grid>
+                        <br margin-top='20px' />
+                        <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> abbrechen </Button>
+                    </Grid>
                     </div>
 
 

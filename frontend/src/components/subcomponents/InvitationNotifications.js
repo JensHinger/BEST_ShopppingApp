@@ -71,6 +71,7 @@ class InvitationNotifications extends Component{
 
     handleClose = () => {
         this.setState({AnchorEl : null})
+        window.location.reload(true)
     }
 
     getPartyName = (invite) => {
