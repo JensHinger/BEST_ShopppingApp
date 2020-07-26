@@ -9,6 +9,9 @@ import AddIcon from '@material-ui/icons/Add';
 import DoneIcon from '@material-ui/icons/Done';
 import ListEntryBO from '../../api/ListEntryBO'
 
+/**
+ * @author Jonathan
+ */
 
 class DisplayStandardListEntry extends Component {
     constructor(props) {
@@ -24,10 +27,12 @@ class DisplayStandardListEntry extends Component {
         }
     }
 
+    //wird nach dem rendern aufgerufen
     componentDidMount(){
         this.getItem()
     }
 
+    //das Item wird hier geholt
     getItem = () => {
         console.log(this.state.listId)    
         ShoppingAPI.getAPI().getItemById(this.state.standardListEntry.getItemId())
@@ -46,6 +51,7 @@ class DisplayStandardListEntry extends Component {
             )
     }
     
+    //Standardlistentry werden zu dem Listentry hinzugefügt
     addStandardListEntryToListFunc = () => {
         var myListEntry = new ListEntryBO()
         myListEntry.setListId(this.state.listId)
@@ -54,9 +60,7 @@ class DisplayStandardListEntry extends Component {
         myListEntry.setUserId(this.state.standardListEntry.getUserId())
         myListEntry.setAmount(this.state.standardListEntry.getAmount())
         myListEntry.setUnit(this.state.standardListEntry.getUnit())
-        //myListEntry.setchecked(0)
         myListEntry.setName("Wir sind die besten!")
-        console.log("der neue Entry:", myListEntry)
         ShoppingAPI.getAPI().addListEntry(myListEntry).then(() => 
             this.setState({showDone : true})
         )
@@ -66,8 +70,6 @@ class DisplayStandardListEntry extends Component {
 
     render(){
         const units = ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg ']
-        console.log("dieser Entry ", this.state.standardListEntry)
-        console.log("dieses Item: ", this.state.item)
         const standardListEntry = this.state.standardListEntry
         const item = this.state.item
         const retailer = this.state.retailer

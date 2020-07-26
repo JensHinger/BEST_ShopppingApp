@@ -13,6 +13,10 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ItemBO from '../../api/ItemBO'
 
+/**
+ * @author Jonathan
+ */
+
  class ListEntryCard extends Component {
     
     constructor(props){
@@ -39,29 +43,18 @@ import ItemBO from '../../api/ItemBO'
         }
     }
     
+    //wird nach dem rendern aufgerufen
     componentDidMount(){
         this.getListentryInformation()
         this.getListEntryPossibleUsersInvitations()
 
     }
 
-
-    //componentWillUnmount(){
-        //console.log("schließe die komponente!")
-        //this.setLeavingCheckState()
-    //}
-
-     //setLeavingCheckState = () => {
-        // const mylistentry = this.state.listentry
-         //mylistentry.setchecked(this.state.checked ? 1 : 0 )
-         //console.log("setze den checked state entsprechend.")
-         //ShoppingAPI.getAPI().updateListEntry(mylistentry)
-     //}
-
-
+    /**
+     * holt sich die Informationen für den Listeneintrag
+     * holt sich hier die ItemId, die UserId, die RetailerId und alle Retailer
+     */
     getListentryInformation = () => {
-            // Informationen über die Listeneinträge  erhalten 
-            // -> Item(id) -> Menge und ArtikelName, User(id), Retailer(id) 
             ShoppingAPI.getAPI().getItemById(this.state.listentry.getItemId()) 
             .then(ItemBO =>
                 this.setState({  
@@ -83,67 +76,65 @@ import ItemBO from '../../api/ItemBO'
             ShoppingAPI.getAPI().getAllRetailer()
             .then(retailerBOs => retailerBOs.map((retailerBO) => this.setState({all_retailers: [...this.state.all_retailers, retailerBO]}))
                 )
-            
         }
     
+    //holt sich die Listeneinträge der möglichen Usereinladungen
     getListEntryPossibleUsersInvitations = () => {
        ShoppingAPI.getAPI().getListById(this.state.listid)
             .then((list) => ShoppingAPI.getAPI().getPartyById(list.getPartylId())
             .then((party) => ShoppingAPI.getAPI().getAcceptedInvitationsByPartyId(party.getID())
             .then((invitations) => invitations.map((inv) => this.getListEntryPossibleUsers(inv.getTargetUserId(),
-            )))))}
+            )))))
+        }
 
+    //holt sich die Listeneinträge des Users
     getListEntryPossibleUsers = (target_user_id) => {
         ShoppingAPI.getAPI().getUserById(target_user_id)
             .then((user) => this.setState({party_users: [...this.state.party_users, user]})
-            //.then(console.log("später"))
             )  
-    
     }
 
+    //holt sich den Retailer Namen und gibt es der Variablen ret_names zurück
     getListEntryPossibleRetailerNames = () => {
         var ret_names = this.state.all_retailers.map((retailer) => retailer.getName()
         )
-        //console.log(ret_names)
         return (ret_names)
     }
 
+    //holt sich den Usernamen und gibt es den Variablen names zurück
     getListEntryPossibleUserNames = () => { 
         var names = this.state.party_users.map((user) => user.getName()
                       )
         return (names)
     }
 
+    //der expanded Status wird hier umgedreht
     expandHandler = () => {
         this.setState({expanded : !this.state.expanded})
     }
 
+    //geht durch den Handler und prüft den Stand
     scoreThroughHandler = () => {
         this.setState({checked :!this.state.checked})
-        //console.log("checked:", this.state.checked)
         if (this.state.expanded === true){
             this.setState({expanded : !this.state.expanded})}
-
-        //console.log("checked:", this.state.checked)
         const mylistentry = this.state.listentry
         mylistentry.setchecked(this.state.checked ? 0 : 1 )
-        //console.log("setze den checked state entsprechend.")
-        
         ShoppingAPI.getAPI().updateListEntry(this.state.listentry).then(() => this.props.onListEntryUpdated(this.state.listentry) )
 
     }
     
+    //Item wird geupdatet; neuer Name wird gesetzt
     updateItem = () => {       
         var myitem = new ItemBO
-        //console.log(this.state.sel_amount)
         myitem.setName(this.state.sel_item_name ? this.state.sel_item_name : this.state.item.getName())
-        //console.log("item zum updaten:", myitem)
         ShoppingAPI.getAPI().addItem(myitem)
         .then((newItem) => {return (this.setState({item: newItem}),
             this.updateListEntry(newItem))}
         )         
     }
 
+    //Listeneinträge werden geupdatet
     updateListEntry(item){
         console.log("users:", this.state.party_users)
         console.log("sel_user:", this.state.sel_user)
@@ -176,6 +167,7 @@ import ItemBO from '../../api/ItemBO'
         )
     }
 
+    //Listeneinträge werden gelöscht
     deleteLEntry = () => {
         console.log("versuche einen Eintrag zu löschen")
         ShoppingAPI.getAPI().deleteListEntry(this.state.listentry.getID()).then(
