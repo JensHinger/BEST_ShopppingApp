@@ -86,10 +86,13 @@ class AddStandardLisEntry extends Component {
         var Item = new ItemBO()
         Item.setName(this.state.pickedItem)
         ShoppingAPI.getAPI().addItem(Item)
-            .then((newItem) => {
-                return (this.setState({ items: [...this.state.items, newItem] }),
-                    this.createNewStandardListEntry(newItem))
-            })
+            .then(function(newItem){
+                var check = this.state.items.filter(item => item.getName() === newItem.getName())
+                if (check.length < 1){
+                    this.setState({ items: [...this.state.items, newItem]})
+                }
+                this.createNewStandardListEntry(newItem)
+            }.bind(this))
     }
 
     //neue StandardlistenEinträge werden erstellt

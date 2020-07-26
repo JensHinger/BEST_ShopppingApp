@@ -85,9 +85,10 @@ class PartyShoppingList extends Component {
     }
     //** Handler für einen ausgewählten Filter */
     handleFilterSelected = (filteredRetailer) => {
-        const filteredState = this.state.filteredEntries.filter((listEntry) => filteredRetailer.getID() === listEntry.getRetailerId())
-        this.setState({ filteredEntries: filteredState })
-    }
+        if(filteredRetailer != null){
+            const filteredState = this.state.filteredEntries.filter((listEntry) => filteredRetailer.getID() === listEntry.getRetailerId())
+            this.setState({ filteredEntries: filteredState })}
+        }
     //** Funktion um den Filter zu resetten  */
     handleFilterReset = () => {
         this.setState({ filteredEntries: this.state.listentries })

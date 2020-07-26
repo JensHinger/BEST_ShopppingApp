@@ -82,10 +82,13 @@ class AddListEntry extends Component {
         var myitem = new ItemBO
         myitem.setName(this.state.pickedItem)
         ShoppingAPI.getAPI().addItem(myitem)
-            .then((newItem) => {
-                return (this.setState({ items: [...this.state.items, newItem] }),
-                    this.createNewListEntry(newItem))
-            })
+            .then(function(newItem){
+                var check = this.state.items.filter(item => item.getName() === newItem.getName())
+                if (check.length < 1){
+                    this.setState({ items: [...this.state.items, newItem]})
+                }
+                this.createNewListEntry(newItem)
+            }.bind(this))
     }
 
     //neue Listeneinträge werden erstellt
