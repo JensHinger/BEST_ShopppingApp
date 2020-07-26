@@ -72,6 +72,11 @@ class Header extends Component{
 
   };
 
+   handleSiteChange = () => {
+    window.location.href='https://best-it-praktikum-team-5.ey.r.appspot.com/edit'
+  }
+
+
   render(){
 
     const { classes } = this.props;
@@ -91,7 +96,8 @@ class Header extends Component{
         onClose={this.handleMenuClose}
       >
          
-        <MenuItem onClick={this.handleMenuClose}><LogOutDialog></LogOutDialog></MenuItem> 
+        <MenuItem onClick={this.handleMenuClose}><LogOutDialog></LogOutDialog></MenuItem>
+        <MenuItem onClick={this.handleSiteChange}>Meine Einkaufsliste</MenuItem>
       </Menu>
     );
 

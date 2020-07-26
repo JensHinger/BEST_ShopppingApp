@@ -65,9 +65,11 @@ class Header extends Component {
   //** User updaten  */
   handleUserUpdate = () => {
     this.getCurrentUser()
-
-
   };
+
+  handleSiteChange = () => {
+    window.location.href='https://best-it-praktikum-team-5.ey.r.appspot.com/rep'
+  }
 
   render() {
 
@@ -89,6 +91,7 @@ class Header extends Component {
       >
         {user ? <MenuItem onClick={this.handleMenuClose} component={RouterLink} to={`/manageuser/`}>My account </MenuItem> : null}
         <MenuItem onClick={this.handleMenuClose}><LogOutDialog></LogOutDialog></MenuItem>
+        <MenuItem onClick={this.handleSiteChange}>Mein Report</MenuItem>
       </Menu>
     );
 
