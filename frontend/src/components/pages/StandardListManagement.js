@@ -4,6 +4,8 @@ import StandardListEntryCard from'../subcomponents/StandardListEntryCard';
 import {Link as RouterLink} from 'react-router-dom'
 import {Button, Typography} from '@material-ui/core/';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import { spacing } from '@material-ui/system';
 /**
  * @author  Jonathan
@@ -67,17 +69,18 @@ class StandardListManagement extends Component {
                             
                                 <Typography >Lieblingseinträge der Gruppe {this.state.party.getName()}               
                                 </Typography>
-                                
-                            
-                            
                             : null
                         }
-                        <Button size={"small"} variant={"outlined"} component = {RouterLink} to={`/addstandardlistentry/${this.props.match.params.partyid}`} >Eintrag hinzufügen</Button>
+                        <IconButton size={"small"} variant={"outlined"} component = {RouterLink} to={`/addstandardlistentry/${this.props.match.params.partyid}`} >
+                            <PlaylistAddIcon/>
+                        </IconButton>
                     </Grid>
                 </div>
                 <hr/>
                 {
                     this.state.stListEntries ? 
+                    this.state.stListEntries.length === 0 ?
+                        <Typography>Du hast keine Lieblingseinträge</Typography>:
                     this.state.stListEntries.map(stListEntry => <StandardListEntryCard  onStandardListEntryDeleted = {this.deleteStandardListEntryHandler} partyId = {this.state.partyId} standardListEntry = {stListEntry} key={stListEntry.getID()}/>)
                     : null 
                 }
