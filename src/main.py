@@ -63,7 +63,7 @@ list_entry = api.inherit('ListEntry', bo, {
                                                                         ' hinterlegt ist'),
     'user_id': fields.Integer(attribute='_user_id', description='Der User, welcher in dem Listentry hinterlegt ist'),
     'list_id': fields.Integer(attribute='_list_id', description='Der Liste, in welcher der Listentry hinterlegt ist'),
-    'amount': fields.Integer(attribute='_amount', description='Die Menge eines gewählten Produktes'),
+    'amount': fields.Float(attribute='_amount', description='Die Menge eines gewählten Produktes'),
     'unit': fields.Integer(attribute='_unit', description='Die Einheit eines gewählten Produktes'),
     'checked': fields.Integer(attribute='_checked', description='Sagt aus ob der Eintrag abgehakt wurde'),
 })
@@ -80,7 +80,7 @@ standard_list_entry = api.inherit('StandardListEntry', bo, {
                                                                 'ist'),
     'party_id': fields.Integer(attribute='_party_id', description='Der Party, in welcher der StandardListEntry'
                                                                   ' hinterlegt ist'),
-    'amount': fields.Integer(attribute='_amount', description='Die Menge eines gewählten Produktes'),
+    'amount': fields.Float(attribute='_amount', description='Die Menge eines gewählten Produktes'),
     'unit': fields.Integer(attribute='_unit', description='Die Einheit eines gewählten Produktes'),
 })
 
