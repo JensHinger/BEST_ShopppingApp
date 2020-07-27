@@ -26,12 +26,14 @@ class Report extends Component {
         }
     }
 
+    //wird nach dem rendern aufgerufen
     componentDidMount(){
         this.getCurrentUser()
         this.getAllRetailer()
         this.getAllItems()   
     }
 
+    //holt sich den User 
     getCurrentUser = () => {
         ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
         .then(UserBO => {return(
@@ -41,27 +43,29 @@ class Report extends Component {
           ,this.getCheckedListentries())})
       }
     
-
+    //holt sich die checked Listeneinträge
     getCheckedListentries = () => {
         ShoppingAPI.getAPI().getCheckedListentriesByUser(this.state.currentUser.getID())
         .then(listentries => this.setState({listentries : listentries,
                                             filterListentrys : listentries}))
     }
 
+    //holt sich alle Retailer
     getAllRetailer = () => {
         ShoppingAPI.getAPI().getAllRetailer()
         .then(retailer => this.setState({retailer : retailer}))
     }
 
+    //holt sich alle Items
     getAllItems = () => {
         ShoppingAPI.getAPI().getAllItems()
         .then(items => this.setState({items : items}))
     }
 
+    //filtert die Listeneinträge
     filterListentrys = () => {
         var retailerBO = this.state.retailer.filter(retailer => retailer.getName() === this.state.pickedRetailer)
 
-        console.log(retailerBO.length)
 
         if (retailerBO.length < 1 && this.state.end_date !== null && this.state.start_date !== null){
             //Wenn nur ein Start und End Datum angegeben wurden

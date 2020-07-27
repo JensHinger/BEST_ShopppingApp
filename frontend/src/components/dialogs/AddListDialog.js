@@ -18,7 +18,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 class AddListDialog extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -29,29 +29,29 @@ class AddListDialog extends Component {
         }
 
     }
-/**
- * Auszuführende Anweisung beim Öffnen des Dialogs
- * Prüft ob es geöffnet ist
- */
+    /**
+     * Auszuführende Anweisung beim Öffnen des Dialogs
+     * Prüft ob es geöffnet ist
+     */
     handleClickOpen = () => {
         this.setState({ open: true })
     };
-/**
- * Auszuführende Anweisung beim Schließen des Dialogs
- * Prüft ob es geschlossen ist 
- */
+    /**
+     * Auszuführende Anweisung beim Schließen des Dialogs
+     * Prüft ob es geschlossen ist 
+     */
     handleClose = () => {
         this.setState({ open: false });
     };
-/**
- * Setzen des Namens
- */
+    /**
+     * Setzen des Namens
+     */
     handleAddList(list) {
         this.setState({ listName: list })
     };
-/**  
- * Auszuführende Anweisung beim hinzufügen einer Liste
- */
+    /**  
+     * Auszuführende Anweisung beim hinzufügen einer Liste
+     */
     addList = () => {
         const list = new ListBO()
         list.setName(this.state.listName)
@@ -62,11 +62,11 @@ class AddListDialog extends Component {
     }
 
     render() {
-        return(
+        return (
             <div>
                 <ThemeProvider theme={Theme}>
                     <IconButton onClick={() => this.handleClickOpen()}>
-                        <PlaylistAddIcon fontSize='large'  />
+                        <PlaylistAddIcon fontSize='large' />
                     </IconButton>
 
                     <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
@@ -104,25 +104,3 @@ class AddListDialog extends Component {
 }
 
 export default AddListDialog;
-
-
-
-
-
- 
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

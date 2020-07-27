@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Button } from '@material-ui/core'
+import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Button, Typography } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ShoppingAPI from '../../api/ShoppingAPI'
 import { Link as RouterLink } from 'react-router-dom';
@@ -13,6 +13,10 @@ import UpdateListDialog from '../dialogs/UpdateListDialog';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
+/**
+ * @author Michael, René, Jens und Anny
+ */
+
 class UserParties extends Component {
 
     constructor(props) {
@@ -21,29 +25,28 @@ class UserParties extends Component {
         this.state = {
 
             user: null,
-            parties : [],
-            lists : [],
-            expanded: true 
+            parties: [],
+            lists: [],
+            expanded: true
 
         }
     }
-
+    //** Wird auf Client und Server vor dem Rendering einmalig aufgerufen */
     componentWillMount() {
-        //console.log("Cookie:", document.cookie)
         this.getCurrUser()
     }
 
 
     //** Die Funktion holt uns den eingeloggten User und dessen Partys  */
     getCurrUser = () => {
-        console.log("eingeloggter User:", firebase.auth().currentUser)
-        console.log("usertoken:", )
+
         ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
-        .then((returnedUser) => {return (this.setState({user: returnedUser}),
-                                         this.getPartiesByUser())}
-        
-        
-        )
+            .then((returnedUser) => {
+                return (this.setState({ user: returnedUser }),
+                    this.getPartiesByUser())
+            }
+
+            )
     }
 
     //** Alle Listen einer bestimmten Party */
@@ -55,15 +58,15 @@ class UserParties extends Component {
             }.bind(this)
             )
     }
-   //** Alle Parties eines Users */
+    //** Alle Parties eines Users */
     getPartiesByUser = () => {
 
-        //console.log("wir holen uns den User")
         ShoppingAPI.getAPI().getAcceptedInvitationsByTargetUserId(this.state.user.getID())
-        .then(invitations => this.getPartyByInvitations(invitations))
+            .then(invitations => this.getPartyByInvitations(invitations))
 
     }
     
+    //** Für jede Invitation die Party herausfiltern */r
     getPartyByInvitations = (invitations) => {
         invitations.forEach(invitation => {
             ShoppingAPI.getAPI().getPartyById(invitation.getPartyiId())
@@ -76,7 +79,6 @@ class UserParties extends Component {
     }
     //** Löschen einer Liste */
     deleteList = (listId) => {
-        //*console.log("versuche eine Liste zu löschen")
         ShoppingAPI.getAPI().deleteList(listId)
             .then(this.setState({
                 lists: this.state.lists.filter(list => list.getID() !== listId)
@@ -84,7 +86,7 @@ class UserParties extends Component {
             ))
 
     }
-
+    //** Das neue (geupdatete) Listenobjekt wird in der Liste ersetzt */
     replaceNewList = (list) => {
 
         var Liste = this.state.lists
@@ -95,11 +97,7 @@ class UserParties extends Component {
 
         this.setState({ lists: Liste })
 
-
     }
-
-
-
 
 
 
@@ -110,7 +108,7 @@ class UserParties extends Component {
 
             <div>
                 {userParties.map((party) =>
-                    <ExpansionPanel style={{width : "50%", margin : "auto"}} expanded={this.state.expanded === party.getID()} onChange={() => this.getListsByParty(party.getID())} key={party.getID()}>
+                    <ExpansionPanel style={{ width: "50%", margin: "auto" }} expanded={this.state.expanded === party.getID()} onChange={() => this.getListsByParty(party.getID())} key={party.getID()}>
                         <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                         >
@@ -127,7 +125,12 @@ class UserParties extends Component {
                                 </IconButton>
                             </div>
                         </ExpansionPanelSummary>
-                        {lists.map((list) =>
+                        
+                        {lists.length === 0 ?   
+                            <Typography variant="h4"> In dieser Party gibt es keine Listen!</Typography>
+                        
+                        :
+                        lists.map((list) =>
 
                             <ExpansionPanelDetails key={list.getID()}>
 

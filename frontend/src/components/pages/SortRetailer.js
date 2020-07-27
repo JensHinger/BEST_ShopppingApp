@@ -33,20 +33,20 @@ class SortRetailer extends Component {
             )
     }
 
-    //holt sich die Namen aller Retailer
+    //holt sich die Namen der Retailer
     getListEntryPossibleRetailerNames = () => {
         var ret_names = this.state.all_retailers.map((retailer) => retailer.getName()
         )
         return (ret_names)
     }
 
-    //filtert die Retailer
+    //Filtert die Retailer
     filtered = () => {
         const filteredRetailer = this.state.all_retailers.filter((retailer) => retailer.getName() == this.state.sel_retailer)
         this.props.onFilterSelected(filteredRetailer[0])
     }
 
-    //reset vom Filter
+    //Filter wird gereset 
     resetFilter = () => {
         this.setState({
             autocompleteFieldKey: this.state.autocompleteFieldKey + 1,

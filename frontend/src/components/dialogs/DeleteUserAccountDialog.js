@@ -5,64 +5,61 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { ThemeProvider } from "@material-ui/core"
+import { ThemeProvider} from "@material-ui/core"
 import Theme from "../../Theme"
 import RemoveIcon from '@material-ui/icons/Remove';
 import ShoppingAPI from '../../api/ShoppingAPI';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 /**
  * @author  Jens, Anny
  */
-class RemoveGroupMemberDialog extends Component {
+class DeleteUserAccountDialog extends Component {
 
   constructor(props) {
     super(props);
     /** Propübergabe von Manageparty */
     this.state = {
       open: false,
-      invitation: props.invitation,
+      user: props.user
     }
   }
 
-  /** Funktion zum Öffnen des Dialogs */
   handleClickOpen = () => {
     this.setState({ open: true });
   };
 
-  /** Funktion zum Schließen des Dialogs */
   handleClose = () => {
     this.setState({ open: false });
-
+    
   };
-  //** Löschen einer Invitation; Prop Übergabe von Manage Party */
-  handleInvDelete = () => {
-    console.log("Invitation ID: ", this.state.invitation[0].getID())
-    console.log("invitation:", this.state.invitation)
-    ShoppingAPI.getAPI().deleteInvitation(this.state.invitation[0].getID())
-      .then(function () {
-        this.props.handleInvitationDelete(this.props.index);
-        this.handleClose()
-      }.bind(this))
-  };
+  //** Löschen eines Users; Prop Übergabe von Manage Party */
+  handleUserDelete = () => {
+    ShoppingAPI.getAPI().deleteUser(this.state.user.getID()).then(
+      firebase.auth().signOut()
+    )
+  }
 
   render() {
+    console.log("props:", this.props)
     return (
       <ThemeProvider theme={Theme}>
 
-        <Button onClick={this.handleClickOpen}>
-          <RemoveIcon fontSize='medium' color='primary' />
+        <Button variant="outlined" onClick={this.handleClickOpen}>
+          Account löschen
         </Button>
 
         <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Mitglied entfernen</DialogTitle>
+          <DialogTitle id="form-dialog-title">Account löschen</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Möchten Sie das Gruppenmitglied wirklich entfernen?
+              Willst du deinen Account wirklich löschen ? 
             </DialogContentText>
 
           </DialogContent>
 
           <DialogActions>
-            <Button onClick={this.handleInvDelete}>
+            <Button onClick={this.handleUserDelete}>
               Ja
             </Button>
             <Button onClick={this.handleClose}>
@@ -76,4 +73,4 @@ class RemoveGroupMemberDialog extends Component {
   }
 }
 
-export default RemoveGroupMemberDialog
+export default DeleteUserAccountDialog

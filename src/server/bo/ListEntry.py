@@ -61,9 +61,11 @@ class ListEntry(BusinessObject):
         self._unit = unit
 
     def get_checked(self):
+        """Auslesen des checked Status"""
         return self._checked
 
     def set_checked(self, condition):
+        """Setzen des checked Status"""
         self._checked = condition
 
     @staticmethod
