@@ -9,14 +9,17 @@ import AddIcon from '@material-ui/icons/Add';
 import DoneIcon from '@material-ui/icons/Done';
 import ListEntryBO from '../../api/ListEntryBO'
 
+/**
+ * @author Jonathan
+ */
 
 class DisplayStandardListEntry extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            standardListEntry : this.props.standardListEntry,
-            listId : this.props.listId,
+            standardListEntry: this.props.standardListEntry,
+            listId: this.props.listId,
             item: null,
             retailer: null,
             user: null,
@@ -24,28 +27,32 @@ class DisplayStandardListEntry extends Component {
         }
     }
 
-    componentDidMount(){
+    //wird nach dem rendern aufgerufen
+    componentDidMount() {
         this.getItem()
     }
 
+    //das Item wird hier geholt
     getItem = () => {
-        console.log(this.state.listId)    
         ShoppingAPI.getAPI().getItemById(this.state.standardListEntry.getItemId())
-            .then((myItem) => this.setState({item : myItem}))
+            .then((myItem) => this.setState({ item: myItem }))
 
-        ShoppingAPI.getAPI().getUserById(this.state.standardListEntry.getUserId()) 
+        ShoppingAPI.getAPI().getUserById(this.state.standardListEntry.getUserId())
             .then((UserBO) =>
-                this.setState({  
-                user : UserBO})
-                )
+                this.setState({
+                    user: UserBO
+                })
+            )
 
-        ShoppingAPI.getAPI().getRetailerById(this.state.standardListEntry.getRetailerId()) 
-        .then(RetailerBO =>
-            this.setState({  
-                retailer : RetailerBO})
+        ShoppingAPI.getAPI().getRetailerById(this.state.standardListEntry.getRetailerId())
+            .then(RetailerBO =>
+                this.setState({
+                    retailer: RetailerBO
+                })
             )
     }
-    
+
+    //Standardlistentry werden zu dem Listentry hinzugefügt
     addStandardListEntryToListFunc = () => {
         var myListEntry = new ListEntryBO()
         myListEntry.setListId(this.state.listId)
@@ -54,42 +61,38 @@ class DisplayStandardListEntry extends Component {
         myListEntry.setUserId(this.state.standardListEntry.getUserId())
         myListEntry.setAmount(this.state.standardListEntry.getAmount())
         myListEntry.setUnit(this.state.standardListEntry.getUnit())
-        //myListEntry.setchecked(0)
         myListEntry.setName("Wir sind die besten!")
-        console.log("der neue Entry:", myListEntry)
-        ShoppingAPI.getAPI().addListEntry(myListEntry).then(() => 
-            this.setState({showDone : true})
+        ShoppingAPI.getAPI().addListEntry(myListEntry).then(() =>
+            this.setState({ showDone: true })
         )
-        
-        
+
+
     }
 
-    render(){
+    render() {
         const units = ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg ']
-        console.log("dieser Entry ", this.state.standardListEntry)
-        console.log("dieses Item: ", this.state.item)
         const standardListEntry = this.state.standardListEntry
         const item = this.state.item
         const retailer = this.state.retailer
         const user = this.state.user
         const showDone = this.state.showDone
-        return(
-            <div> { standardListEntry && item && retailer && user ?
+        return (
+            <div> {standardListEntry && item && retailer && user ?
                 <Card>
                     <CardContent>
-                         {item.getName()} {standardListEntry.getAmount()} {units[standardListEntry.getUnit()]}
-                         {retailer.getName()} {user.getName()}
+                        {item.getName()} {standardListEntry.getAmount()} {units[standardListEntry.getUnit()]}
+                        {retailer.getName()} {user.getName()}
                         <IconButton onClick={() => this.addStandardListEntryToListFunc()}>
-                            <AddIcon/>
+                            <AddIcon />
                         </IconButton>
-                        {this.state.showDone ? 
-                        <DoneIcon color={"success"}/>
-                        : null }
-                        
+                        {this.state.showDone ?
+                            <DoneIcon color={"success"} />
+                            : null}
+
                     </CardContent>
                 </Card>
-                : null 
-                }
+                : null
+            }
             </div>
 
 

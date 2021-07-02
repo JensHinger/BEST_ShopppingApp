@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import Overview from './components/pages/Overview';
 import About from './components/pages/About';
 import ManageParty from "./components/pages/ManageParty";
 import ManageUser from "./components/pages/ManageUser"
-import MyArticle from './components/pages/MyArticle';
 import PartyShoppingList from "./components/pages/PartyShoppingList";
 import AddListEntry from "./components/subcomponents/AddListEntry";
 import StandardListManagement from "./components/pages/StandardListManagement";
@@ -114,7 +113,7 @@ class App extends Component {
                 <Overview />
               </Route>
               <Route path='/myarticle'>
-                <MyArticle />
+                
               </Route>
               <Route path={'/manageparty/:partyid'} component={ManageParty}>
 

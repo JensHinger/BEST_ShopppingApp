@@ -10,7 +10,7 @@ import Theme from "../../Theme"
 import { ThemeProvider } from "@material-ui/core"
 import RetailerBO from '../../api/RetailerBO';
 import ShoppingAPI from '../../api/ShoppingAPI';
-
+import ErrorDialog from '../../components/dialogs/ErrorDialog'
 /**
  * @author  Dominic, Anny und Jens
  */
@@ -23,6 +23,7 @@ class AddRetailerDialog extends Component {
         this.state = {
             open: false,
             retailerName: "",
+            errorDialog: false,
 
         }
     }
@@ -56,10 +57,16 @@ class AddRetailerDialog extends Component {
         this.handleClose()
     }
 
+    handleErrorClose = () => {
+        this.setState({errorDialog: false})
+    }
 
     render() {
         return (
             <div>
+
+                { this.state.errorDialog ? 
+                    <ErrorDialog errorMessage={"Gib einen Namen für den Laden ein!"} handleErrorClose={this.handleErrorClose}/>:null}
                 <ThemeProvider theme={Theme}>
                     <Button onClick={() => this.handleClickOpen()}>
                         <AddBoxIcon fontSize='large' color='primary' /> Laden hinzufügen
@@ -82,7 +89,7 @@ class AddRetailerDialog extends Component {
                         </DialogContent>
 
                         <DialogActions>
-                            <Button onClick={() => this.addRetailer()}>
+                            <Button onClick={() => this.state.retailerName != "" ?  this.addRetailer() : this.setState({errorDialog: true}) }>
                                 Laden hinzufügen
                     </Button>
                             <Button onClick={() => this.handleClose()}>

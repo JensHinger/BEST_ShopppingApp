@@ -12,172 +12,170 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ItemBO from '../../api/ItemBO'
+import ErrorDialog from '../dialogs/ErrorDialog'
 
- class ListEntryCard extends Component {
-    
-    constructor(props){
+/**
+ * @author Jonathan
+ */
+
+class ListEntryCard extends Component {
+
+    constructor(props) {
         super(props)
         this.state = {
-            listentry : props.listentry,
-            checked : props.listentry.getchecked(),
+            listentry: props.listentry,
+            checked: props.listentry.getchecked(),
             listid: props.listid.listid,
-            item : null, 
-            user: null, 
+            item: null,
+            user: null,
             retailer: null,
-            expanded : null,
+            expanded: null,
             all_retailers: [],
             all_retailers_name: [],
             party_users: [],
             party_user_names: [],
-            sel_retailer: null, 
+            sel_retailer: null,
             sel_user: null,
             sel_amount: null,
             sel_unit: null,
             sel_item_name: null,
-            units : ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg '] 
+            units : ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg '],
+            errorDialog: false,
 
         }
     }
-    
-    componentDidMount(){
+
+    //wird nach dem rendern aufgerufen
+    componentDidMount() {
         this.getListentryInformation()
         this.getListEntryPossibleUsersInvitations()
 
     }
 
-
-    //componentWillUnmount(){
-        //console.log("schließe die komponente!")
-        //this.setLeavingCheckState()
-    //}
-
-     //setLeavingCheckState = () => {
-        // const mylistentry = this.state.listentry
-         //mylistentry.setchecked(this.state.checked ? 1 : 0 )
-         //console.log("setze den checked state entsprechend.")
-         //ShoppingAPI.getAPI().updateListEntry(mylistentry)
-     //}
-
-
+    /**
+     * holt sich die Informationen für den Listeneintrag
+     * holt sich hier die ItemId, die UserId, die RetailerId und alle Retailer
+     */
     getListentryInformation = () => {
-            // Informationen über die Listeneinträge  erhalten 
-            // -> Item(id) -> Menge und ArtikelName, User(id), Retailer(id) 
-            ShoppingAPI.getAPI().getItemById(this.state.listentry.getItemId()) 
+        ShoppingAPI.getAPI().getItemById(this.state.listentry.getItemId())
             .then(ItemBO =>
-                this.setState({  
-                  item : ItemBO})
-                  )
-            
-            ShoppingAPI.getAPI().getUserById(this.state.listentry.getUserId()) 
-            .then(UserBO =>
-                this.setState({  
-                user : UserBO})
-                )
-            
-            ShoppingAPI.getAPI().getRetailerById(this.state.listentry.getRetailerId()) 
-            .then(RetailerBO =>
-                this.setState({  
-                  retailer : RetailerBO})
-                )
-            
-            ShoppingAPI.getAPI().getAllRetailer()
-            .then(retailerBOs => retailerBOs.map((retailerBO) => this.setState({all_retailers: [...this.state.all_retailers, retailerBO]}))
-                )
-            
-        }
-    
-    getListEntryPossibleUsersInvitations = () => {
-       ShoppingAPI.getAPI().getListById(this.state.listid)
-            .then((list) => ShoppingAPI.getAPI().getPartyById(list.getPartylId())
-            .then((party) => ShoppingAPI.getAPI().getAcceptedInvitationsByPartyId(party.getID())
-            .then((invitations) => invitations.map((inv) => this.getListEntryPossibleUsers(inv.getTargetUserId(),
-            )))))}
+                this.setState({
+                    item: ItemBO
+                })
+            )
 
-    getListEntryPossibleUsers = (target_user_id) => {
-        ShoppingAPI.getAPI().getUserById(target_user_id)
-            .then((user) => this.setState({party_users: [...this.state.party_users, user]})
-            //.then(console.log("später"))
-            )  
-    
+        ShoppingAPI.getAPI().getUserById(this.state.listentry.getUserId())
+            .then(UserBO =>
+                this.setState({
+                    user: UserBO
+                })
+            )
+
+        ShoppingAPI.getAPI().getRetailerById(this.state.listentry.getRetailerId())
+            .then(RetailerBO =>
+                this.setState({
+                    retailer: RetailerBO
+                })
+            )
+
+        ShoppingAPI.getAPI().getAllRetailer()
+            .then(retailerBOs => retailerBOs.map((retailerBO) => this.setState({ all_retailers: [...this.state.all_retailers, retailerBO] }))
+            )
     }
 
+    //holt sich die Listeneinträge der möglichen Usereinladungen
+    getListEntryPossibleUsersInvitations = () => {
+        ShoppingAPI.getAPI().getListById(this.state.listid)
+            .then((list) => ShoppingAPI.getAPI().getPartyById(list.getPartylId())
+                .then((party) => ShoppingAPI.getAPI().getAcceptedInvitationsByPartyId(party.getID())
+                    .then((invitations) => invitations.map((inv) => this.getListEntryPossibleUsers(inv.getTargetUserId(),
+                    )))))
+    }
+
+    //holt sich die Listeneinträge des Users
+    getListEntryPossibleUsers = (target_user_id) => {
+        ShoppingAPI.getAPI().getUserById(target_user_id)
+            .then((user) => this.setState({ party_users: [...this.state.party_users, user] })
+            )
+    }
+
+    //holt sich den Retailer Namen und gibt es der Variablen ret_names zurück
     getListEntryPossibleRetailerNames = () => {
         var ret_names = this.state.all_retailers.map((retailer) => retailer.getName()
         )
-        //console.log(ret_names)
         return (ret_names)
     }
 
-    getListEntryPossibleUserNames = () => { 
+    //holt sich den Usernamen und gibt es den Variablen names zurück
+    getListEntryPossibleUserNames = () => {
         var names = this.state.party_users.map((user) => user.getName()
-                      )
+        )
         return (names)
     }
 
+    //der expanded Status wird hier umgedreht
     expandHandler = () => {
-        this.setState({expanded : !this.state.expanded})
+        this.setState({ expanded: !this.state.expanded })
     }
 
+    //geht durch den Handler und prüft den Stand
     scoreThroughHandler = () => {
-        this.setState({checked :!this.state.checked})
-        //console.log("checked:", this.state.checked)
-        if (this.state.expanded === true){
-            this.setState({expanded : !this.state.expanded})}
-
-        //console.log("checked:", this.state.checked)
+        this.setState({ checked: !this.state.checked })
+        if (this.state.expanded === true) {
+            this.setState({ expanded: !this.state.expanded })
+        }
         const mylistentry = this.state.listentry
-        mylistentry.setchecked(this.state.checked ? 0 : 1 )
-        //console.log("setze den checked state entsprechend.")
-        
-        ShoppingAPI.getAPI().updateListEntry(this.state.listentry).then(() => this.props.onListEntryUpdated(this.state.listentry) )
+        mylistentry.setchecked(this.state.checked ? 0 : 1)
+        ShoppingAPI.getAPI().updateListEntry(this.state.listentry).then(() => this.props.onListEntryUpdated(this.state.listentry))
 
     }
-    
-    updateItem = () => {       
+
+    //Item wird geupdatet; neuer Name wird gesetzt
+    updateItem = () => {
         var myitem = new ItemBO
-        //console.log(this.state.sel_amount)
         myitem.setName(this.state.sel_item_name ? this.state.sel_item_name : this.state.item.getName())
-        //console.log("item zum updaten:", myitem)
         ShoppingAPI.getAPI().addItem(myitem)
-        .then((newItem) => {return (this.setState({item: newItem}),
-            this.updateListEntry(newItem))}
-        )         
+            .then((newItem) => {
+                return (this.setState({ item: newItem }),
+                    this.updateListEntry(newItem))
+            }
+            )
     }
 
-    updateListEntry(item){
-        console.log("users:", this.state.party_users)
-        console.log("sel_user:", this.state.sel_user)
-        const mylistentry = this.state.listentry 
+    //Listeneinträge werden geupdatet
+    updateListEntry(item) {
+        const mylistentry = this.state.listentry
         mylistentry.setItemId(item.getID())
         //find retailer Id corresponding to retailer ID
         mylistentry.setRetailerId(this.state.all_retailers[this.getListEntryPossibleRetailerNames().indexOf(this.state.sel_retailer)].getID())
         // find user Id corresponding to User Id
         mylistentry.setUserId(this.state.party_users[this.getListEntryPossibleUserNames().indexOf(this.state.sel_user)].getID())
         //mylistentry.setchecked(this.convertChecked())
-        mylistentry.setchecked(this.state.checked ? 1 : 0 )
+        mylistentry.setchecked(this.state.checked ? 1 : 0)
         mylistentry.setAmount(this.state.sel_amount ? this.state.sel_amount : this.state.listentry.getAmount())
         mylistentry.setUnit(this.state.units.indexOf(this.state.sel_unit))
-        //console.log("mein LENTRY:", mylistentry)
-        this.props.onListEntryUpdated(this.state.listentry) 
+        this.props.onListEntryUpdated(this.state.listentry)
         ShoppingAPI.getAPI().updateListEntry(mylistentry)
-        .then(ShoppingAPI.getAPI().getUserById(this.state.listentry.getUserId()) 
+            .then(ShoppingAPI.getAPI().getUserById(this.state.listentry.getUserId())
                 .then(UserBO =>
-                    this.setState({  
-                    user : UserBO})
+                    this.setState({
+                        user: UserBO
+                    })
+                ),
+
+                ShoppingAPI.getAPI().getRetailerById(this.state.listentry.getRetailerId())
+                    .then(RetailerBO =>
+                        this.setState({
+                            retailer: RetailerBO
+                        })
                     ),
-                
-            ShoppingAPI.getAPI().getRetailerById(this.state.listentry.getRetailerId()) 
-                .then(RetailerBO =>
-                    this.setState({  
-                    retailer : RetailerBO})
-                    ),
-            this.props.onListEntryUpdated(this.state.listentry) 
-        
-        )
+                this.props.onListEntryUpdated(this.state.listentry)
+
+            )
     }
 
+    //Listeneinträge werden gelöscht
     deleteLEntry = () => {
-        console.log("versuche einen Eintrag zu löschen")
         ShoppingAPI.getAPI().deleteListEntry(this.state.listentry.getID()).then(
             () => {
                 this.props.onListEntryDeleted(this.state.listentry)
@@ -186,16 +184,16 @@ import ItemBO from '../../api/ItemBO'
 
     }
 
-    render(){
-        const units = ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg ']   
-        //console.log("sel_retailer:", this.state.sel_retailer)
-        //console.log("state.sel_user",this.state.sel_user)
-        //console.log("this.state.sel_item_name", this.state.sel_item_name)
-        //console.log("item:", this.state.item)
-        const { classes } = this.props; 
+    render() {
+        const units = ['St ', 'kg ', 'g ', 'L ', 'ml ', 'm ', 'cm ', 'Pckg ']
+        const { classes } = this.props;
         //console.log("eine Card: ", this.props)
-        return(
+        return (
             <div>
+
+            {this.state.errorDialog?
+                <ErrorDialog errorMessage="Irgendetwas stimmt hier nicht :c" handleErrorClose={this.handleErrorClose}/>
+            : null}
                 
 
             { 
@@ -246,7 +244,9 @@ import ItemBO from '../../api/ItemBO'
                                 style={{ width: 300 }}
                                 renderInput={(params) =><TextField {...params}  label="User"  />}/>
                                 
-                                <Button onClick={() => this.updateItem()} size ="large" color="primary" startIcon={< CheckCircleOutlineIcon/>} />
+                                <Button onClick={() => this.state.sel_retailer && this.state.sel_user && (this.state.sel_amount === null ||  this.state.sel_amount != "" && Math.sign(parseFloat(this.state.sel_amount)) === 1) 
+                                                       && this.state.sel_unit && (this.state.sel_item_name != "" || this.state.sel_item_name === null || this.state.sel_item_name) ?
+                                    this.updateItem() : this.setState({errorDialog : true})} size ="large" color="primary" startIcon={< CheckCircleOutlineIcon/>} />
                                 <Button onClick={() => this.deleteLEntry()} size="large" color="primary" startIcon={<DeleteForeverIcon/>}/>          
                                 
 
@@ -258,10 +258,10 @@ import ItemBO from '../../api/ItemBO'
                 : null 
             }    
             </div>
-        ) 
+        )
     }
- }
+}
 
 
 
- export default ListEntryCard
+export default ListEntryCard

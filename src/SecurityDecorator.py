@@ -52,7 +52,6 @@ def secured(function):
                         E-Mail-Adresse ändern. Daher werden diese beiden Daten sicherheitshalber
                         in unserem System geupdated."""
 
-                        user.set_name(name)
                         user.set_email(email)
                         adm.update_user(user)
                     else:

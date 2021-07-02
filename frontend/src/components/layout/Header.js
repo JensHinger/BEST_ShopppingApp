@@ -15,6 +15,11 @@ import InvitationNotification from '../subcomponents/InvitationNotifications'
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
+
+/**
+ * @author Jens, Jonathan
+ */
+
 const styles = theme => ({
 
   divider: {
@@ -26,9 +31,10 @@ const styles = theme => ({
   }
 })
 
-class Header extends Component{
 
-  constructor(props){
+class Header extends Component {
+
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -36,34 +42,36 @@ class Header extends Component{
       currentUser: null
     }
   }
-
+  //** Der aktuelle User wird gefetched */
   getCurrentUser = () => {
     ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
-    .then(UserBO =>
-      this.setState({
+      .then(UserBO =>
+        this.setState({
           currentUser: UserBO
-      }))
+        }))
   }
-
-  componentDidMount(){
+  //** Wird nach dem Rendering aufgerufen */
+  componentDidMount() {
     this.getCurrentUser()
   }
-
+  //** öffnen des Menüs */
   handleProfileMenuOpen = (event) => {
-    this.setState({AnchorEL : event.currentTarget});
+    this.setState({ AnchorEL: event.currentTarget });
   };
-
+  //** Schließen des Menüs im Header */
   handleMenuClose = () => {
-    this.setState({AnchorEL : null})
+    this.setState({ AnchorEL: null })
   };
-
+  //** User updaten  */
   handleUserUpdate = () => {
     this.getCurrentUser()
-    console.log('Hallo')
-
   };
 
-  render(){
+  handleSiteChange = () => {
+    window.location.href='https://best-it-praktikum-team-5.ey.r.appspot.com/rep'
+  }
+
+  render() {
 
     const { classes } = this.props;
 
@@ -81,8 +89,9 @@ class Header extends Component{
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-         {user? <MenuItem onClick={this.handleMenuClose}  component={RouterLink} to={`/manageuser/`} /*onUserUpdated = {this.handleUserUpdate}*/>My account </MenuItem> :null}
-        <MenuItem onClick={this.handleMenuClose}><LogOutDialog></LogOutDialog></MenuItem> 
+        {user ? <MenuItem onClick={this.handleMenuClose} component={RouterLink} to={`/manageuser/`}>My account </MenuItem> : null}
+        <MenuItem onClick={this.handleMenuClose}><LogOutDialog></LogOutDialog></MenuItem>
+        <MenuItem onClick={this.handleSiteChange}>Mein Report</MenuItem>
       </Menu>
     );
 
@@ -90,35 +99,35 @@ class Header extends Component{
       <div>
         <AppBar position="static">
           <Toolbar>
-            <Button component={RouterLink} to = {'/overview'}>
-              <Typography  className={classes.title} variant="h6" >
+            <Button component={RouterLink} to={'/overview'}>
+              <Typography className={classes.title} variant="h6" >
                 BE!ST
               </Typography>
             </Button>
 
-            <div className={classes.divider}/>
-  
-              {
-                user ?
+            <div className={classes.divider} />
+
+            {
+              user ?
                 <div>
-                  <InvitationNotification user = {user}/>
+                  <InvitationNotification user={user} />
                 </div>
                 : null
-              }
-              <IconButton
-                edge="end"
-                onClick={this.handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
+            }
+            <IconButton
+              edge="end"
+              onClick={this.handleProfileMenuOpen}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
           </Toolbar>
         </AppBar>
         {renderMenu}
       </div>
-      
+
     );
   }
 }
 
-export default withStyles(styles) (Header); 
+export default withStyles(styles)(Header); 

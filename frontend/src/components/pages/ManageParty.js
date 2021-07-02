@@ -9,7 +9,7 @@ import InvitationBO from '../../api/InvitationBO';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
-//Hier muss noch das update rein sobald User gelöscht wird muss neu gerendert werden.
+
 /**
  * @author Michael, René, Jens und Anny
  */
@@ -23,24 +23,24 @@ class ManageGroup extends Component {
             users: [],
             invitations: [],
             userBO: null,
-            mail : "",
-            user: null, 
+            mail: "",
+            user: null,
             newName: "",
         }
     }
-
+    //** User anhand der Google Id aus dem Backend holen */
     getCurrentUserByGoogleId = () => {
         ShoppingAPI.getAPI().getUserByGoogleId(firebase.auth().currentUser.uid)
-        .then(UserBO => this.setState({
+            .then(UserBO => this.setState({
                 userBO: UserBO
             }))
     }
-
+    //** Wird auf dem Client nach dem Rendering einmal aufgerufen */
     componentDidMount() {
         this.getParty()
         this.getCurrentUserByGoogleId()
     }
-
+    //** Funktion zum Fetchen der Party */
     getParty = () => {
         ShoppingAPI.getAPI().getPartyById(this.state.partyId)
             .then(function (party) {
@@ -48,17 +48,17 @@ class ManageGroup extends Component {
                 this.getAllUsersInParty(party.getID())
             }.bind(this))
     }
-    /**  */
+    //** Das updaten eines PartyBOs  */
     handlePartyChange = () => {
         var newParty = this.state.party
         newParty.setName(this.state.newName)
         ShoppingAPI.getAPI().updateParty(newParty)
     }
-
-    renameParty = (event) =>{
-        this.setState({newName : event.target.value})
+    //** Party umbenennen */
+    renameParty = (event) => {
+        this.setState({ newName: event.target.value })
     }
-    
+    //** Alle User in eine Party */
     getAllUsersInParty = (id) => {
         ShoppingAPI.getAPI().getAcceptedInvitationsByPartyId(id)
             .then(function (invitations) {
@@ -72,36 +72,33 @@ class ManageGroup extends Component {
                 )
             }.bind(this))
     }
-
+    //** Funktion zum Löschen eines Users */
     handleUserDelete = () => {
- 
+
         this.setState({ users: [] })
         this.setState({ invitations: [] })
         this.getAllUsersInParty(this.state.partyId)
-        console.log("users nach update:", this.state.users)
-        console.log("invitations nach update", this.state.invitations)
+
 
         // Hier noch ein router auf die Overview page
 
     }
-
+    //** Jemanden zur Gruppe hinzufügen */
     addMemberToGroup = () => {
 
         ShoppingAPI.getAPI().getUserByEmail(this.state.mail)
-        .then(function(user) {
-            const new_invitation = new InvitationBO()
-            new_invitation.setTargetUserId(user.getID())
-            new_invitation.setSourceUserId(this.state.user)
-            new_invitation.setPartyiId(this.state.partyId)
+            .then(function (user) {
+                const new_invitation = new InvitationBO()
+                new_invitation.setTargetUserId(user.getID())
+                new_invitation.setSourceUserId(this.state.user)
+                new_invitation.setPartyiId(this.state.partyId)
 
-            ShoppingAPI.getAPI().addInvitation(new_invitation).then(this.setState({mail : ""}))
-        }.bind(this))
+                ShoppingAPI.getAPI().addInvitation(new_invitation).then(this.setState({ mail: "" }))
+            }.bind(this))
     }
 
     render() {
 
-        //console.log("invitations:", this.state.invitations)
-        //console.log("users:", this.state.users)
         const currentParty = this.state.party
         const users = this.state.users
         const userBO = this.state.userBO
@@ -112,33 +109,32 @@ class ManageGroup extends Component {
 
                 <br margin-top='20px' />
 
-                Gruppennamen ändern 
+                Gruppennamen ändern
                 <Divider />
 
                 <br margin-top='20px' />
-               
+
                 <Grid>
                     <TextField onChange={event => this.renameParty(event)} id="outlined-basic" placeholder={currentParty ? currentParty.getName() : null} variant="outlined" />
                     <Button onClick={this.handlePartyChange}>
-                        <SaveIcon variant ="contained" color = "primary" fontSize ="large"/> 
+                        <SaveIcon variant="contained" color="primary" fontSize="large" />
                     </Button>
                 </Grid>
-              
+
                 <br margin-top='20px' />
 
                 Gruppenmitglieder
-                <Divider/>
+                <Divider />
                 <br margin-top='20px' />
-                
+
                 {users ?
                     users.map((user, index) =>
                         <Grid>
                             {user.getName()}
-                            {user.getID()}
                             <RemoveGroupMemberDialog invitation={this.state.invitations.filter(invitation => invitation.getTargetUserId() === user.getID())} handleInvitationDelete={this.handleUserDelete} index={index} />
                         </Grid>
                     )
-                : null}
+                    : null}
 
                 <br margin-top='20px' />
 
@@ -146,25 +142,25 @@ class ManageGroup extends Component {
                 <Divider />
 
                 <TextField
-                  onChange = {(event) => this.setState({mail : event.target.value})}
-                  required
-                  margin="dense"
-                  id="userEmail"
-                  label="E-Mail"
-                  type="string"
-                  value = {this.state.mail}/>
+                    onChange={(event) => this.setState({ mail: event.target.value })}
+                    required
+                    margin="dense"
+                    id="userEmail"
+                    label="E-Mail"
+                    type="string"
+                    value={this.state.mail} />
                 <br margin-top='20px' />
                 <Button onClick={this.addMemberToGroup}>
-                  <GroupAddIcon color = "primary" fontSize = "large"/>
+                    <GroupAddIcon color="primary" fontSize="large" />
                 </Button>
 
                 <br margin-top='20px' />
-                    {userBO && invitations.length > 0?
-                        <ExitGroupDialog invitation={this.state.invitations.filter(invitation => invitation.getTargetUserId() === this.state.userBO.getID())}/>
-                    :null}
+                {userBO && invitations.length > 0 ?
+                    <ExitGroupDialog invitation={this.state.invitations.filter(invitation => invitation.getTargetUserId() === this.state.userBO.getID())} />
+                    : null}
                 <br margin-top='20px' />
 
-               
+
 
             </Typography>
         )

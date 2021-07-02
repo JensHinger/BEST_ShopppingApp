@@ -45,9 +45,9 @@ class ListEntryMapper(Mapper):
 
         return result
 
-    def set_user_null(self, listentry):
+    def set_user_one(self, listentry):
         cursor = self._cnx.cursor()
-        command = "UPDATE listentry SET user_id = null WHERE id LIKE ('{}')".format(listentry.get_id())
+        command = "UPDATE listentry SET user_id = 1 WHERE id LIKE ('{}')".format(listentry.get_id())
         cursor.execute(command)
 
         self._cnx.commit()
@@ -200,7 +200,7 @@ class ListEntryMapper(Mapper):
     def delete(self, listentry):
 
         cursor = self._cnx.cursor()
-        command = "DELETE FROM listentry WHERE id LIKE ('{}')".format(listentry.get_id())
+        command = "DELETE FROM listentry WHERE id LIKE ('{}')".format(listentry)
         cursor.execute(command)
 
         self._cnx.commit()

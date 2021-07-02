@@ -7,57 +7,60 @@ import ListEntryBO from '../../api/ListEntryBO'
 import { Link as RouterLink } from 'react-router-dom'
 import AddRetailerDialog from '../dialogs/AddRetailerDialog';
 import ItemBO from '../../api/ItemBO';
+import ErrorDialog from '../dialogs/ErrorDialog'
 
 /**
- * @author Dominic, Anny, Jens, Jonathan
+ * @author Anny, Dominic, Jens, Jonathan
  */
- class AddListEntry extends Component {
+class AddListEntry extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
 
-        open: false, 
-        article: "",
-        amount: null,
-        unit: null,
-        listid: this.props.match.params.listid,
-        retailer: [],
-        items: [],
-        users: [],
-        pickedUser: null,
-        pickedRetailer: null,
-        pickedItem: null,
-        retailerAutoCompleteKey: 0,
-        userAutoCompleteKey: 1,
-        unitTextFieldKey: 2,
-        itemAutoCompleteKey: 3,
-        amountTextFieldKey: 4,
+            open: false,
+            article: "",
+            amount: null,
+            unit: null,
+            listid: this.props.match.params.listid,
+            retailer: [],
+            items: [],
+            users: [],
+            pickedUser: null,
+            pickedRetailer: null,
+            pickedItem: null,
+            retailerAutoCompleteKey: 0,
+            userAutoCompleteKey: 1,
+            unitTextFieldKey: 2,
+            itemAutoCompleteKey: 3,
+            amountTextFieldKey: 4,
 
         }
-        
-
-
-
-  }
-    componentDidMount(){
+    }
+    componentDidMount() {
         this.getAllItems()
         this.getAllRetailer()
         this.getListEntryPossibleUsersInvitations()
     }
 
-
+    //holt sich alle Retailer und setzt diese in einen State
     getAllRetailer() {
         ShoppingAPI.getAPI().getAllRetailer()
             .then(retailer => this.setState({ retailer: retailer }))
     }
 
+    //holt sich alle Items und setzt sie in einen State
     getAllItems = () => {
         ShoppingAPI.getAPI().getAllItems()
-        .then(items => this.setState({items: items}))
+            .then(items => this.setState({ items: items }))
     }
 
+    /**
+     * holt sich die ListenId
+     * listId wird in state gesetzt
+     * holt sich aus der Liste die PartylId
+     */
     getListEntryPossibleUsersInvitations = () => {
         ShoppingAPI.getAPI().getListById(this.state.listid)
             .then((list) => ShoppingAPI.getAPI().getPartyById(list.getPartylId())
@@ -66,6 +69,7 @@ import ItemBO from '../../api/ItemBO';
                     )))))
     }
 
+    //holt sich die UserId von dem eingeloggten User
     getListEntryPossibleUsers = (target_user_id) => {
         ShoppingAPI.getAPI().getUserById(target_user_id)
             .then((user) => this.setState({ users: [...this.state.users, user] })
@@ -73,33 +77,37 @@ import ItemBO from '../../api/ItemBO';
 
     }
 
-
+    //neues Item wird erzeugt
     createItem = () => {
         var myitem = new ItemBO
         myitem.setName(this.state.pickedItem)
-        console.log("item zum updaten:", myitem)
         ShoppingAPI.getAPI().addItem(myitem)
-        .then((newItem) => {return (this.setState({items : [...this.state.items, newItem]}),
-            this.createNewListEntry(newItem))})
+            .then(function(newItem){
+                var check = this.state.items.filter(item => item.getName() === newItem.getName())
+                if (check.length < 1){
+                    this.setState({ items: [...this.state.items, newItem]})
+                }
+                this.createNewListEntry(newItem)
+            }.bind(this))
     }
 
+    //neue Listeneinträge werden erstellt
     createNewListEntry = (oneItem) => {
         var ListEntry = new ListEntryBO
-        console.log("item: ", oneItem)
         ListEntry.setItemId(oneItem.getID())
         ListEntry.setListId(this.state.listid)
-        ListEntry.setAmount(parseInt(this.state.amount))
+        ListEntry.setAmount(this.state.amount)
         ListEntry.setUnit(parseInt(this.state.unit))
         ListEntry.setRetailerId(this.state.retailer[this.getListEntryPossibleRetailerNames().indexOf(this.state.pickedRetailer)].getID())
         ListEntry.setUserId(this.state.users[this.getListEntryPossibleUserNames().indexOf(this.state.pickedUser)].getID())
         ListEntry.setName("Wir sind die besten!")
-        console.log("der neue Entry:", ListEntry)
         ShoppingAPI.getAPI().addListEntry(ListEntry).then(
             this.emptyState()
         )
 
     }
 
+    //neue Keys werden erstellt
     emptyState = () => {
         this.setState({
             article: "",
@@ -109,69 +117,76 @@ import ItemBO from '../../api/ItemBO';
             pickedUser: "",
             pickedRetailer: "",
             item: null,
+            errorDialog: false
         })
-        console.log("state nachdem er geleert wurde", this.state)
+        
         //generating random keys to force the autocomplete boxes to re-render, thus making them empty 
         this.setState({
             retailerAutoCompleteKey: this.state.retailerAutoCompleteKey + 1,
             userAutoCompleteKey: this.state.userAutoCompleteKey + 1,
             unitTextFieldKey: this.state.unitTextFieldKey + 1,
             itemAutoCompleteKey: this.state.itemAutoCompleteKey + 1,
-            amountTextFieldKey: this.state.amountTextFieldKey + 1, 
+            amountTextFieldKey: this.state.amountTextFieldKey + 1,
         })
     }
 
+    //holt sich die listEntry User Namen und gibt diese an die Konstante userNames zurück
     getListEntryPossibleUserNames = () => {
         const userNames = this.state.users.map((user) => user.getName())
-        //console.log("alle Usernamen:", userNames)
         return (userNames)
     }
 
+    //holt sich die listEnty Retailer Namen und gibt diese an die ret_names zurück
     getListEntryPossibleRetailerNames = () => {
         var ret_names = this.state.retailer.map((retailer) => retailer.getName()
         )
-        console.log("namen aller Retailer:", ret_names)
         return (ret_names)
     }
 
+    //holt sich die StandardlistEntry User Namen und gibt diese an die Variable item_names zurück
     getListEntryPossibleItemNames = () => {
         var item_names = this.state.items.map((item) => item.getName()
         )
-        console.log("namen aller Items:", item_names)
         return (item_names)
     }
 
-
+    //Value wird hier übergeben und setzt den State.amount auf value
     handleAmountChange = (value) => {
         this.setState({ amount: value })
-        //console.log(this.state.amount)
     };
 
+    //Value wird hier übergeben und setzt den State.article auf value
     handleArticleChange = (value) => {
         this.setState({ article: value })
-        //console.log(this.state.article)
     };
 
+    //Value wird hier übergeben und setzt den State.unit auf value
     handleUnitChange = (value) => {
         this.setState({ unit: value })
     };
 
+    //checked Status wird hier umgedreht
     handleClicked = () => {
         this.setState({ checked: !this.state.checked })
-        //console.log("checked:", this.state.checked)
     };
 
+    //Value wird hier übergeben und setzt den State.pickedUser auf value
     handleUserChange = (value) => {
         this.setState({ pickedUser: value })
     };
 
-
+    //holt sich alle Retailer
     handleNewRetailer = () => {
         this.getAllRetailer()
     };
 
+    //Schließt den ErrorDialog
+    handleErrorClose = () =>{
+        this.setState({errorDialog : false})
+      }
+
     render() {
-        console.log("user", this.state.users)
+        
         const units = [
             {
                 value: 0,
@@ -210,13 +225,14 @@ import ItemBO from '../../api/ItemBO';
         const retailer = this.state.retailer
         const item = this.state.items
         const user = this.state.users
-        //console.log(retailer)
-        //console.log(user)
-
-
 
         return (
             <div>
+                
+                {this.state.errorDialog?
+                    <ErrorDialog errorMessage="Alle Felder müssen befüllt sein!" handleErrorClose={this.handleErrorClose}/>
+                : null}
+
                 <Typography variant='h6' component='h1' align='center'>
 
                     <br margin-top='20px' />
@@ -268,23 +284,22 @@ import ItemBO from '../../api/ItemBO';
                     </div>
 
                     <div>
-                        <Grid container justify= "center" >
+                        <Grid container justify="center" >
 
-                            <Grid xs ={4}>
-                                <br margin-top='20px'/>
+                            <Grid xs={4}>
+                                <br margin-top='20px' />
                                 <Grid container justify="center">
-                                {item ?
-                                <Autocomplete
-                                    
-                                    freeSolo
-                                    key={this.state.itemAutoCompleteKey}
-                                    id="combo-box-demo"
-                                    onInputChange={(event, value) => this.setState({ pickedItem: value })}
-                                    options={item}
-                                    getOptionLabel={(option) => option.getName()}
-                                    style={{ width: 200 }}
-                                    renderInput={(params) => <TextField  {...params} label="Artikel" />} />
-                                : null}
+                                    {item ?
+                                        <Autocomplete
+                                            freeSolo
+                                            key={this.state.itemAutoCompleteKey}
+                                            id="combo-box-demo"
+                                            onInputChange={(event, value) => this.setState({ pickedItem: value })}
+                                            options={item}
+                                            getOptionLabel={(option) => option.getName()}
+                                            style={{ width: 200 }}
+                                            renderInput={(params) => <TextField  {...params} label="Artikel" />} />
+                                        : null}
                                 </Grid>
                             </Grid>
 
@@ -294,10 +309,10 @@ import ItemBO from '../../api/ItemBO';
                                     key={this.state.amountTextFieldKey}
                                     label="Menge"
                                     helperText="Geben Sie eine Menge an"
-                                    value = {this.state.amount}
-                                    onChange={(event)=> this.handleAmountChange(event.target.value)}/>
+                                    value={this.state.amount}
+                                    onChange={(event) => this.handleAmountChange(event.target.value)} />
 
-                                
+
                             </Grid>
 
 
@@ -323,47 +338,36 @@ import ItemBO from '../../api/ItemBO';
                             </Grid>
                         </Grid>
                     </div>
-                    <div>
-                        {/**<Grid container justify="center"> 
-                    <Grid xs>
-                        <br margin-top ='20px'/>
-                        <Checkbox 
-                        checked={this.state.checked} onClick={() => {this.handleClicked()}}
-                        />
-                        Standardartikel
-                    </Grid>
-                    </Grid>*/}
-                    </div>
+
+
                     <div>
                         <br margin-top='20px' />
                         <Grid container
                             direction="row"
                             justify="center">
 
-
                             <br margin-top='20px' />
-                            <Button onClick={() => this.state.amount && this.state.pickedItem && this.state.pickedRetailer && this.state.pickedUser && (this.state.unit == 0 |this.state.unit) ?
-                                                   this.createItem() : console.log("da stimmt was nicht!")} variant="contained" color="primary"> Eintrag hinzufügen </Button>
-                            
-                            
-                            
-
-
-
+                            <Button onClick={() => (this.state.amount &&  !isNaN(this.state.amount)) && this.state.pickedItem && this.state.pickedRetailer && this.state.pickedUser && (this.state.unit == 0 || this.state.unit) && Math.sign(parseFloat(this.state.amount)) === 1 ?
+                                                   this.createItem() : this.setState({errorDialog : true})} variant="contained" color="primary"> Eintrag hinzufügen </Button>
 
                         </Grid>
 
                     </div>
-                    <div>   <Grid 
-                            justify="center">
+
+
+                    <div>   
+                        <Grid justify="center">
                             <br margin-top='20px' />
                             <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> zurück zu meinen Einträgen </Button>
-
-                            <br margin-top='20px' />
-                            <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> abbrechen </Button>
-                            </Grid>
+                        </Grid>
                     </div>
 
+                    <div>
+                        <Grid justify="center">
+                            <br margin-top='20px' />
+                            <Button component={RouterLink} to={`/partyshoppinglist/${this.state.listid}`} variant="contained" color="secondary"> abbrechen </Button>
+                        </Grid>
+                    </div>
 
                 </Typography>
 
@@ -373,4 +377,3 @@ import ItemBO from '../../api/ItemBO';
 }
 
 export default AddListEntry
-

@@ -95,9 +95,9 @@ class ShoppingAdministration(object):
     Hier geht es um die Listentrys
     """
 
-    def set_user_null(self, listentry):
+    def set_user_one(self, listentry):
         with ListEntryMapper() as mapper:
-            return mapper.set_user_null(listentry)
+            return mapper.set_user_one(listentry)
 
     def get_all_listentries(self):
         """Alle Listeneinträge auslesen."""
@@ -161,7 +161,7 @@ class ShoppingAdministration(object):
         retailer = Retailer()
         retailer.set_name(name)
 
-        retailers = self.get_all_items()
+        retailers = self.get_all_retailer()
         for sRetailer in retailers:
             if sRetailer.get_name().lower() == name.lower():
                 return None
@@ -218,10 +218,10 @@ class ShoppingAdministration(object):
     Hier geht es um die Invitation
     """
 
-    def set_source_user_null(self, invitation):
-        """Setze den FK source_user auf null"""
+    def set_source_user_one(self, invitation):
+        """Setze den FK source_user auf one"""
         with InvitationMapper() as mapper:
-            return mapper.set_source_user_null(invitation)
+            return mapper.set_source_user_one(invitation)
 
     def get_all_invitation(self):
         """Alle Invitations auslesen."""
@@ -283,12 +283,13 @@ class ShoppingAdministration(object):
         with InvitationMapper() as mapper:
             return mapper.find_all_pend_invites()
 
-    def create_invitation(self, partyi_id, target_user_id, source_user_id):
+    def create_invitation(self, partyi_id, target_user_id, source_user_id, is_accepted):
         """Eine Invitation erstellen."""
         invitation = Invitation()
         invitation.set_partyi_id(partyi_id)
         invitation.set_target_user_id(target_user_id)
         invitation.set_source_user_id(source_user_id)
+        invitation.set_is_accepted(is_accepted)
 
         with InvitationMapper() as mapper:
             return mapper.insert(invitation)
@@ -398,23 +399,23 @@ class ShoppingAdministration(object):
         out_invitations = self.get_all_invitations_by_source_user(user.get_id())
         if type(out_invitations) is list:
             for out_invitation in out_invitations:
-                self.set_source_user_null(out_invitation)
+                self.set_source_user_one(out_invitation)
         else:
-            self.set_source_user_null(out_invitations)
+            self.set_source_user_one(out_invitations)
 
         listentries = self.get_listentry_by_user_id(user.get_id())
         if type(listentries) is list:
             for listentry in listentries:
-                self.set_user_null(listentry)
+                self.set_user_one(listentry)
         else:
-            self.set_user_null(listentries)
+            self.set_user_one(listentries)
 
         standard_listentries = self.get_standard_listentry_by_user_id(user.get_id())
         if type(standard_listentries) is list:
             for standardListentry in standard_listentries:
-                self.set_sle_user_null(standardListentry)
+                self.set_sle_user_one(standardListentry)
         else:
-            self.set_sle_user_null(standard_listentries)
+            self.set_sle_user_one(standard_listentries)
 
         with UserMapper() as mapper:
             mapper.delete(user)
@@ -423,10 +424,10 @@ class ShoppingAdministration(object):
     Hier geht es um den Standartlisteneinträge
     """
 
-    def set_sle_user_null(self, standard_listentry):
-        """Setze den FK source_user auf null"""
+    def set_sle_user_one(self, standard_listentry):
+        """Setze den FK source_user auf one"""
         with StandardListEntryMapper() as mapper:
-            return mapper.set_sle_user_null(standard_listentry)
+            return mapper.set_sle_user_one(standard_listentry)
 
     def get_all_standard_list_entrys(self):
         """Alle Standartlisteneinträge auslesen."""

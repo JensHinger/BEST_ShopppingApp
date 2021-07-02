@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import send_from_directory, Flask
 from flask_restx import Resource, Api, fields
 from flask_cors import CORS
 
@@ -17,9 +17,20 @@ from SecurityDecorator import secured
 
 app = Flask(__name__)
 
+
+@app.route('/edit')
+def editor_index():
+    return send_from_directory('static/editor', 'index.html')
+
+
+@app.route('/rep')
+def report_index():
+    return send_from_directory('static/report', 'index.html')
+
+
 CORS(app, resources=r'/shopping/*')
 
-api = Api(app, version='0.1 pre-alpha', title='SSLS API',
+api = Api(app, version='1.0 Beta', title='SSLS API',
     description='Demo-API für das Shared-Shopping-List-System')
 
 shopping = api.namespace('shopping', description='Funktionen des SSLS')
@@ -33,25 +44,26 @@ bo = api.model('BusinessObject', {
 })
 
 invitation = api.inherit('Invitation', bo, {
-    'partyi_id': fields.Integer(attribute='_partyi_id', description='Die Einheit eines gewählten Produktes'),
-    'target_user_id': fields.Integer(attribute='_target_user_id', description='Die Menge eines gewählten Produktes'),
-    'source_user_id': fields.Integer(attribute='_source_user_id', description='Die Menge eines gewählten Produktes'),
-    'is_accepted': fields.Integer(attribute='_is_accepted', description='Die Menge eines gewählten Produktes'),
+    'partyi_id': fields.Integer(attribute='_partyi_id', description='Party der invitation'),
+    'target_user_id': fields.Integer(attribute='_target_user_id', description='Der Target user der Invitation'),
+    'source_user_id': fields.Integer(attribute='_source_user_id', description='Der Source user der Invitation'),
+    'is_accepted': fields.Integer(attribute='_is_accepted', description='Ob die Invitation akzeptiert ist'),
 })
 
 item = api.inherit('Item', bo, {
 })
 
 list = api.inherit('List', bo, {
-    'partyl_id': fields.Integer(attribute='_partyl_id', description='Die Einheit eines gewählten Produktes'),
+    'partyl_id': fields.Integer(attribute='_partyl_id', description='Die Party zu welcher die Liste gehört'),
 })
 
 list_entry = api.inherit('ListEntry', bo, {
-    'item_id': fields.Integer(attribute='_item_id', description='Die Einheit eines gewählten Produktes'),
-    'retailer_id': fields.Integer(attribute='_retailer_id', description='Die Einheit eines gewählten Produktes'),
-    'user_id': fields.Integer(attribute='_user_id', description='Die Einheit eines gewählten Produktes'),
-    'list_id': fields.Integer(attribute='_list_id', description='Die Einheit eines gewählten Produktes'),
-    'amount': fields.Integer(attribute='_amount', description='Die Menge eines gewählten Produktes'),
+    'item_id': fields.Integer(attribute='_item_id', description='Das Item, welches in dem Listentry hinterlegt ist'),
+    'retailer_id': fields.Integer(attribute='_retailer_id', description='Der Retailer, welcher in dem Listentry'
+                                                                        ' hinterlegt ist'),
+    'user_id': fields.Integer(attribute='_user_id', description='Der User, welcher in dem Listentry hinterlegt ist'),
+    'list_id': fields.Integer(attribute='_list_id', description='Der Liste, in welcher der Listentry hinterlegt ist'),
+    'amount': fields.Float(attribute='_amount', description='Die Menge eines gewählten Produktes'),
     'unit': fields.Integer(attribute='_unit', description='Die Einheit eines gewählten Produktes'),
     'checked': fields.Integer(attribute='_checked', description='Sagt aus ob der Eintrag abgehakt wurde'),
 })
@@ -60,28 +72,24 @@ party = api.inherit('Party', bo, {
 })
 
 standard_list_entry = api.inherit('StandardListEntry', bo, {
-    'item_id': fields.Integer(attribute='_item_id', description='Die Einheit eines gewählten Produktes'),
-    'retailer_id': fields.Integer(attribute='_retailer_id', description='Die Einheit eines gewählten Produktes'),
-    'user_id': fields.Integer(attribute='_user_id', description='Die Einheit eines gewählten Produktes'),
-    'party_id': fields.Integer(attribute='_party_id', description='Die Einheit eines gewählten Produktes'),
-    'amount': fields.Integer(attribute='_amount', description='Die Menge eines gewählten Produktes'),
+    'item_id': fields.Integer(attribute='_item_id', description='Das Item, welches in dem StandardListEntry'
+                                                                ' hinterlegt ist'),
+    'retailer_id': fields.Integer(attribute='_retailer_id', description='Der Retailer, welcher in dem StandardListEntry'
+                                                                        ' hinterlegt ist'),
+    'user_id': fields.Integer(attribute='_user_id', description='Der User, welcher in dem StandardListEntry hinterlegt '
+                                                                'ist'),
+    'party_id': fields.Integer(attribute='_party_id', description='Der Party, in welcher der StandardListEntry'
+                                                                  ' hinterlegt ist'),
+    'amount': fields.Float(attribute='_amount', description='Die Menge eines gewählten Produktes'),
     'unit': fields.Integer(attribute='_unit', description='Die Einheit eines gewählten Produktes'),
 })
 
 user = api.inherit('User', bo, {
-    'email': fields.String(attribute='_email', description='Die Einheit eines gewählten Produktes'),
-    'google_id': fields.String(attribute='_google_id', description='Die Einheit eines gewählten Produktes'),
+    'email': fields.String(attribute='_email', description='Die Email eines Nutzers'),
+    'google_id': fields.String(attribute='_google_id', description='Die google_id eines Nutzers'),
 })
 
 retailer = api.inherit('retailer', bo, {
-})
-
-report_retailer = api.inherit('ReportRetailer', bo, {
-    'commonness': fields.Integer(attribute='_commonness', description='Die Anzahl des Ladens welcher besucht wurde')
-})
-
-report_item = api.inherit('ReportItem', bo, {
-    'commonness': fields.Integer(attribute='_commonness', description='Die Anzahl des Items welches gekauft wurde')
 })
 
 """Invitation related"""
@@ -93,12 +101,13 @@ class InvitationListOperations(Resource):
     @shopping.expect(invitation)
     @secured
     def post(self):
+        """Erstellen eines Invitation Objekts"""
         adm = ShoppingAdministration()
         proposal = Invitation.from_dict(api.payload)
         print("proposal", proposal)
         if proposal is not None:
             invi = adm.create_invitation(proposal.get_partyi_id(), proposal.get_target_user_id(),
-                                         proposal.get_source_user_id())
+                                         proposal.get_source_user_id(), proposal.get_is_accepted())
             return invi, 200
         else:
             return "", 500
@@ -110,7 +119,7 @@ class InvitationOperations(Resource):
     @shopping.marshal_with(invitation)
     @secured
     def get(self, id):
-        """Auslesen von Invitaion Objekten welche die mit dieser ID verbunden sind."""
+        """Auslesen von Invitation Objekten welche die mit dieser ID verbunden sind."""
         adm = ShoppingAdministration()
         entry = adm.get_invitation_by_id(id)
         return entry
@@ -118,7 +127,7 @@ class InvitationOperations(Resource):
     @shopping.expect(invitation)
     @secured
     def put(self, id):
-        """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
+        """Update der spezifizierten Invitation. Es ist die id relevant, welche per Link übergeben wird."""
         adm = ShoppingAdministration()
         invi = Invitation.from_dict(api.payload)
 
@@ -131,7 +140,7 @@ class InvitationOperations(Resource):
 
     @secured
     def delete(self, id):
-        """Löschen der spezifizierten party"""
+        """Löschen der spezifizierten Invitation"""
         adm = ShoppingAdministration()
         p = adm.get_invitation_by_id(id)
 
@@ -171,7 +180,7 @@ class AcceptedInvitationBySourceUser(Resource):
     @shopping.marshal_with(invitation)
     @secured
     def get(self, id):
-        """Auslesen von pending Invitation Objekten welche die mit dieser Source User ID verbunden sind."""
+        """Auslesen von accepted Invitation Objekten welche die mit dieser Source User ID verbunden sind."""
         adm = ShoppingAdministration()
         entry = adm.get_accepted_invites_by_source_user_by_id(id)
         return entry
@@ -183,7 +192,7 @@ class AcceptedInvitationByTargetUser(Resource):
     @shopping.marshal_with(invitation)
     @secured
     def get(self, id):
-        """Auslesen von pending Invitation Objekten welche die mit dieser Target User ID verbunden sind."""
+        """Auslesen von accepted Invitation Objekten welche die mit dieser Target User ID verbunden sind."""
         adm = ShoppingAdministration()
         entry = adm.get_accepted_invites_by_target_user_by_id(id)
         return entry
@@ -208,7 +217,7 @@ class AcceptedInvitationsByParty(Resource):
     @shopping.marshal_with(invitation)
     @secured
     def get(self, id):
-        """Auslesen von pending Invitation Objekten welche die mit dieser Party ID verbunden sind."""
+        """Auslesen von accepted Invitation Objekten welche die mit dieser Party ID verbunden sind."""
         adm = ShoppingAdministration()
         entry = adm.get_all_accepted_user_in_party(id)
         return entry
@@ -235,7 +244,7 @@ class ItemListOperations(Resource):
 
     @shopping.marshal_with(item)
     def get(self):
-        """Auslesen des aller ItemBos aus der DB."""
+        """Auslesen aller ItemBos aus der DB."""
         adm = ShoppingAdministration()
         item = adm.get_all_items()
 
@@ -253,7 +262,7 @@ class ItemOperations(Resource):
     @shopping.marshal_with(item)
     @secured
     def get(self, id):
-        """Auslesen eines spezifizierten Party Objekts aus der DB """
+        """Auslesen eines spezifizierten Item Objekts aus der DB """
         adm = ShoppingAdministration()
         item = adm.get_item_by_id(id)
         return item
@@ -295,6 +304,7 @@ class ListListOperations(Resource):
     @shopping.expect(list)
     @secured
     def post(self):
+        """Anlegen einer neuen List: Die vom Client vorgegebenen Daten werden dabei als Vorschlag aufgenommen."""
         adm = ShoppingAdministration()
         proposal = List.from_dict(api.payload)
         print("proposal", proposal)
@@ -311,7 +321,7 @@ class ListOperations(Resource):
     @shopping.marshal_with(list)
     @secured
     def get(self, id):
-        """Auslesen von pending Invitation Objekten welche die mit dieser Party ID verbunden sind."""
+        """Auslesen von List Objekten, welche die mit dieser Party ID verbunden sind."""
         adm = ShoppingAdministration()
         entry = adm.get_list_by_id(id)
         return entry
@@ -320,7 +330,7 @@ class ListOperations(Resource):
     @shopping.expect(list)
     @secured
     def put(self, id):
-        """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
+        """Update der spezifizierten List. Es ist die id relevant welche per Link übergeben wird."""
         adm = ShoppingAdministration()
         list = List.from_dict(api.payload)
 
@@ -333,7 +343,7 @@ class ListOperations(Resource):
 
     @secured
     def delete(self, id):
-        """Löschen der spezifizierten party"""
+        """Löschen der spezifizierten List"""
         adm = ShoppingAdministration()
         p = adm.get_list_by_id(id)
 
@@ -350,7 +360,7 @@ class ListByPartyOperations(Resource):
     @shopping.marshal_with(list)
     @secured
     def get(self, id):
-        """Auslesen von pending Invitation Objekten welche die mit dieser Party ID verbunden sind."""
+        """Auslesen von List Objekten welche die mit dieser Party ID verbunden sind."""
         adm = ShoppingAdministration()
         entry = adm.get_all_lists_by_partyl_id(id)
         return entry
@@ -363,7 +373,7 @@ class ListEntryByListOperations(Resource):
     @shopping.marshal_with(list_entry)
     @secured
     def get(self, id):
-        """Auslesen von Listentry Objekten welche die mit dieser  List ID verbunden sind."""
+        """Auslesen von Listentry Objekten welche die mit dieser List ID verbunden sind."""
         adm = ShoppingAdministration()
         entry = adm.get_listentry_by_list_id(id)
         return entry
@@ -375,6 +385,7 @@ class ListEntryByUserOperations(Resource):
     @shopping.marshal_with(list_entry)
     @secured
     def get(self, id):
+        """Auslesen von Listentry Objekten welche die mit diesem User verbunden sind."""
         adm = ShoppingAdministration()
         entry = adm.get_listentry_by_user_id(id)
         return entry
@@ -387,13 +398,7 @@ class ListEntryListOperations(Resource):
     @shopping.expect(list_entry)
     @secured
     def post(self):
-        """Die vom Client gesendeten Daten werden als Vorschlag aufgefasst (siehe Thies),
-        PROBLEM! Hier bekomme ich doch nicht die IDs zurück sondern die eingegebenen Strings?!
-        Ich müsste ja erst die neu entstandenen item (+ amount, unit) in die DB füttern.
-        Dann muss ich herausfinden ob der User existiert (und in der Gruppe ist).
-        gleiches gilt für den Retailer. Erst dann kann ich meinen Listentry erstellen und in der DB speicher.
-        """
-
+        """Anlegen eines neuen Listentry: Die vom Client vorgegebenen Daten werden dabei als Vorschlag aufgenommen."""
         adm = ShoppingAdministration()
         proposal = ListEntry.from_dict(api.payload)
         print("proposal", proposal)
@@ -411,25 +416,21 @@ class ListEntryOperations(Resource):
 
     @shopping.marshal_with(list_entry)
     @secured
+
     def get(self, id):
+        """Auslesen von Listentry Objekten welche die mit dieser Id verbunden sind."""
         adm = ShoppingAdministration()
         entry = adm.get_listentry_by_id(id)
         return entry
-
-    @shopping.marshal_with(list_entry)
-    @secured
-    def get(self, id):
-        """Auslesen eines spezifizierten Party Objekts aus der DB """
-        adm = ShoppingAdministration()
-        lentry = adm.get_listentry_by_id(id)
-        return lentry
 
     @shopping.expect(list_entry)
     @secured
     def put(self, id):
         """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
         adm = ShoppingAdministration()
+        print("payload:", api.payload)
         lentry = ListEntry.from_dict(api.payload)
+        print("Lentry welcher zu updaten ist: ", lentry)
 
 
         if lentry is not None:
@@ -465,7 +466,7 @@ class PartyOperations(Resource):
     @shopping.expect(party)
     @secured
     def put(self, id):
-        """Update der spezifizierten party. Es ist die id relevant welche per Link übergeben wird."""
+        """Update einer spezifizierten Party. Es ist die id relevant welche per Link übergeben wird."""
         adm = ShoppingAdministration()
         p = Party.from_dict(api.payload)
 
@@ -554,7 +555,7 @@ class RetailerListOperations(Resource):
     @shopping.marshal_with(retailer)
     @secured
     def get(self):
-        """Auslesen des aller Retailer aus der DB."""
+        """Auslesen aller Retailer aus der DB."""
         adm = ShoppingAdministration()
         ret = adm.get_all_retailer()
 
@@ -567,6 +568,7 @@ class RetailerListOperations(Resource):
     @shopping.expect(retailer)
     @secured
     def post(self):
+        """Anlegen eines neuen Retailer: Die vom Client vorgegebenen Daten werden dabei als Vorschlag aufgenommen."""
         adm = ShoppingAdministration()
         proposal = Retailer.from_dict(api.payload)
 
@@ -585,7 +587,7 @@ class StandardListEntryByPartyOperations(Resource):
     @shopping.marshal_with(standard_list_entry)
     @secured
     def get(self, id):
-        """Auslesen eines StandardListentry Objekts welches die mit dieser  Party ID verbunden sind."""
+        """Auslesen der StandardListentry Objekte, welche mit dieser Party ID verbunden sind."""
         adm = ShoppingAdministration()
         entry = adm.get_standard_list_entry_by_party_id(id)
         return entry
@@ -597,6 +599,7 @@ class StandardListEntryByUserOperations(Resource):
     @shopping.marshal_with(standard_list_entry)
     @secured
     def get(self, id):
+        """Auslesen der StandardListentry Objekte, welche mit diesem User verbunden sind."""
         adm = ShoppingAdministration()
         entry = adm.get_standard_listentry_by_user_id(id)
 
@@ -609,8 +612,7 @@ class StandardListEntryListOperations(Resource):
     @shopping.expect(standard_list_entry)
     @secured
     def post(self):
-        """Die vom Client gesendeten Daten werden als Vorschlag aufgefasst (siehe Thies)
-        """
+        """Anlegen einer neuen StandardListEntry: Die vom Client gesendeten Daten werden als Vorschlag aufgefasst"""
         print("anlegen eines Standardlistentries")
         adm = ShoppingAdministration()
         print(api.payload)
@@ -631,6 +633,7 @@ class StandardListEntryOperations(Resource):
     @shopping.marshal_with(standard_list_entry)
     @secured
     def get(self,id):
+        """Auslesen der StandardListentry Objekte, welche mit dieser Id verbunden ist."""
         adm = ShoppingAdministration()
         entry = adm.get_standard_list_entry_by_id(id)
         return entry
@@ -640,7 +643,7 @@ class StandardListEntryOperations(Resource):
     @shopping.marshal_with(standard_list_entry)
     @secured
     def put(self, id):
-        """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
+        """Update des spezifizierten StandardListentry. Es ist die id relevant welche per Link übergeben wird."""
         adm = ShoppingAdministration()
         slentry = StandardListEntry.from_dict(api.payload)
 
@@ -653,7 +656,7 @@ class StandardListEntryOperations(Resource):
 
     @secured
     def delete(self, id):
-        """Update des spezifizierten listentries. Es ist die id relevant welche per Link übergeben wird."""
+        """Löschen des spezifizierten StandardListentry. Es ist die id relevant welche per Link übergeben wird."""
         adm = ShoppingAdministration()
         slentry = adm.get_standard_list_entry_by_id(id)
 
@@ -695,7 +698,7 @@ class UserOperations(Resource):
 
     @secured
     def delete(self, id):
-        """Löschen des Spezifizierten Retailers aus der DB."""
+        """Löschen des Spezifizierten Users aus der DB."""
         adm = ShoppingAdministration()
         u = adm.get_user_by_id(id)
 
@@ -712,7 +715,7 @@ class UserByGoogleIdOperations(Resource):
     @secured
     def get(self, googleid):
         print("google id:", googleid)
-        """Auslesen dess durch die google-mail spezifizierten Users"""
+        """Auslesen dess durch die google-id spezifizierten Users"""
         adm = ShoppingAdministration()
         u = adm.get_user_by_google_id(googleid)
         if u is not None:
@@ -738,6 +741,8 @@ class ReportOperations(Resource):
 
     @shopping.marshal_with(list_entry)
     def get(self, userid):
+        """Auslesen aller Listentries, welche abgehackt sind und der FK user_id == userid,
+         um den Report Client zu befüllen"""
         adm = ShoppingAdministration()
         listentries = adm.get_checked_by_user_id(userid)
         if listentries is not None:

@@ -8,7 +8,7 @@ class Party(BusinessObject):
 
     @staticmethod
     def from_dict(dictionary=dict()):
-        """Umwandeln eines Python dict() in einen listentry()."""
+        """Umwandeln eines Python dict() in einen Party()."""
         obj = Party()
         obj.set_id(dictionary["id"])  # eigentlich Teil von BusinessObject !
         obj.set_name(dictionary["name"])

@@ -43,9 +43,9 @@ class StandardListEntryMapper(Mapper):
 
         return result
 
-    def set_sle_user_null(self, standard_listentry):
+    def set_sle_user_one(self, standard_listentry):
         cursor = self._cnx.cursor()
-        command = "UPDATE standardlistentry SET user_id = null WHERE id LIKE ('{}')".format(standard_listentry.get_id())
+        command = "UPDATE standardlistentry SET user_id = 1 WHERE id LIKE ('{}')".format(standard_listentry.get_id())
         cursor.execute(command)
 
         self._cnx.commit()
